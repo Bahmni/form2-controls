@@ -1,2 +1,29 @@
-/*
-!/dist/*
+# Source files
+src/
+test/
+stories/
+examples/
+.storybook/
+
+# Build configs
+.babelrc
+.eslintrc
+webpack.config.js
+webpack.dev.config.js
+jest.config.js
+
+# Git and CI
+.git/
+.github/
+.gitignore
+.talismanrc
+
+# Development files
+node_modules/
+coverage/
+*.log
+.DS_Store
+*~
+*.iml
+.idea/
+install-git-hook.sh
