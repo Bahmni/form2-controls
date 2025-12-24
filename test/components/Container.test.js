@@ -11,6 +11,7 @@ import { ObsGroupControlWithIntl as ObsGroupControl } from 'components/ObsGroupC
 import { CodedControl } from 'components/CodedControl.jsx';
 import ComponentStore from 'src/helpers/componentStore';
 import ControlRecordTreeMgr from 'src/helpers/ControlRecordTreeMgr';
+import { utf8ToBase64 } from '../../src/helpers/encodingUtils';
 
 const PULSE_UUID = 'c36bc411-3f10-11e4-adec-0800271c1b75';
 const ADMISSION_UUID = 'c5cdd4e5-86e0-400c-9742-d73ffb323fa8';
@@ -139,14 +140,14 @@ const createConditionalFormMetadata = () => ({
       type: 'obsControl',
       units: null,
       events: {
-        onValueChange: `function(form){
+        onValueChange: utf8ToBase64(`function(form){
           var admission = form.get('Tuberculosis, Need of Admission').getValue();
           if(admission === 'yes') {
             form.get('Chief Complaint Notes').setEnabled(false);
           } else {
             form.get('Chief Complaint Notes').setEnabled(true);
           }
-        }`,
+        }`),
       },
     },
     {
@@ -298,7 +299,7 @@ describe('Container', () => {
     it('should handle form initialization events', async () => {
       const metadata = createNumericControlMetadata({
         events: {
-          onFormInit: "function(form){form.get('Pulse').setEnabled(false);}",
+          onFormInit: utf8ToBase64("function(form){form.get('Pulse').setEnabled(false);}"),
         },
       });
 
