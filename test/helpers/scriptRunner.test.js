@@ -1,6 +1,7 @@
 import ScriptRunner from 'src/helpers/scriptRunner';
 import FormContext from 'src/helpers/FormContext';
 import { httpInterceptor } from 'src/helpers/httpInterceptor';
+import { utf8ToBase64 } from 'src/helpers/encodingUtils'
 
 jest.mock('src/helpers/FormContext');
 jest.mock('src/helpers/httpInterceptor');
@@ -52,7 +53,7 @@ describe('ScriptRunner', () => {
     });
 
     it('should return formContext.getRecords() when eventJs is provided', () => {
-      const eventJs = 'function(formContext, interceptor) { return true; }';
+      const eventJs = utf8ToBase64('function(formContext, interceptor) { return true; }');
 
       const result = scriptRunner.execute(eventJs);
 
@@ -61,8 +62,9 @@ describe('ScriptRunner', () => {
     });
 
     it('should execute eventJs using eval when eventJs and interceptor are present', () => {
-      const eventJs = 'function(formContext, interceptor) { return true; }';
-      const expectedExecutiveJs = `(${eventJs})(formContext,interceptor)`;
+      let utf8EventScript = 'function(formContext, interceptor) { return true; }';
+      const eventJs = utf8ToBase64(utf8EventScript);
+      const expectedExecutiveJs = `(${utf8EventScript})(formContext,interceptor)`;
 
       scriptRunner.execute(eventJs);
 
@@ -92,9 +94,9 @@ describe('ScriptRunner', () => {
 
     it('should not execute eval when interceptor is null', () => {
       scriptRunner.interceptor = null;
-      const eventJs = 'function(formContext, interceptor) { return true; }';
+      const base64String = utf8ToBase64('function(formContext, interceptor) { return true; }');
 
-      scriptRunner.execute(eventJs);
+      scriptRunner.execute(base64String);
 
       expect(global.eval).not.toHaveBeenCalled();
       expect(mockFormContext.getRecords).toHaveBeenCalled();
@@ -102,22 +104,23 @@ describe('ScriptRunner', () => {
 
     it('should not execute eval when interceptor is undefined', () => {
       scriptRunner.interceptor = undefined;
-      const eventJs = 'function(formContext, interceptor) { return true; }';
+      const base64String = utf8ToBase64('function(formContext, interceptor) { return true; }');
 
-      scriptRunner.execute(eventJs);
+      scriptRunner.execute(base64String);
 
       expect(global.eval).not.toHaveBeenCalled();
       expect(mockFormContext.getRecords).toHaveBeenCalled();
     });
 
     it('should handle complex eventJs functions', () => {
-      const eventJs = `function(formContext, interceptor) {
+      let utfString = `function(formContext, interceptor) {
         const records = formContext.getRecords();
         return records.length > 0;
       }`;
-      const expectedExecutiveJs = `(${eventJs})(formContext,interceptor)`;
+      const base64String = utf8ToBase64(utfString);
+      const expectedExecutiveJs = `(${utfString})(formContext,interceptor)`;
 
-      scriptRunner.execute(eventJs);
+      scriptRunner.execute(base64String);
 
       expect(global.eval).toHaveBeenCalledWith(expectedExecutiveJs);
       expect(mockFormContext.getRecords).toHaveBeenCalled();
@@ -127,7 +130,7 @@ describe('ScriptRunner', () => {
       const mockRecords = [{ id: 'test' }];
       mockFormContext.getRecords.mockReturnValue(mockRecords);
 
-      const result1 = scriptRunner.execute('function() { return true; }');
+      const result1 = scriptRunner.execute(utf8ToBase64('function() { return true; }'));
       const result2 = scriptRunner.execute(null);
       const result3 = scriptRunner.execute(undefined);
 
@@ -161,9 +164,9 @@ describe('ScriptRunner', () => {
     });
 
     it('should handle eventJs that modifies formContext', () => {
-      const eventJs = `function(formContext, interceptor) {
+      const eventJs = utf8ToBase64(`function(formContext, interceptor) {
         formContext.modifyRecord = true;
-      }`;
+      }`);
       const mockModifiedRecords = [{ id: 'modified' }];
       mockFormContext.getRecords.mockReturnValue(mockModifiedRecords);
 
@@ -174,9 +177,9 @@ describe('ScriptRunner', () => {
     });
 
     it('should handle eventJs that uses interceptor', () => {
-      const eventJs = `function(formContext, interceptor) {
+      const eventJs = utf8ToBase64(`function(formContext, interceptor) {
         interceptor.get('/api/data');
-      }`;
+      }`);
 
       scriptRunner.execute(eventJs);
 
@@ -187,8 +190,9 @@ describe('ScriptRunner', () => {
 
     it('should work with arrow function eventJs', () => {
       const eventJs = '(formContext, interceptor) => formContext.getRecords()';
+      const base64String = utf8ToBase64(eventJs);
 
-      scriptRunner.execute(eventJs);
+      scriptRunner.execute(base64String);
 
       expect(global.eval).toHaveBeenCalledWith(`(${eventJs})(formContext,interceptor)`);
     });
