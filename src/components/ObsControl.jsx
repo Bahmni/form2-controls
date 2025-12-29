@@ -186,7 +186,7 @@ export class ObsControl extends addMoreDecorator(Component) {
     const { metadata: { properties }, value } = this.props;
     const isAbnormal = find(properties, (val, key) => (key === 'abnormal' && val));
     const isAbnormalObs = (value.interpretation === 'ABNORMAL');
-    const abnormalClassName = classNames({ 'fa fa-ok': isAbnormalObs });
+    const abnormalClassName = classNames({ 'fas fa-check': isAbnormalObs });
     if (isAbnormal) {
       return (
         <button className="abnormal-button" disabled={!value.value} onClick={this.setAbnormal} >

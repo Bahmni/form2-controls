@@ -1,3 +1,9 @@
+import '@fortawesome/fontawesome-free/css/fontawesome.css';
+import '@fortawesome/fontawesome-free/css/solid.css';
+import '@fortawesome/fontawesome-free/css/regular.css';
+import '@fortawesome/fontawesome-free/css/brands.css';
+import '@fortawesome/fontawesome-free/css/v4-shims.css';
+
 export { Container } from 'components/Container.jsx';
 export { ObsControl } from 'components/ObsControl.jsx';
 export { Label } from 'components/Label.jsx';
@@ -61,4 +67,3 @@ export { CodedMultiSelectValueMapper } from 'src/mapper/CodedMultiSelectValueMap
 export { TranslationKeyGenerator } from 'src/services/TranslationKeyService';
 
 import '../styles/styles.scss';
-

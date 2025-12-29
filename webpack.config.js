@@ -39,6 +39,20 @@ module.exports = {
         include: path.join(__dirname, 'src')
       },
       {
+        test: /\.css$/,
+        include: /node_modules\/@fortawesome/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              url: true,
+              import: true
+            }
+          }
+        ]
+      },
+      {
         test: /\.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
@@ -48,6 +62,10 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
+        type: 'asset/inline'
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/inline'
       }
     ]
