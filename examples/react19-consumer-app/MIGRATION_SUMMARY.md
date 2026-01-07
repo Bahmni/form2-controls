@@ -189,7 +189,7 @@ root.render(
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          formControls: ['bahmni-form-controls']
+          formControls: ['@bahmni/form2-controls']
         }
       }
     }

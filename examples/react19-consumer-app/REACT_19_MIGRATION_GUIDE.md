@@ -327,7 +327,7 @@ setConfig(prev => ({ ...prev, [key]: !prev[key] })); // Function form
 **File:** `src/App.jsx`
 
 ```jsx
-import 'bahmni-form-controls/dist/bundle.css';
+import '@bahmni/form2-controls/dist/bundle.css';
 import './App.css';
 ```
 
@@ -478,7 +478,7 @@ npm run preview
 +   "react": "^19.0.0",
 -   "react-dom": "^18.3.1",
 +   "react-dom": "^19.0.0",
-    "bahmni-form-controls": "file:../.."
+    "@bahmni/form2-controls": "file:../.."
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
