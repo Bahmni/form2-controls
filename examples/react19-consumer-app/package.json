@@ -1,7 +1,7 @@
 {
   "name": "bahmni-form-controls-react19-demo",
   "version": "2.0.0",
-  "description": "React 19 demo application using bahmni-form-controls library",
+  "description": "React 19 demo application using @bahmni/form2-controls library",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,7 +13,7 @@
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "bahmni-form-controls": "file:../.."
+    "@bahmni/form2-controls": "file:../.."
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",

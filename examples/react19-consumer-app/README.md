@@ -1,6 +1,6 @@
 # Bahmni Form Controls - React 19 Consumer Application
 
-A complete, production-ready demo application showing how to integrate and use the `bahmni-form-controls` library in a **React 19.0.0** application with modern best practices.
+A complete, production-ready demo application showing how to integrate and use the `@bahmni/form2-controls` library in a **React 19.0.0** application with modern best practices.
 
 ## 🎯 Overview
 
@@ -51,7 +51,7 @@ This application demonstrates a **Clinical Assessment Form** using React 19's la
 ### Prerequisites
 
 - Node.js 18+ and npm/yarn
-- Built bahmni-form-controls library
+- Built @bahmni/form2-controls library
 
 ### Step 1: Build the Main Library
 
@@ -116,8 +116,8 @@ react19-consumer-app/
 Main application component featuring React 19 best practices:
 
 ```jsx
-import { Container } from 'bahmni-form-controls';
-import 'bahmni-form-controls/dist/bundle.css';
+import { Container } from '@bahmni/form2-controls';
+import '@bahmni/form2-controls/dist/bundle.css';
 
 function App() {
   const formRef = useRef(null);
@@ -456,8 +456,6 @@ Extend the app with:
 - [Migration Guide](./REACT_19_MIGRATION_GUIDE.md)
 - [Vite Documentation](https://vitejs.dev)
 
-### Compare Versions
-- [React 18 Consumer App](../react18-consumer-app/) - Compare implementations
 
 ## 🆚 React 18 vs React 19 Comparison
 
@@ -536,7 +534,7 @@ To contribute to this example:
 
 ## 📄 License
 
-GPL-2.0 (same as bahmni-form-controls)
+MPL-v2.0 (same as @bahmni/form2-controls)
 
 ---
 

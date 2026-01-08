@@ -173,7 +173,7 @@ export class Container extends addMoreDecorator(Component) {
 
   render() {
     const { metadata: { controls,
-      name: formName, version: formVersion }, validate, translations, patient } = this.props;
+      name: formName, version: formVersion }, validate, translations, patient, readonly } = this.props;
     const formTranslations = { ...translations.labels, ...translations.concepts };
     const patientUuid = patient ? patient.uuid : undefined;
     const childProps = {
@@ -190,6 +190,7 @@ export class Container extends addMoreDecorator(Component) {
       showNotification: this.showNotification,
       validate,
       validateForm: this.props.validateForm,
+      enabled: !readonly,
     };
     const groupedRowControls = getGroupedControls(controls, 'row');
     const records = this.state.data.getActive().children.toArray();
@@ -222,6 +223,7 @@ Container.propTypes = {
   observations: PropTypes.array.isRequired,
   onValueUpdated: PropTypes.func,
   patient: PropTypes.object.isRequired,
+  readonly: PropTypes.bool,
   translations: PropTypes.object.isRequired,
   validate: PropTypes.bool.isRequired,
   validateForm: PropTypes.bool.isRequired,

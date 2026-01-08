@@ -24,12 +24,12 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          formControls: ['bahmni-form-controls']
+          formControls: ['@bahmni/form2-controls']
         }
       }
     }
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'bahmni-form-controls']
+    include: ['react', 'react-dom', '@bahmni/form2-controls']
   }
 });

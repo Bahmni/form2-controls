@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
-import { Container } from 'bahmni-form-controls';
-import 'bahmni-form-controls/dist/bundle.css';
+import { Container } from '@bahmni/form2-controls';
+import '@bahmni/form2-controls/dist/bundle.css';
 import {
   clinicalFormMetadata,
   existingObservations,
@@ -36,7 +36,8 @@ function App() {
   const [config, setConfig] = useState({
     validate: true,
     validateForm: false,
-    collapse: false
+    collapse: false,
+    readonly: false
   });
 
   // Track when Container is actually mounted
@@ -201,8 +202,17 @@ function App() {
               <label className="checkbox-label">
                 <input
                   type="checkbox"
+                  checked={config.readonly}
+                  onChange={() => handleConfigChange('readonly')}
+                />
+                <span>🔒 Readonly Mode</span>
+              </label>
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
                   checked={config.validate}
                   onChange={() => handleConfigChange('validate')}
+                  disabled={config.readonly}
                 />
                 <span>Enable Validation</span>
               </label>
@@ -211,6 +221,7 @@ function App() {
                   type="checkbox"
                   checked={config.validateForm}
                   onChange={() => handleConfigChange('validateForm')}
+                  disabled={config.readonly}
                 />
                 <span>Validate on Load</span>
               </label>
@@ -282,6 +293,7 @@ function App() {
                   collapse={config.collapse}
                   locale="en"
                   onValueUpdated={handleFormValueUpdated}
+                  readonly={config.readonly}
                 />
               </ErrorBoundary>
             </div>
@@ -338,7 +350,7 @@ function App() {
                 <strong>Framework:</strong> React 19.0.0
               </li>
               <li>
-                <strong>Library:</strong> bahmni-form-controls
+                <strong>Library:</strong> @bahmni/form2-controls
               </li>
               <li>
                 <strong>Features:</strong> Enhanced hooks, strict dependencies, improved performance
