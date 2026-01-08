@@ -759,6 +759,29 @@ describe('Container', () => {
   });
 
   describe('Edge Cases and Props', () => {
+    it('should handle readonly prop and disable controls when set to true', () => {
+      const metadata = createNumericControlMetadata();
+      const { rerender } = renderContainer({ metadata, readonly: true });
+
+      const input = screen.getByRole('spinbutton');
+      expect(input).toBeDisabled();
+
+      rerender(
+        <Container {...defaultProps} metadata={metadata} readonly={false} />,
+      );
+
+      const enabledInput = screen.getByRole('spinbutton');
+      expect(enabledInput).toBeEnabled();
+    });
+
+    it('should enable controls when readonly prop is not provided', () => {
+      const metadata = createNumericControlMetadata();
+      renderContainer({ metadata });
+
+      const input = screen.getByRole('spinbutton');
+      expect(input).toBeEnabled();
+    });
+
     it('should handle prop changes correctly', () => {
       const metadata = createNumericControlMetadata();
       const patient = { age: 30, gender: 'F', uuid: 'patient-123' };
