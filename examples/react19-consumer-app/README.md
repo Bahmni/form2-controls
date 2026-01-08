@@ -456,8 +456,6 @@ Extend the app with:
 - [Migration Guide](./REACT_19_MIGRATION_GUIDE.md)
 - [Vite Documentation](https://vitejs.dev)
 
-### Compare Versions
-- [React 18 Consumer App](../react18-consumer-app/) - Compare implementations
 
 ## 🆚 React 18 vs React 19 Comparison
 

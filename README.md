@@ -108,48 +108,6 @@ See [REACT_19_MIGRATION.md](./docs/REACT_19_MIGRATION.md) for detailed steps.
 
 ---
 
-### Version 1.1.0 (React 18 Upgrade)
-
-This release upgrades the library to React 18.3.1, bringing performance improvements and modern React APIs while maintaining backward compatibility.
-
-**Breaking Changes:**
-
-- **React 18 Upgrade**: Upgraded from React 17.0.2 to React 18.3.1
-  - Updated peer dependencies: `react` and `react-dom` to `^18.3.1`
-  - Container component API remains unchanged - no code changes needed for consumers
-
-- **ReactDOM API**: Migrated to React 18's createRoot API
-  - Updated `formRenderer.js` with proper root management and cleanup
-  - See [Migration Guide](./REACT_18_MIGRATION.md) for API details
-
-- **Component Updates**: Removed deprecated `UNSAFE_` lifecycle methods from 11 components
-  - See [Migration Guide](./REACT_18_MIGRATION.md) for complete list of updated components
-
-**New Features:**
-
-- React 18 example application in `examples/react18-consumer-app/`
-- Comprehensive troubleshooting and quick-fix documentation
-
-**Performance Improvements:**
-
-- Automatic batching reduces unnecessary re-renders
-- Better root management and memory cleanup
-- Foundation for future concurrent rendering features
-
-**Migration:**
-
-For detailed migration steps, see [REACT_18_MIGRATION.md](./REACT_18_MIGRATION.md)
-
-Quick steps:
-1. Update React dependencies to 18.3.1
-2. Update entry point to use `createRoot` (if using formRenderer directly)
-3. Update custom components (if extended any form-controls components)
-4. Run tests
-
-**Resources:**
-- [Migration Guide](./REACT_18_MIGRATION.md) - Detailed migration steps and API changes
-- [Example App](./examples/react18-consumer-app/) - Working React 18 integration example
----
 
 ### Version 1.0.0 (Major Release)
 
