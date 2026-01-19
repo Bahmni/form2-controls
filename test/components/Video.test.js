@@ -116,6 +116,30 @@ describe('Video Control', () => {
       expect(Util.uploadFile).not.toHaveBeenCalled();
     });
 
+    it('should handle upload failure and show error notification', async () => {
+      Util.uploadFile.mockImplementation(() => Promise.reject('Network error'));
+      const { container } = renderVideo();
+
+      const fileInput = screen.getByLabelText('Upload Video');
+      const file = new File(['content'], 'test.mp4', { type: 'video/mp4' });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      mockFileReader.onloadend({ target: { result: 'data:video/mp4;base64,/9j/4SumRXhpZgAATU' } });
+
+      await waitFor(() => {
+        expect(mockShowNotification).toHaveBeenCalledWith(
+          constants.errorMessage.uploadFailed,
+          constants.messageType.error
+        );
+      });
+
+      await waitFor(() => {
+        const spinnerElement = container.querySelector('.overlay');
+        expect(spinnerElement).not.toBeInTheDocument();
+      });
+    });
+
     it('should show restore button when click the delete button', () => {
       const { container, rerender } = renderVideo({ value: 'someValue' });
 

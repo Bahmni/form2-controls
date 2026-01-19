@@ -110,6 +110,30 @@ describe('Image Control', () => {
       expect(Util.uploadFile).not.toHaveBeenCalled();
     });
 
+    it('should handle upload failure and show error notification', async () => {
+      Util.uploadFile.mockImplementation(() => Promise.reject('Network error'));
+      const { container } = renderImage();
+
+      const fileInput = screen.getByLabelText('', { selector: 'input[type="file"]' });
+      const file = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      mockFileReader.onloadend({ target: { result: 'data:image/jpeg;base64,/9j/4SumRXhpZgAATU' } });
+
+      await waitFor(() => {
+        expect(mockShowNotification).toHaveBeenCalledWith(
+          constants.errorMessage.uploadFailed,
+          constants.messageType.error
+        );
+      });
+
+      await waitFor(() => {
+        const spinnerElement = container.querySelector('.overlay');
+        expect(spinnerElement).not.toBeInTheDocument();
+      });
+    });
+
     it('should display the file which been uploaded', () => {
       renderImage({ value: 'someValue' });
 

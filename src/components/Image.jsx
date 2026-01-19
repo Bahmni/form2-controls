@@ -111,6 +111,11 @@ export class Image extends Component {
         .then((response) => response.json())
         .then(data => {
           this.update(data.url);
+        })
+        .catch(() => {
+          this.setState({ loading: false });
+          this.props.showNotification(Constants.errorMessage.uploadFailed,
+            Constants.messageType.error);
         });
     };
     reader.readAsDataURL(file);
