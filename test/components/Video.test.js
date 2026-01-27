@@ -116,6 +116,30 @@ describe('Video Control', () => {
       expect(Util.uploadFile).not.toHaveBeenCalled();
     });
 
+    it('should handle upload failure and show error notification', async () => {
+      Util.uploadFile.mockImplementation(() => Promise.reject('Network error'));
+      const { container } = renderVideo();
+
+      const fileInput = screen.getByLabelText('Upload Video');
+      const file = new File(['content'], 'test.mp4', { type: 'video/mp4' });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      mockFileReader.onloadend({ target: { result: 'data:video/mp4;base64,/9j/4SumRXhpZgAATU' } });
+
+      await waitFor(() => {
+        expect(mockShowNotification).toHaveBeenCalledWith(
+          constants.errorMessage.uploadFailed,
+          constants.messageType.error
+        );
+      });
+
+      await waitFor(() => {
+        const spinnerElement = container.querySelector('.overlay');
+        expect(spinnerElement).not.toBeInTheDocument();
+      });
+    });
+
     it('should show restore button when click the delete button', () => {
       const { container, rerender } = renderVideo({ value: 'someValue' });
 
@@ -138,10 +162,12 @@ describe('Video Control', () => {
       expect(container.querySelector('.restore-button')).toBeInTheDocument();
     });
 
-    it('should one add more complex control without notification', () => {
+    it('should one add more complex control without notification', async () => {
       renderVideo({ value: 'someValue' });
 
-      expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
+      await waitFor(() => {
+        expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
+      });
     });
 
     it('should not add more complex control when there is no uploaded file', () => {
@@ -156,8 +182,12 @@ describe('Video Control', () => {
       expect(mockOnControlAdd).not.toHaveBeenCalled();
     });
 
-    it('should only one add more complex control when there is an re-uploaded file', () => {
+    it('should only one add more complex control when there is an re-uploaded file', async () => {
       const { rerender } = renderVideo({ value: 'someValue' });
+
+      await waitFor(() => {
+        expect(mockOnControlAdd).toHaveBeenCalledTimes(1);
+      });
 
       rerender(
         <Video
@@ -172,16 +202,21 @@ describe('Video Control', () => {
         />
       );
 
-      expect(mockOnControlAdd).toHaveBeenCalledTimes(1);
+      // Should still be called only once after rerender
+      await waitFor(() => {
+        expect(mockOnControlAdd).toHaveBeenCalledTimes(1);
+      });
     });
 
-    it('should add more control when there is value and switch the tab', () => {
+    it('should add more control when there is value and switch the tab', async () => {
       const { unmount } = renderVideo();
       unmount();
 
       renderVideo({ value: 'someValue' });
 
-      expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
+      await waitFor(() => {
+        expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
+      });
     });
 
     it('should throw error on fail of validations', () => {

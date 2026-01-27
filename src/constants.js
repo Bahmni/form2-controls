@@ -25,6 +25,7 @@ const Constants = {
 
   errorMessage: {
     fileTypeNotSupported: 'File Type not supported',
+    uploadFailed: 'Upload failed. Please try again.',
   },
 
   toastTimeout: 4000,

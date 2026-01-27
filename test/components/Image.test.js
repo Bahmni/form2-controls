@@ -110,6 +110,30 @@ describe('Image Control', () => {
       expect(Util.uploadFile).not.toHaveBeenCalled();
     });
 
+    it('should handle upload failure and show error notification', async () => {
+      Util.uploadFile.mockImplementation(() => Promise.reject('Network error'));
+      const { container } = renderImage();
+
+      const fileInput = screen.getByLabelText('', { selector: 'input[type="file"]' });
+      const file = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      mockFileReader.onloadend({ target: { result: 'data:image/jpeg;base64,/9j/4SumRXhpZgAATU' } });
+
+      await waitFor(() => {
+        expect(mockShowNotification).toHaveBeenCalledWith(
+          constants.errorMessage.uploadFailed,
+          constants.messageType.error
+        );
+      });
+
+      await waitFor(() => {
+        const spinnerElement = container.querySelector('.overlay');
+        expect(spinnerElement).not.toBeInTheDocument();
+      });
+    });
+
     it('should display the file which been uploaded', () => {
       renderImage({ value: 'someValue' });
 
@@ -185,10 +209,12 @@ describe('Image Control', () => {
       expect(container.querySelector('.restore-button')).not.toBeInTheDocument();
     });
 
-    it('should one add more complex control without notification', () => {
+    it('should one add more complex control without notification', async () => {
       renderImage({ value: 'someValue' });
 
-      expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
+      await waitFor(() => {
+        expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
+      });
     });
 
     it('should one add more complex control with notification after uploading the file', async () => {
@@ -220,8 +246,12 @@ describe('Image Control', () => {
       expect(mockOnControlAdd).not.toHaveBeenCalled();
     });
 
-    it('should only one add more complex control when there is an re-uploaded file', () => {
+    it('should only one add more complex control when there is an re-uploaded file', async () => {
       const { rerender } = renderImage({ value: 'someValue' });
+
+      await waitFor(() => {
+        expect(mockOnControlAdd).toHaveBeenCalledTimes(1);
+      });
 
       rerender(
         <Image
@@ -236,16 +266,21 @@ describe('Image Control', () => {
         />
       );
 
-      expect(mockOnControlAdd).toHaveBeenCalledTimes(1);
+      // Should still be called only once after rerender
+      await waitFor(() => {
+        expect(mockOnControlAdd).toHaveBeenCalledTimes(1);
+      });
     });
 
-    it('should add more control when there is value and switch the tab', () => {
+    it('should add more control when there is value and switch the tab', async () => {
       const { unmount } = renderImage();
       unmount();
 
       renderImage({ value: 'someValue' });
 
-      expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
+      await waitFor(() => {
+        expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
+      });
     });
 
     it('should throw error on fail of validations', () => {
