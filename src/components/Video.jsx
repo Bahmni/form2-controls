@@ -19,6 +19,13 @@ export class Video extends Component {
     this.displayDeleteButton = this.displayDeleteButton.bind(this);
   }
 
+  componentDidMount() {
+    // Add control on initial mount if component has a value
+    if (this.props.value && !this.props.value.includes('voided')) {
+      this.addControlWithNotification(false);
+    }
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     this.isValueChanged = this.props.value !== nextProps.value;
     if (this.props.enabled !== nextProps.enabled ||
@@ -76,6 +83,7 @@ export class Video extends Component {
     this.setState({ loading: true });
     if (e.target.files === undefined) {
       this.update(undefined);
+      e.target.value = '';
       return;
     }
     const file = e.target.files[0];
@@ -85,6 +93,7 @@ export class Video extends Component {
       this.update(undefined);
       this.props.showNotification(Constants.errorMessage.fileTypeNotSupported,
         Constants.messageType.error);
+      e.target.value = '';
       return;
     }
     reader.onloadend = (event) => {
@@ -92,15 +101,20 @@ export class Video extends Component {
         .then((response) => response.json())
         .then(data => {
           this.update(data.url);
+          e.target.value = '';
+          // Call directly on successful upload
+          this.setState({}, () => {
+            this.addControlWithNotification(true);
+          });
         })
         .catch(() => {
           this.setState({ loading: false });
           this.props.showNotification(Constants.errorMessage.uploadFailed,
             Constants.messageType.error);
+          e.target.value = '';
         });
     };
     reader.readAsDataURL(file);
-    this.addControlWithNotification(true);
   }
 
   handleDelete() {
@@ -145,7 +159,6 @@ export class Video extends Component {
       } else {
         deleteButton = this.displayDeleteButton();
       }
-      this.addControlWithNotification(false);
     }
     const id = `file-browse-observation_${this.props.formFieldPath.split('/')[1]}`;
     const loading = (this.state.loading === true);

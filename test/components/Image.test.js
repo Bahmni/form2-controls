@@ -209,10 +209,12 @@ describe('Image Control', () => {
       expect(container.querySelector('.restore-button')).not.toBeInTheDocument();
     });
 
-    it('should one add more complex control without notification', () => {
+    it('should one add more complex control without notification', async () => {
       renderImage({ value: 'someValue' });
 
-      expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
+      await waitFor(() => {
+        expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
+      });
     });
 
     it('should one add more complex control with notification after uploading the file', async () => {
@@ -244,8 +246,12 @@ describe('Image Control', () => {
       expect(mockOnControlAdd).not.toHaveBeenCalled();
     });
 
-    it('should only one add more complex control when there is an re-uploaded file', () => {
+    it('should only one add more complex control when there is an re-uploaded file', async () => {
       const { rerender } = renderImage({ value: 'someValue' });
+
+      await waitFor(() => {
+        expect(mockOnControlAdd).toHaveBeenCalledTimes(1);
+      });
 
       rerender(
         <Image
@@ -260,16 +266,21 @@ describe('Image Control', () => {
         />
       );
 
-      expect(mockOnControlAdd).toHaveBeenCalledTimes(1);
+      // Should still be called only once after rerender
+      await waitFor(() => {
+        expect(mockOnControlAdd).toHaveBeenCalledTimes(1);
+      });
     });
 
-    it('should add more control when there is value and switch the tab', () => {
+    it('should add more control when there is value and switch the tab', async () => {
       const { unmount } = renderImage();
       unmount();
 
       renderImage({ value: 'someValue' });
 
-      expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
+      await waitFor(() => {
+        expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, false);
+      });
     });
 
     it('should throw error on fail of validations', () => {

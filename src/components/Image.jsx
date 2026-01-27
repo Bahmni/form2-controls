@@ -19,6 +19,13 @@ export class Image extends Component {
     this.displayDeleteButton = this.displayDeleteButton.bind(this);
   }
 
+  componentDidMount() {
+    // Add control on initial mount if component has a value
+    if (this.props.value && !this.props.value.includes('voided')) {
+      this.addControlWithNotification(false);
+    }
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     this.isValueChanged = this.props.value !== nextProps.value;
     if (this.props.enabled !== nextProps.enabled ||
@@ -36,7 +43,7 @@ export class Image extends Component {
       if (this.props.validate) {
         const errors = this._getErrors(this.props.value);
         const hasErrors = this._hasErrors(errors);
-        
+
         if (this.state.hasErrors !== hasErrors) {
           this.setState({ hasErrors });
         }
@@ -86,15 +93,11 @@ export class Image extends Component {
   }
 
   handleChange(e) {
-    const value = e.target.value;
-    // eslint-disable-next-line no-unused-vars
-    const errors = this._getErrors(value);
-    this.setState({ hasErrors: this._hasErrors(errors) });
-    this.props.onChange({ value, errors });
     e.preventDefault();
     this.setState({ loading: true });
     if (e.target.files === undefined) {
       this.update(undefined);
+      e.target.value = '';
       return;
     }
     const file = e.target.files[0];
@@ -104,6 +107,7 @@ export class Image extends Component {
       this.update(undefined);
       this.props.showNotification(Constants.errorMessage.fileTypeNotSupported,
         Constants.messageType.error);
+      e.target.value = '';
       return;
     }
     reader.onloadend = (event) => {
@@ -111,15 +115,20 @@ export class Image extends Component {
         .then((response) => response.json())
         .then(data => {
           this.update(data.url);
+          e.target.value = '';
+          // Call directly on successful upload
+          this.setState({}, () => {
+            this.addControlWithNotification(true);
+          });
         })
         .catch(() => {
           this.setState({ loading: false });
           this.props.showNotification(Constants.errorMessage.uploadFailed,
             Constants.messageType.error);
+          e.target.value = '';
         });
     };
     reader.readAsDataURL(file);
-    this.addControlWithNotification(true);
   }
 
   handleDelete() {
@@ -152,6 +161,7 @@ export class Image extends Component {
     let isPreviewHidden = true;
     let deleteButton = null;
     let restoreButton = null;
+
     if (this.props.value) {
       isPreviewHidden = false;
       let imageUrl;
@@ -165,7 +175,6 @@ export class Image extends Component {
       if (this.props.value.indexOf('voided') > 0) {
         restoreButton = this.displayRestoreButton();
       }
-      this.addControlWithNotification(false);
     }
     const id = `file-browse-observation_${this.props.formFieldPath.split('/')[1]}`;
     const loading = (this.state.loading === true);
