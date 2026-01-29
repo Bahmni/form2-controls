@@ -57,10 +57,7 @@ export { ProviderDesigner } from 'components/designer/Provider.jsx';
 export { IDGenerator } from 'src/helpers/idGenerator';
 export { DescriptorParser } from 'src/helpers/descriptorParser';
 export { default as ComponentStore } from 'src/helpers/componentStore';
-export { default as ScriptRunner } from 'src/helpers/scriptRunner';
 export { runEventScript } from 'src/helpers/runEventScript';
-export { default as ObservationMapper } from 'src/helpers/ObservationMapper';
-export { default as ControlRecordTreeBuilder } from 'src/helpers/ControlRecordTreeBuilder';
 
 // -------------------------- mappers ---------------------
 export { BooleanValueMapper } from 'src/mapper/BooleanValueMapper';
