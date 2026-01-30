@@ -57,6 +57,7 @@ export { ProviderDesigner } from 'components/designer/Provider.jsx';
 export { IDGenerator } from 'src/helpers/idGenerator';
 export { DescriptorParser } from 'src/helpers/descriptorParser';
 export { default as ComponentStore } from 'src/helpers/componentStore';
+export { runEventScript } from 'src/helpers/runEventScript';
 
 // -------------------------- mappers ---------------------
 export { BooleanValueMapper } from 'src/mapper/BooleanValueMapper';

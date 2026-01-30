@@ -287,3 +287,33 @@ export class CodedMultiSelectValueMapper {
 export class TranslationKeyGenerator {
   static generate(key: string): string;
 }
+
+export function runEventScript(
+  formData: any,
+  eventScript: string,
+  patient: { uuid: string; [key: string]: any },
+  parentRecord?: any,
+): any;
+
+export class ScriptRunner {
+  constructor(rootRecord: any, patient: PatientData, parentRecord?: any);
+  execute(eventJs: string): any;
+}
+
+// ==================== Data Transformation ====================
+export class ObservationMapper {
+  from(records: any): ObservationData[];
+}
+
+export class ControlRecordTreeBuilder {
+  getRecords(
+    controls: any[],
+    formName: string,
+    formVersion: string,
+    currentLayerObs: any,
+    allObs: any,
+    parentFormFieldPath?: string
+  ): any;
+  parseObs(obs: any): any;
+  build(metadata: FormMetadata, observation: ObservationData[]): any;
+}
