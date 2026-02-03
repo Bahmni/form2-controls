@@ -1,18 +1,11 @@
 {
   "name": "@bahmni/form2-controls",
-  "version": "0.0.06",
+  "version": "0.0.7",
   "description": "Repository for form controls",
   "license": "MPL-2.0",
   "main": "./dist/bundle.js",
   "style": "./dist/bundle.css",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/bundle.js"
-    },
-    "./dist/bundle.css": "./dist/bundle.css"
-  },
   "scripts": {
     "clean": "rimraf dist/*",
     "build": "webpack && copyfiles index.d.ts dist",
