@@ -317,3 +317,84 @@ export class ControlRecordTreeBuilder {
   parseObs(obs: any): any;
   build(metadata: FormMetadata, observation: ObservationData[]): any;
 }
+
+// ==================== FHIR Transformation ====================
+
+/**
+ * FHIR Reference type
+ */
+export interface FhirReference {
+  reference: string;
+  type?: string;
+  display?: string;
+}
+
+/**
+ * Options for FHIR observation transformation
+ */
+export interface FhirTransformOptions {
+  /** FHIR Reference to the patient (e.g., { reference: 'Patient/uuid' }) */
+  patientReference: FhirReference;
+  /** FHIR Reference to the encounter (e.g., { reference: 'Encounter/uuid' }) */
+  encounterReference: FhirReference;
+  /** FHIR Reference to the performer/practitioner (e.g., { reference: 'Practitioner/uuid' }) */
+  performerReference: FhirReference;
+}
+
+/**
+ * FHIR Observation bundle entry
+ */
+export interface FhirObservationEntry {
+  /** The FHIR Observation resource */
+  resource: {
+    resourceType: 'Observation';
+    id: string;
+    status: string;
+    code: any;
+    subject: FhirReference;
+    encounter: FhirReference;
+    performer: FhirReference[];
+    effectiveDateTime: string;
+    valueQuantity?: { value: number };
+    valueString?: string;
+    valueBoolean?: boolean;
+    valueDateTime?: string;
+    valueCodeableConcept?: any;
+    interpretation?: any[];
+    extension?: any[];
+    note?: any[];
+    hasMember?: FhirReference[];
+    [key: string]: any;
+  };
+  /** The full URL for bundle reference (e.g., 'urn:uuid:xxx') */
+  fullUrl: string;
+}
+
+/**
+ * Transforms Container observations to FHIR Observation resources
+ */
+export class FhirObservationTransformer {
+  /**
+   * Transform observations to FHIR Observation resources
+   * @param observations - Raw observations from Container.getValue() or Form2Observation[]
+   * @param options - Configuration options with patient, encounter, and performer references
+   * @returns Array of FHIR Observation bundle entries with resource and fullUrl
+   */
+  toFhir(
+    observations: ObservationData[],
+    options: FhirTransformOptions
+  ): FhirObservationEntry[];
+}
+
+// ==================== FHIR Constants ====================
+
+export const FHIR_OBSERVATION_INTERPRETATION_SYSTEM: string;
+export const FHIR_OBSERVATION_FORM_NAMESPACE_PATH_URL: string;
+export const FHIR_OBSERVATION_COMPLEX_DATA_URL: string;
+export const CONCEPT_DATATYPE_NUMERIC: string;
+export const CONCEPT_DATATYPE_COMPLEX: string;
+export const FHIR_OBSERVATION_STATUS_FINAL: string;
+export const FHIR_RESOURCE_TYPE_OBSERVATION: string;
+export const DATE_REGEX_PATTERN: RegExp;
+export const DATETIME_REGEX_PATTERN: RegExp;
+export const INTERPRETATION_TO_CODE: Record<string, { code: string; display: string }>;
