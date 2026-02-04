@@ -372,19 +372,16 @@ export interface FhirObservationEntry {
 
 /**
  * Transforms Container observations to FHIR Observation resources
+ * @param observations - Raw observations from Container.getValue() or Form2Observation[]
+ * @param options - Configuration options with patient, encounter, and performer references
+ * @returns Array of FHIR Observation bundle entries with resource and fullUrl
  */
-export class FhirObservationTransformer {
-  /**
-   * Transform observations to FHIR Observation resources
-   * @param observations - Raw observations from Container.getValue() or Form2Observation[]
-   * @param options - Configuration options with patient, encounter, and performer references
-   * @returns Array of FHIR Observation bundle entries with resource and fullUrl
-   */
-  toFhir(
-    observations: ObservationData[],
-    options: FhirTransformOptions
-  ): FhirObservationEntry[];
-}
+export function transformToFhir(
+  observations: ObservationData[],
+  options: FhirTransformOptions
+): FhirObservationEntry[];
+
+export const FhirObservationTransformer
 
 // ==================== FHIR Constants ====================
 

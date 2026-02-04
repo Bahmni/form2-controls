@@ -200,73 +200,70 @@ const createObservationResource = (observationPayload, options) => {
  * Transforms Container observations to FHIR Observation resources
  *
  * @example
- * const transformer = new FhirObservationTransformer();
- * const fhirObservations = transformer.toFhir(observations, {
+ * const fhirObservations = transformToFhir(observations, {
  *   patientReference: { reference: 'Patient/uuid' },
  *   encounterReference: { reference: 'Encounter/uuid' },
  *   performerReference: { reference: 'Practitioner/uuid' }
  * });
+ *
+ * @param {Array} observations - Raw observations from Container.getValue() or transformed Form2Observation[]
+ * @param {Object} options - Configuration options
+ * @param {Object} options.patientReference - FHIR Reference to patient (e.g., { reference: 'Patient/uuid' })
+ * @param {Object} options.encounterReference - FHIR Reference to encounter (e.g., { reference: 'Encounter/uuid' })
+ * @param {Object} options.performerReference - FHIR Reference to performer (e.g., { reference: 'Practitioner/uuid' })
+ * @returns {Array<{resource: Object, fullUrl: string}>} Array of FHIR Observation bundle entries
  */
-export default class FhirObservationTransformer {
-  /**
-   * Transform Container observations to FHIR Observation resources
-   * @param {Array} observations - Raw observations from Container.getValue() or transformed Form2Observation[]
-   * @param {Object} options - Configuration options
-   * @param {Object} options.patientReference - FHIR Reference to patient (e.g., { reference: 'Patient/uuid' })
-   * @param {Object} options.encounterReference - FHIR Reference to encounter (e.g., { reference: 'Encounter/uuid' })
-   * @param {Object} options.performerReference - FHIR Reference to performer (e.g., { reference: 'Practitioner/uuid' })
-   * @returns {Array<{resource: Object, fullUrl: string}>} Array of FHIR Observation bundle entries
-   */
-  toFhir(observations, options) {
-    if (!observations || !Array.isArray(observations)) {
-      return [];
-    }
-
-    const results = [];
-
-    for (const obs of observations) {
-      // Handle voided observations
-      if (obs.voided) {
-        continue;
-      }
-
-      if (obs.groupMembers && obs.groupMembers.length > 0) {
-        // Recursively process group members
-        const memberResults = this.toFhir(obs.groupMembers, options);
-        results.push(...memberResults);
-
-        // Create parent observation with hasMember references
-        const parentObservation = createObservationResource(obs, options);
-        parentObservation.hasMember = memberResults.map((member) => ({
-          reference: member.fullUrl,
-          type: 'Observation',
-        }));
-
-        const parentUuid = generateUUID();
-        const parentFullUrl = `urn:uuid:${parentUuid}`;
-
-        results.push({
-          resource: {
-            ...parentObservation,
-            id: parentUuid,
-          },
-          fullUrl: parentFullUrl,
-        });
-      } else {
-        const observation = createObservationResource(obs, options);
-        const uuid = generateUUID();
-        const fullUrl = `urn:uuid:${uuid}`;
-
-        results.push({
-          resource: {
-            ...observation,
-            id: uuid,
-          },
-          fullUrl,
-        });
-      }
-    }
-
-    return results;
+export function transformToFhir(observations, options) {
+  if (!observations || !Array.isArray(observations)) {
+    return [];
   }
+
+  const results = [];
+
+  for (const obs of observations) {
+    // Handle voided observations
+    if (obs.voided) {
+      continue;
+    }
+
+    if (obs.groupMembers && obs.groupMembers.length > 0) {
+      // Recursively process group members
+      const memberResults = transformToFhir(obs.groupMembers, options);
+      results.push(...memberResults);
+
+      // Create parent observation with hasMember references
+      const parentObservation = createObservationResource(obs, options);
+      parentObservation.hasMember = memberResults.map((member) => ({
+        reference: member.fullUrl,
+        type: 'Observation',
+      }));
+
+      const parentUuid = generateUUID();
+      const parentFullUrl = `urn:uuid:${parentUuid}`;
+
+      results.push({
+        resource: {
+          ...parentObservation,
+          id: parentUuid,
+        },
+        fullUrl: parentFullUrl,
+      });
+    } else {
+      const observation = createObservationResource(obs, options);
+      const uuid = generateUUID();
+      const fullUrl = `urn:uuid:${uuid}`;
+
+      results.push({
+        resource: {
+          ...observation,
+          id: uuid,
+        },
+        fullUrl,
+      });
+    }
+  }
+
+  return results;
 }
+
+export default transformToFhir;

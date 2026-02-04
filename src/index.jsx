@@ -65,6 +65,7 @@ export { CodedValueMapper } from 'src/mapper/CodedValueMapper';
 export { CodedMultiSelectValueMapper } from 'src/mapper/CodedMultiSelectValueMapper';
 
 // -------------------------- FHIR transformation ---------------------
+export { transformToFhir } from 'src/helpers/FhirObservationTransformer';
 export { default as FhirObservationTransformer } from 'src/helpers/FhirObservationTransformer';
 export * from 'src/constants/fhir';
 
