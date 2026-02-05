@@ -9,14 +9,13 @@ import {
   DATE_REGEX_PATTERN,
   INTERPRETATION_TO_CODE,
 } from 'src/constants/fhir';
+import{
+   NUMBER,
+   STRING,
+   BOOLEAN,
+   OBJECT
+} from 'src/constants';
 
-/**
- * Creates a FHIR Coding object
- * @param {string} code - The code value
- * @param {string} [systemURL] - The coding system URL
- * @param {string} [display] - Display text for the coding
- * @returns {Object} FHIR Coding object
- */
 const createCoding = (code, systemURL, display) => {
   const coding = { code };
   if (systemURL) {
@@ -128,10 +127,10 @@ const createObservationResource = (observationPayload, options) => {
 
   if (value !== null && value !== undefined) {
     switch (typeof value) {
-      case 'number':
+      case NUMBER:
         observation.valueQuantity = { value };
         break;
-      case 'string': {
+      case STRING: {
         if (conceptDatatype === CONCEPT_DATATYPE_COMPLEX && value.trim() !== '') {
           observation.extension = observation.extension || [];
           observation.extension.push({
@@ -144,11 +143,11 @@ const createObservationResource = (observationPayload, options) => {
         }
         break;
       }
-      case 'boolean':
+      case BOOLEAN:
         observation.valueBoolean = value;
         break;
-      case 'object':
-        if (value instanceof Date) {
+      case OBJECT:
+        if (value instanceof Date && !isNaN(value.getTime())) {
           observation.valueDateTime = value.toISOString();
         } else if (value && 'uuid' in value) {
           observation.valueCodeableConcept = createCodeableConcept([
@@ -160,7 +159,8 @@ const createObservationResource = (observationPayload, options) => {
   }
 
   if (observationPayload.interpretation) {
-    const interpretationValue = observationPayload.interpretation.toUpperCase();
+    const interpretationString = String(observationPayload.interpretation);
+    const interpretationValue = interpretationString.toUpperCase();
     const mapping =
       INTERPRETATION_TO_CODE[interpretationValue] || INTERPRETATION_TO_CODE.NORMAL;
 
@@ -214,6 +214,11 @@ const createObservationResource = (observationPayload, options) => {
  * @returns {Array<{resource: Object, fullUrl: string}>} Array of FHIR Observation bundle entries
  */
 export function transformToFhir(observations, options) {
+  
+  if (!options || !options.patientReference || !options.encounterReference || !options.performerReference) {
+  throw new Error('transformToFhir requires patientReference, encounterReference, and performerReference in options');
+  }
+
   if (!observations || !Array.isArray(observations)) {
     return [];
   }

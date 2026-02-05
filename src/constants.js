@@ -17,6 +17,10 @@ const Constants = {
     error: 'error',
   },
   bahmni: 'Bahmni',
+   NUMBER: 'number',
+   STRING: 'string',
+   BOOLEAN: 'boolean',
+   OBJECT: 'object',
 
   messageType: {
     success: 'success',

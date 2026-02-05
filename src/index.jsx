@@ -66,8 +66,8 @@ export { CodedMultiSelectValueMapper } from 'src/mapper/CodedMultiSelectValueMap
 
 // -------------------------- FHIR transformation ---------------------
 export { transformToFhir } from 'src/helpers/FhirObservationTransformer';
-export { default as FhirObservationTransformer } from 'src/helpers/FhirObservationTransformer';
-export * from 'src/constants/fhir';
+import * as FhirConstants from 'src/constants/fhir';
+export { FhirConstants };
 
 // -------------------------- services ---------------------
 export { TranslationKeyGenerator } from 'src/services/TranslationKeyService';
