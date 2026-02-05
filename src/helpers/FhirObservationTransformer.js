@@ -9,12 +9,7 @@ import {
   DATE_REGEX_PATTERN,
   INTERPRETATION_TO_CODE,
 } from 'src/constants/fhir';
-import{
-   NUMBER,
-   STRING,
-   BOOLEAN,
-   OBJECT
-} from 'src/constants';
+import { NUMBER, STRING, BOOLEAN, OBJECT } from 'src/constants';
 
 const createCoding = (code, systemURL, display) => {
   const coding = { code };
