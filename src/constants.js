@@ -1,3 +1,8 @@
+export const NUMBER = 'number';
+export const STRING = 'string';
+export const BOOLEAN = 'boolean';
+export const OBJECT = 'object';
+
 const Constants = {
   Grid: {
     defaultRowWidth: 1,
@@ -17,6 +22,10 @@ const Constants = {
     error: 'error',
   },
   bahmni: 'Bahmni',
+  NUMBER,
+  STRING,
+  BOOLEAN,
+  OBJECT,
 
   messageType: {
     success: 'success',

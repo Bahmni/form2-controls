@@ -64,6 +64,11 @@ export { BooleanValueMapper } from 'src/mapper/BooleanValueMapper';
 export { CodedValueMapper } from 'src/mapper/CodedValueMapper';
 export { CodedMultiSelectValueMapper } from 'src/mapper/CodedMultiSelectValueMapper';
 
+// -------------------------- FHIR transformation ---------------------
+export { getFhirObservations } from 'src/helpers/FhirObservationTransformer';
+import * as FhirConstants from 'src/constants/fhir';
+export { FhirConstants };
+
 // -------------------------- services ---------------------
 export { TranslationKeyGenerator } from 'src/services/TranslationKeyService';
 
