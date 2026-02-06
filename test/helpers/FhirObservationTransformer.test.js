@@ -519,8 +519,7 @@ describe('FhirObservationTransformer', () => {
     });
 
     it('should handle empty observations array', () => {
-      const result = getFhirObeservations
-      ([], defaultOptions);
+      const result = getFhirObeservations([], defaultOptions);
       expect(result).toEqual([]);
     });
 
@@ -532,8 +531,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = getFhirObeservations
-      (observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       // Empty group members should still produce an observation without hasMember
       expect(result).toHaveLength(1);
