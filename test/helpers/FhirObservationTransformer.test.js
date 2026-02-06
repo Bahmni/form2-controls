@@ -1,4 +1,5 @@
-import transformToFhir from 'src/helpers/FhirObservationTransformer';
+import getFhirObeservations
+ from 'src/helpers/FhirObservationTransformer';
 import {
   FHIR_OBSERVATION_INTERPRETATION_SYSTEM,
   FHIR_OBSERVATION_FORM_NAMESPACE_PATH_URL,
@@ -16,17 +17,17 @@ describe('FhirObservationTransformer', () => {
 
   describe('toFhir', () => {
     it('should return empty array for null observations', () => {
-      const result = transformToFhir(null, defaultOptions);
+      const result = getFhirObeservations(null, defaultOptions);
       expect(result).toEqual([]);
     });
 
     it('should return empty array for undefined observations', () => {
-      const result = transformToFhir(undefined, defaultOptions);
+      const result = getFhirObeservations(undefined, defaultOptions);
       expect(result).toEqual([]);
     });
 
     it('should return empty array for non-array observations', () => {
-      const result = transformToFhir('invalid', defaultOptions);
+      const result = getFhirObeservations('invalid', defaultOptions);
       expect(result).toEqual([]);
     });
 
@@ -40,7 +41,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result).toHaveLength(1);
       expect(result[0].resource.resourceType).toBe(FHIR_RESOURCE_TYPE_OBSERVATION);
@@ -62,7 +63,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result).toHaveLength(1);
       expect(result[0].resource.valueQuantity).toEqual({ value: 72 });
@@ -76,7 +77,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result).toHaveLength(1);
       expect(result[0].resource.valueBoolean).toBe(true);
@@ -90,7 +91,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result).toHaveLength(1);
       expect(result[0].resource.valueDateTime).toBeDefined();
@@ -106,7 +107,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result).toHaveLength(1);
       expect(result[0].resource.valueDateTime).toBe(dateValue.toISOString());
@@ -120,7 +121,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result).toHaveLength(1);
       expect(result[0].resource.valueCodeableConcept).toBeDefined();
@@ -136,7 +137,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result).toHaveLength(1);
       expect(result[0].resource.valueCodeableConcept.coding[0].display).toBe('Female');
@@ -150,7 +151,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result).toHaveLength(1);
       expect(result[0].resource.valueQuantity).toEqual({ value: 75.5 });
@@ -170,7 +171,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result).toHaveLength(1);
       expect(result[0].resource.code.coding[0].code).toBe('concept-uuid-2');
@@ -185,7 +186,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result).toHaveLength(1);
       expect(result[0].resource.interpretation).toBeDefined();
@@ -205,7 +206,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result[0].resource.interpretation[0].coding[0].code).toBe('N');
       expect(result[0].resource.interpretation[0].coding[0].display).toBe('Normal');
@@ -221,7 +222,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result[0].resource.extension).toBeDefined();
       const formPathExtension = result[0].resource.extension.find(
@@ -240,7 +241,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       const formPathExtension = result[0].resource.extension?.find(
         (ext) => ext.url === FHIR_OBSERVATION_FORM_NAMESPACE_PATH_URL
@@ -257,7 +258,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result[0].resource.note).toBeDefined();
       expect(result[0].resource.note[0].text).toBe('This is a clinical note');
@@ -271,7 +272,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result[0].resource.extension).toBeDefined();
       const complexExtension = result[0].resource.extension.find(
@@ -292,7 +293,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result[0].resource.effectiveDateTime).toBe(obsDatetime);
     });
@@ -307,7 +308,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result[0].resource.effectiveDateTime).toBe(observationDateTime);
     });
@@ -320,7 +321,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result[0].resource.code.coding[0].code).toBe('direct-concept-uuid');
     });
@@ -333,7 +334,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result[0].resource.valueString).toBeUndefined();
     });
@@ -357,7 +358,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       // Should have 3 observations: 2 members + 1 parent
       expect(result).toHaveLength(3);
@@ -394,7 +395,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       // Should have 3 observations: 1 leaf + 1 inner parent + 1 outer parent
       expect(result).toHaveLength(3);
@@ -432,7 +433,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       // Should have 2 observations: 1 active member + 1 parent
       expect(result).toHaveLength(2);
@@ -459,7 +460,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result).toHaveLength(3);
       expect(result[0].resource.valueString).toBe('value1');
@@ -474,7 +475,7 @@ describe('FhirObservationTransformer', () => {
         { concept: { uuid: 'c3' }, value: 'v3' },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       const ids = result.map((r) => r.resource.id);
       const uniqueIds = new Set(ids);
@@ -495,7 +496,7 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result).toHaveLength(1);
       expect(result[0].resource.valueString).toBeUndefined();
@@ -511,14 +512,15 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations(observations, defaultOptions);
 
       expect(result).toHaveLength(1);
       expect(result[0].resource.valueString).toBeUndefined();
     });
 
     it('should handle empty observations array', () => {
-      const result = transformToFhir([], defaultOptions);
+      const result = getFhirObeservations
+      ([], defaultOptions);
       expect(result).toEqual([]);
     });
 
@@ -530,7 +532,8 @@ describe('FhirObservationTransformer', () => {
         },
       ];
 
-      const result = transformToFhir(observations, defaultOptions);
+      const result = getFhirObeservations
+      (observations, defaultOptions);
 
       // Empty group members should still produce an observation without hasMember
       expect(result).toHaveLength(1);

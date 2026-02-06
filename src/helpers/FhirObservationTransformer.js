@@ -213,7 +213,7 @@ const createObservationResource = (observationPayload, options) => {
  * @param {Object} options.performerReference - FHIR Reference to performer (e.g., { reference: 'Practitioner/uuid' })
  * @returns {Array<{resource: Object, fullUrl: string}>} Array of FHIR Observation bundle entries
  */
-export function transformToFhir(observations, options) {
+export function getFhirObeservations(observations, options) {
   
   if (!options || !options.patientReference || !options.encounterReference || !options.performerReference) {
   throw new Error('transformToFhir requires patientReference, encounterReference, and performerReference in options');
@@ -233,7 +233,7 @@ export function transformToFhir(observations, options) {
 
     if (obs.groupMembers && obs.groupMembers.length > 0) {
       // Recursively process group members
-      const memberResults = transformToFhir(obs.groupMembers, options);
+      const memberResults = getFhirObeservations(obs.groupMembers, options);
       results.push(...memberResults);
 
       // Create parent observation with hasMember references
@@ -271,4 +271,4 @@ export function transformToFhir(observations, options) {
   return results;
 }
 
-export default transformToFhir;
+export default getFhirObeservations;
