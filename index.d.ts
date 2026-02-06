@@ -376,7 +376,7 @@ export interface FhirObservationEntry {
  * @param options - Configuration options with patient, encounter, and performer references
  * @returns Array of FHIR Observation bundle entries with resource and fullUrl
  */
-export function getFhirObeservations(
+export function getFhirObservations(
   observations: ObservationData[],
   options: FhirTransformOptions
 ): FhirObservationEntry[];
