@@ -116,6 +116,36 @@ describe('Video Control', () => {
       expect(Util.uploadFile).not.toHaveBeenCalled();
     });
 
+    it('should handle backend error response with error object and show error message', async () => {
+      const errorMessage = 'The video format \'quicktime\' is not supported. ' +
+        'Supported formats are [ogg, 3gpp, mp4, mpeg, wmv, avi, mov, flv, webm, mkv]';
+      Util.uploadFile.mockResolvedValue({
+        json: () => Promise.resolve({
+          error: {
+            code: 'org.bahmni.module.bahmnicore.web.v1_0.controller.VisitDocumentController:95',
+            message: errorMessage,
+          },
+        }),
+      });
+      renderVideo();
+
+      const fileInput = screen.getByLabelText('Upload Video');
+      const file = new File(['content'], 'test.mov', { type: 'video/quicktime' });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      mockFileReader.onloadend({ target: { result: 'data:video/quicktime;base64,/9j/4SumRXhpZgAATU' } });
+
+      await waitFor(() => {
+        expect(mockShowNotification).toHaveBeenCalledWith(
+          errorMessage,
+          constants.messageType.error
+        );
+      });
+
+      expect(mockOnControlAdd).not.toHaveBeenCalled();
+    });
+
     it('should handle upload failure and show error notification', async () => {
       Util.uploadFile.mockImplementation(() => Promise.reject('Network error'));
       const { container } = renderVideo();

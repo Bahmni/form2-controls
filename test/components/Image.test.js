@@ -110,6 +110,35 @@ describe('Image Control', () => {
       expect(Util.uploadFile).not.toHaveBeenCalled();
     });
 
+    it('should handle backend error response with error object and show error message', async () => {
+      const errorMessage = 'Could not save patient document';
+      Util.uploadFile.mockResolvedValue({
+        json: () => Promise.resolve({
+          error: {
+            code: 'org.bahmni.module.bahmnicore.web.v1_0.controller.VisitDocumentController:95',
+            message: errorMessage,
+          },
+        }),
+      });
+      renderImage();
+
+      const fileInput = screen.getByLabelText('', { selector: 'input[type="file"]' });
+      const file = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      mockFileReader.onloadend({ target: { result: 'data:image/jpeg;base64,/9j/4SumRXhpZgAATU' } });
+
+      await waitFor(() => {
+        expect(mockShowNotification).toHaveBeenCalledWith(
+          errorMessage,
+          constants.messageType.error
+        );
+      });
+
+      expect(mockOnControlAdd).not.toHaveBeenCalled();
+    });
+
     it('should handle upload failure and show error notification', async () => {
       Util.uploadFile.mockImplementation(() => Promise.reject('Network error'));
       const { container } = renderImage();

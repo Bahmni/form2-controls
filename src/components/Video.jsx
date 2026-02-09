@@ -100,6 +100,13 @@ export class Video extends Component {
       Util.uploadFile(event.target.result, this.props.patientUuid, fileType)
         .then((response) => response.json())
         .then(data => {
+          if (data.error) {
+            this.setState({ loading: false });
+            const errorMessage = data.error.message || Constants.errorMessage.uploadFailed;
+            this.props.showNotification(errorMessage, Constants.messageType.error);
+            e.target.value = '';
+            return;
+          }
           this.update(data.url);
           e.target.value = '';
           // Call directly on successful upload
