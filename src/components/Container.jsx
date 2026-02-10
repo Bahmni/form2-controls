@@ -66,14 +66,14 @@ export class Container extends addMoreDecorator(Component) {
 
   onValueChanged(formFieldPath, value, errors, onActionDone) {
     this.setState((previousState) => ({
-      ...previousState,
-      data: previousState.data.update(formFieldPath, value, errors),
-      collapse: undefined,
+        ...previousState,
+        data: previousState.data.update(formFieldPath, value, errors),
+        collapse: undefined,
     }), () => {
-      if (onActionDone) {
-        onActionDone();
-      }
-      this.onValueUpdated();
+        if (onActionDone) {
+          onActionDone();
+        }
+        this.onValueUpdated();
     });
   }
 
@@ -129,9 +129,9 @@ export class Container extends addMoreDecorator(Component) {
   onControlRemove(formFieldPath) {
     this.setState((previousState) => (
       {
-        ...previousState,
-        data: previousState.data.remove(formFieldPath),
-        collapse: undefined,
+      ...previousState,
+      data: previousState.data.remove(formFieldPath),
+      collapse: undefined,
       }
     ));
   }
@@ -199,6 +199,7 @@ export class Container extends addMoreDecorator(Component) {
         <div>
           <NotificationContainer
             notification={this.state.notification}
+            onClose={() => this.setState({ notification: {} })}
           />
           {displayRowControls(groupedRowControls, records, childProps)}
         </div>
