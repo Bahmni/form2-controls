@@ -27,6 +27,7 @@ export class Container extends addMoreDecorator(Component) {
     this.onControlRemove = this.onControlRemove.bind(this);
     this.onEventTrigger = this.onEventTrigger.bind(this);
     this.showNotification = this.showNotification.bind(this);
+    this.clearNotification = this.clearNotification.bind(this);
 
     const initScript = this.props.metadata.events && this.props.metadata.events.onFormInit;
     let updatedTree;
@@ -171,6 +172,10 @@ export class Container extends addMoreDecorator(Component) {
     }, Constants.toastTimeout);
   }
 
+  clearNotification() {
+    this.setState({ notification: {} });
+  }
+
   render() {
     const { metadata: { controls,
       name: formName, version: formVersion }, validate, translations, patient, readonly } = this.props;
@@ -199,7 +204,7 @@ export class Container extends addMoreDecorator(Component) {
         <div>
           <NotificationContainer
             notification={this.state.notification}
-            onClose={() => this.setState({ notification: {} })}
+            onClose={this.clearNotification}
           />
           {displayRowControls(groupedRowControls, records, childProps)}
         </div>

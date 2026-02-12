@@ -100,7 +100,7 @@ describe('UploadHandler', () => {
       expect(onError).not.toHaveBeenCalled();
     });
 
-    it('should not call onSuccess when data.url is missing', () => {
+    it('should call onError when data.url is missing (even without explicit error)', () => {
       const data = {
         error: undefined,
         // No url property
@@ -109,8 +109,8 @@ describe('UploadHandler', () => {
       const result = UploadHandler.handleUploadResponse(data, onSuccess, onError);
 
       expect(onSuccess).not.toHaveBeenCalled();
-      expect(onError).not.toHaveBeenCalled();
-      expect(result).toBe(true);
+      expect(onError).toHaveBeenCalledWith(Constants.errorMessage.uploadFailed);
+      expect(result).toBe(false);
     });
 
     it('should not call onSuccess when onSuccess is null', () => {

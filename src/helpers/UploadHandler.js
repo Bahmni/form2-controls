@@ -1,4 +1,4 @@
-import Constants from '../constants';
+import Constants from 'src/constants';
 
 export class UploadHandler {
   /**
@@ -10,11 +10,19 @@ export class UploadHandler {
    */
   static handleUploadResponse(data, onSuccess, onError) {
     if (data.error) {
-      const errorMessage = (data.error && data.error.message) || Constants.errorMessage.uploadFailed;
-      onError(errorMessage);
+      const errorMessage = data.error.message || Constants.errorMessage.uploadFailed;
+      if (onError) {
+        onError(errorMessage);
+      }
       return false;
     }
-    if (onSuccess && data.url) {
+    if (!data.url) {
+      if (onError) {
+        onError(Constants.errorMessage.uploadFailed);
+      }
+      return false;
+    }
+    if (onSuccess) {
       onSuccess(data.url);
     }
     return true;
