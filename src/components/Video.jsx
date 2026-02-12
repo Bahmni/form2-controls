@@ -50,7 +50,7 @@ export class Video extends Component {
     }
     const validations = this.props.validations;
     let controlDetails;
-    if (value && value.indexOf('voided') >= 0) {
+    if (value && value.indexOf('voided') > 0) {
       controlDetails = { validations, undefined };
     } else {
       controlDetails = { validations, value };
