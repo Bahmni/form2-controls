@@ -7,6 +7,7 @@ import Constants from 'src/constants';
 import isEmpty from 'lodash/isEmpty';
 import { Util } from 'src/helpers/Util';
 import { Validator } from 'src/helpers/Validator';
+import { UploadHandler } from 'src/helpers/UploadHandler';
 
 export class Image extends Component {
 
@@ -110,22 +111,31 @@ export class Image extends Component {
       e.target.value = '';
       return;
     }
+    
+    const inputElement = e.target;
     reader.onloadend = (event) => {
       Util.uploadFile(event.target.result, this.props.patientUuid, fileType)
         .then((response) => response.json())
         .then(data => {
-          this.update(data.url);
-          e.target.value = '';
-          // Call directly on successful upload
-          this.setState({}, () => {
-            this.addControlWithNotification(true);
-          });
+          const handleSuccess = (url) => {
+            this.update(url);
+            inputElement.value = '';
+            this.setState({}, () => {
+              this.addControlWithNotification(true);
+            });
+          };
+          const handleError = (errorMessage) => {
+            this.setState({ loading: false });
+            this.props.showNotification(errorMessage, Constants.messageType.error);
+            inputElement.value = '';
+          };
+          UploadHandler.handleUploadResponse(data, handleSuccess, handleError);
         })
         .catch(() => {
           this.setState({ loading: false });
           this.props.showNotification(Constants.errorMessage.uploadFailed,
             Constants.messageType.error);
-          e.target.value = '';
+          inputElement.value = '';
         });
     };
     reader.readAsDataURL(file);

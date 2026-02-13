@@ -116,6 +116,36 @@ describe('Video Control', () => {
       expect(Util.uploadFile).not.toHaveBeenCalled();
     });
 
+    it('should handle backend error response with error object and show error message', async () => {
+      const errorMessage = 'The video format \'quicktime\' is not supported. ' +
+        'Supported formats are [ogg, 3gpp, mp4, mpeg, wmv, avi, mov, flv, webm, mkv]';
+      Util.uploadFile.mockResolvedValue({
+        json: () => Promise.resolve({
+          error: {
+            code: 'org.bahmni.module.bahmnicore.web.v1_0.controller.VisitDocumentController:95',
+            message: errorMessage,
+          },
+        }),
+      });
+      renderVideo();
+
+      const fileInput = screen.getByLabelText('Upload Video');
+      const file = new File(['content'], 'test.mov', { type: 'video/quicktime' });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      mockFileReader.onloadend({ target: { result: 'data:video/quicktime;base64,/9j/4SumRXhpZgAATU' } });
+
+      await waitFor(() => {
+        expect(mockShowNotification).toHaveBeenCalledWith(
+          errorMessage,
+          constants.messageType.error
+        );
+      });
+
+      expect(mockOnControlAdd).not.toHaveBeenCalled();
+    });
+
     it('should handle upload failure and show error notification', async () => {
       Util.uploadFile.mockImplementation(() => Promise.reject('Network error'));
       const { container } = renderVideo();
@@ -137,6 +167,101 @@ describe('Video Control', () => {
       await waitFor(() => {
         const spinnerElement = container.querySelector('.overlay');
         expect(spinnerElement).not.toBeInTheDocument();
+      });
+    });
+
+    it('should handle error object with missing message property and use fallback', async () => {
+      Util.uploadFile.mockResolvedValue({
+        json: () => Promise.resolve({
+          error: {
+            code: 'ERROR_CODE_123',
+            // No message property
+          },
+        }),
+      });
+      renderVideo();
+
+      const fileInput = screen.getByLabelText('Upload Video');
+      const file = new File(['content'], 'test.mp4', { type: 'video/mp4' });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      mockFileReader.onloadend({ target: { result: 'data:video/mp4;base64,/9j/4SumRXhpZgAATU' } });
+
+      await waitFor(() => {
+        expect(mockShowNotification).toHaveBeenCalledWith(
+          constants.errorMessage.uploadFailed,
+          constants.messageType.error
+        );
+      });
+    });
+
+    it('should handle error being a non-object value (true) and use fallback', async () => {
+      Util.uploadFile.mockResolvedValue({
+        json: () => Promise.resolve({
+          error: true, // Error as boolean instead of object
+        }),
+      });
+      renderVideo();
+
+      const fileInput = screen.getByLabelText('Upload Video');
+      const file = new File(['content'], 'test.mp4', { type: 'video/mp4' });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      mockFileReader.onloadend({ target: { result: 'data:video/mp4;base64,/9j/4SumRXhpZgAATU' } });
+
+      await waitFor(() => {
+        expect(mockShowNotification).toHaveBeenCalledWith(
+          constants.errorMessage.uploadFailed,
+          constants.messageType.error
+        );
+      });
+    });
+
+    it('should handle error message being empty string and use fallback', async () => {
+      Util.uploadFile.mockResolvedValue({
+        json: () => Promise.resolve({
+          error: {
+            code: 'ERROR_CODE',
+            message: '', // Empty string
+          },
+        }),
+      });
+      renderVideo();
+
+      const fileInput = screen.getByLabelText('Upload Video');
+      const file = new File(['content'], 'test.mp4', { type: 'video/mp4' });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      mockFileReader.onloadend({ target: { result: 'data:video/mp4;base64,/9j/4SumRXhpZgAATU' } });
+
+      await waitFor(() => {
+        expect(mockShowNotification).toHaveBeenCalledWith(
+          constants.errorMessage.uploadFailed,
+          constants.messageType.error
+        );
+      });
+    });
+
+    it('should clear file input field after error response', async () => {
+      Util.uploadFile.mockResolvedValue({
+        json: () => Promise.resolve({
+          error: { message: 'Upload failed' },
+        }),
+      });
+      renderVideo();
+
+      const fileInput = screen.getByLabelText('Upload Video');
+      const file = new File(['content'], 'test.mp4', { type: 'video/mp4' });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      mockFileReader.onloadend({ target: { result: 'data:video/mp4;base64,/9j/4SumRXhpZgAATU' } });
+
+      await waitFor(() => {
+        expect(fileInput.value).toBe('');
       });
     });
 

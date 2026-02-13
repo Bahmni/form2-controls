@@ -14,6 +14,16 @@ const NotificationContainer = (props) => {
           <div className="message-text">
             { props.notification.message }
           </div>
+          {props.onClose && (
+            <button
+              className="notification-close-btn"
+              onClick={props.onClose}
+              aria-label="Close notification"
+              type="button"
+            >
+              <i className="fa fa-times" />
+            </button>
+          )}
         </div>
       </div>
     );
@@ -26,6 +36,7 @@ NotificationContainer.propTypes = {
     message: PropTypes.string,
     type: PropTypes.string,
   }).isRequired,
+  onClose: PropTypes.func,
 };
 
 export default NotificationContainer;
