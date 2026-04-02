@@ -1,17 +1,16 @@
 import React from "react";
-import {storiesOf} from "@kadira/storybook";
-import {Obs} from "src/helpers/Obs";
+import { Obs } from "src/helpers/Obs";
 import "../styles/styles.scss";
-import {NumericBox} from "src/components/NumericBox.jsx";
-import {BooleanControl} from "src/components/BooleanControl.jsx";
-import {Button} from "src/components/Button.jsx";
-import {List} from "immutable";
+import { NumericBox } from "src/components/NumericBox.jsx";
+import { BooleanControl } from "src/components/BooleanControl.jsx";
+import { Button } from "src/components/Button.jsx";
+import { List } from "immutable";
 import StoryWrapper from "./StoryWrapper";
-import {CodedControl} from "src/components/CodedControl.jsx";
-import {AutoComplete} from "src/components/AutoComplete.jsx";
-import {TextBox} from "src/components/TextBox.jsx";
-import {Container} from "src/components/Container.jsx";
-import {Section} from "src/components/Section.jsx";
+import { CodedControl } from "src/components/CodedControl.jsx";
+import { AutoComplete } from "src/components/AutoComplete.jsx";
+import { TextBox } from "src/components/TextBox.jsx";
+import { Container } from "src/components/Container.jsx";
+import { Section } from "src/components/Section.jsx";
 
 const metadata = {
   id: 1,
@@ -95,16 +94,19 @@ componentStore.registerComponent('autoComplete', AutoComplete);
 componentStore.registerComponent('text', TextBox);
 componentStore.registerComponent('section', Section);
 
+export default {
+  title: 'Section control',
+};
 
-storiesOf('Section control', module)
-    .add('Basic View', () => (
-  <StoryWrapper json={metadata}>
-    <Container
-      metadata={metadata}
-      observations={ [] }
-      validate= { true }
-    />
-
-  </StoryWrapper>
-  ));
-
+export const BasicView = {
+  render: () => (
+    <StoryWrapper json={metadata}>
+      <Container
+        metadata={metadata}
+        observations={[]}
+        validate={true}
+        translations={{ labels: {}, concepts: {} }}
+      />
+    </StoryWrapper>
+  ),
+};
