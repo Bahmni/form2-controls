@@ -1,6 +1,6 @@
 {
   "name": "@bahmni/form2-controls",
-  "version": "0.0.6",
+  "version": "0.0.3",
   "description": "Repository for form controls",
   "license": "MPL-2.0",
   "main": "./dist/bundle.js",
@@ -33,6 +33,7 @@
     "@bahmni/design-system": ">=0.0.1-dev"
   },
   "devDependencies": {
+    "@bahmni/design-system": ">=0.0.1-dev",
     "@babel/cli": "^7.28.3",
     "@babel/core": "^7.28.4",
     "@babel/eslint-parser": "^7.28.4",
