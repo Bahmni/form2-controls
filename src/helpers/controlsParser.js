@@ -22,7 +22,8 @@ export function setupAddRemoveButtonsForAddMore(records) {
 
 export function getControls(controls, records, props) {
   return controls.map((control) => {
-    const registeredControl = ComponentStore.getRegisteredComponent(control.type);
+    const store = props.componentStore || ComponentStore;
+    const registeredControl = store.getRegisteredComponent(control.type);
     if (registeredControl) {
       let recordsForControl = getRecordsForControl(control, records);
       if (recordsForControl.length > 1) {

@@ -196,6 +196,7 @@ export class Container extends addMoreDecorator(Component) {
       validate,
       validateForm: this.props.validateForm,
       enabled: !readonly,
+      componentStore: this.props.componentStore,
     };
     const groupedRowControls = getGroupedControls(controls, 'row');
     const records = this.state.data.getActive().children.toArray();

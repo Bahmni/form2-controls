@@ -5,6 +5,7 @@ import '@fortawesome/fontawesome-free/css/brands.css';
 import '@fortawesome/fontawesome-free/css/v4-shims.css';
 
 export { Container } from 'components/Container.jsx';
+export { CarbonContainer } from 'src/carbon-components/CarbonContainer';
 export { ObsControl } from 'components/ObsControl.jsx';
 export { Label } from 'components/Label.jsx';
 export { TextBox } from 'components/TextBox.jsx';
