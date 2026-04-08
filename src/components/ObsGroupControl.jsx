@@ -90,6 +90,7 @@ export class ObsGroupControl extends addMoreDecorator(Component) {
       onValueChanged: this.onChange,
       patientUuid,
       showNotification,
+      componentStore: this.props.componentStore,
     };
     const groupedRowControls = getGroupedControls(this.props.metadata.controls, 'row');
     const toggleClass = `form-builder-toggle ${classNames({ active: !this.state.collapse })}`;

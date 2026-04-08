@@ -73,6 +73,7 @@ export class Section extends addMoreDecorator(Component) {
       onEventTrigger,
       patientUuid,
       showNotification,
+      componentStore: this.props.componentStore,
     };
     const groupedRowControls = getGroupedControls(this.props.metadata.controls, 'row');
     const sectionClass =

@@ -65,12 +65,12 @@ $lightestGray: #eee;
         }
         .obs-control-field{
           flex:9;
-          .obs-comment-section-wrap {
-            display: -webkit-flex;
-          }
           .obs-comment-section-wrap textarea {
             width: 70%;
             float:left;
+          }
+          .obs-comment-section-wrap .cds--form-item {
+            width: 70%;
           }
           .form-control-buttons{
             max-width: 83%;

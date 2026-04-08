@@ -29,9 +29,11 @@
   "author": "bahmni@thoughtworks.com",
   "peerDependencies": {
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "@bahmni/design-system": ">=0.0.1-dev.192"
   },
   "devDependencies": {
+    "@bahmni/design-system": ">=0.0.1-dev.192",
     "@babel/cli": "^7.28.3",
     "@babel/core": "^7.28.4",
     "@babel/eslint-parser": "^7.28.4",

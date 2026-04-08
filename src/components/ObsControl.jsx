@@ -222,7 +222,8 @@ export class ObsControl extends addMoreDecorator(Component) {
 
   render() {
     const { concept } = this.props.metadata;
-    const registeredComponent = ComponentStore.getRegisteredComponent(concept.datatype);
+    const store = this.props.componentStore || ComponentStore;
+    const registeredComponent = store.getRegisteredComponent(concept.datatype);
     const complexClass = Util.isComplexMediaConcept(concept) ? 'complex-component' : '';
     const addMoreComplexClass = complexClass && this.isCreateByAddMore() ?
         'add-more-complex-component' : '';
