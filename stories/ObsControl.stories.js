@@ -131,7 +131,7 @@ export const TextBoxObsControl = {
 
 export const TextBoxObsControlWithAddMoreEnabled = {
   render: () => (
-    <StoryWrapper json={form.controls[1]}>
+    <StoryWrapper json={addMoreControl}>
       <ObsControl
         {...commonProps}
         formUuid={'fbc5d897-64e4-4cc1-90a3-47fde7a98026'}

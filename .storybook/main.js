@@ -18,10 +18,7 @@ module.exports = {
         {
           loader: require.resolve('babel-loader'),
           options: {
-            presets: [
-              ['@babel/preset-env', { modules: false }],
-              ['@babel/preset-react', { runtime: 'automatic' }],
-            ],
+            configFile: path.resolve(__dirname, '../.babelrc'),
           },
         },
       ],
