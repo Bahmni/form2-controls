@@ -1,10 +1,12 @@
 import { forwardRef } from 'react';
 import { Container } from 'components/Container.jsx';
 import ComponentStore from 'src/helpers/componentStore';
-import { TextBox as CarbonTextBox } from './TextBox';
+import { TextBox } from 'components/bahmni-design-system/TextBox';
+import { ObsGroupControl } from 'components/bahmni-design-system/ObsGroupControl';
 
 const carbonComponents = {
-  text: CarbonTextBox,
+  text: TextBox,
+  obsgroupcontrol: ObsGroupControl,
 };
 
 /**
