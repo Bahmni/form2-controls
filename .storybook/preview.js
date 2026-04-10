@@ -3,7 +3,7 @@ import { IntlProvider } from 'react-intl';
 
 export const decorators = [
   (Story) => (
-    <IntlProvider locale="en" messages={{}}>
+    <IntlProvider locale="en" messages={{}} onError={() => {}}>
       <Story />
     </IntlProvider>
   ),

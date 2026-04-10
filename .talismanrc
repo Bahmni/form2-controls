@@ -4,5 +4,5 @@ fileignoreconfig:
 - filename: index.d.ts
   checksum: 1fbccc4629e105fc202835dd50e62b6c4e29c281a5fd773118e2da4b337b2f39
 - filename: yarn.lock
-  checksum: 6c427873fe3b41d3d06861d47d3f64519a2bf096c69dfcc0fb1289e97f83a39f
+  checksum: 831e2552a7066a6fc6e55d5e30fa5e79bee3d12bf5fd12767c844304ce0b23d3
 version: "1.0"

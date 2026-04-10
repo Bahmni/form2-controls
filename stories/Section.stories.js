@@ -1,10 +1,8 @@
 import React from "react";
-import { Obs } from "src/helpers/Obs";
 import "../styles/styles.scss";
 import { NumericBox } from "src/components/NumericBox.jsx";
 import { BooleanControl } from "src/components/BooleanControl.jsx";
 import { Button } from "src/components/Button.jsx";
-import { List } from "immutable";
 import StoryWrapper from "./StoryWrapper";
 import { CodedControl } from "src/components/CodedControl.jsx";
 import { AutoComplete } from "src/components/AutoComplete.jsx";
