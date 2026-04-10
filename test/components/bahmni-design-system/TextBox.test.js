@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TextBox } from 'src/carbon-components/TextBox';
+import { TextBox } from 'components/bahmni-design-system/TextBox';
 import constants from 'src/constants';
 import { Error } from 'src/Error';
 
