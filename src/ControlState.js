@@ -78,11 +78,11 @@ export class ControlState extends ImmutableControlState {
   }
 
   getRecords() {
-    return this.get('data').toArray();
+    return this.get('data').valueSeq().toArray();
   }
 
   getActiveRecords() {
-    return this.get('data').filter(r => r.active).toArray();
+    return this.get('data').filter(r => r.active).valueSeq().toArray();
   }
 }
 
