@@ -78,7 +78,7 @@ export class ObsGroupControl extends addMoreDecorator(Component) {
     } = this.props;
 
     const childProps = {
-      collapse,
+      collapse: this.state.collapse,
       enabled: this.props.enabled,
       formName,
       formVersion,
@@ -159,5 +159,5 @@ ObsGroupControl.defaultProps = {
   hidden: false,
   showAddMore: false,
   showRemove: false,
-  children: List.of([]),
+  children: List(),
 };
