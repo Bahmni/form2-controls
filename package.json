@@ -20,9 +20,8 @@
     "lint:fix": "eslint --ext .js --ext .jsx ./src ./test --fix",
     "publish": "npm publish || true",
     "ci": "yarn run clean && yarn run build && yarn run publish",
-    "storybook": "start-storybook -p 6006",
-    "deploy-storybook": "storybook-to-ghpages",
-    "build-storybook": "build-storybook",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "bump-up": "npm version patch -m 'Bumped to version %s'",
     "watch": "webpack --watch --config webpack.dev.config.js"
   },
@@ -34,6 +33,14 @@
     "@carbon/react": ">=1.0.0"
   },
   "devDependencies": {
+    "storybook": "^8.4.0",
+    "@storybook/react": "^8.4.0",
+    "@storybook/react-webpack5": "^8.4.0",
+    "@storybook/addon-actions": "^8.4.0",
+    "@storybook/addon-essentials": "^8.4.0",
+    "@storybook/addon-interactions": "^8.4.0",
+    "@storybook/blocks": "^8.4.0",
+    "@storybook/test": "^8.4.0",
     "@bahmni/design-system": ">=0.0.1-dev.192",
     "@babel/cli": "^7.28.3",
     "@babel/core": "^7.28.4",
