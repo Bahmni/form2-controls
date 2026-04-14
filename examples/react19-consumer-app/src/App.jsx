@@ -1,6 +1,7 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
-import { Container } from '@bahmni/form2-controls';
+import { CarbonContainer } from '@bahmni/form2-controls';
 import '@bahmni/form2-controls/dist/bundle.css';
+import '@bahmni/design-system/styles';
 import {
   clinicalFormMetadata,
   existingObservations,
@@ -282,7 +283,7 @@ function App() {
 
             <div className="form-wrapper">
               <ErrorBoundary>
-                <Container
+                <CarbonContainer
                   ref={formRef}
                   metadata={formData}
                   observations={observations}

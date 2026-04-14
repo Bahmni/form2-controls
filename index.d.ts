@@ -49,6 +49,9 @@ export interface ContainerProps {
   collapse?: boolean;
   locale?: string;
   onValueUpdated?: (data: any) => void;
+  componentStore?: {
+    getRegisteredComponent(type: string): any;
+  };
 }
 
 export interface ContainerMethods {
@@ -61,6 +64,10 @@ export interface ContainerMethods {
 export class Container extends React.Component<ContainerProps> implements ContainerMethods {
   getValue(): { observations: ObservationData[]; errors: any[] };
 }
+
+export const CarbonContainer: React.ForwardRefExoticComponent<
+  ContainerProps & React.RefAttributes<ContainerMethods>
+>;
 
 // ==================== Form Control Components ====================
 

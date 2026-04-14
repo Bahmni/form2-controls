@@ -34,6 +34,9 @@ module.exports = {
     '<rootDir>/test/**/*.test.{js,jsx}'
   ],
   moduleFileExtensions: ['js', 'jsx', 'json'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!(@bahmni/design-system|@bahmni/services)/)'
+  ],
   testTimeout: 10000,
   coverageThreshold: {
     global: {

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ComponentStore from 'src/helpers/componentStore';
 import classNames from 'classnames';
 import { List } from 'immutable';
 import { IntlProvider, injectIntl } from 'react-intl';
-import addMoreDecorator from './AddMoreDecorator';
-import { getGroupedControls, displayRowControls } from '../helpers/controlsParser';
+import addMoreDecorator from 'components/AddMoreDecorator';
+import { getGroupedControls, displayRowControls } from 'src/helpers/controlsParser';
+import { Accordion, AccordionItem } from '@bahmni/design-system';
 
 export class ObsGroupControl extends addMoreDecorator(Component) {
 
@@ -23,8 +23,7 @@ export class ObsGroupControl extends addMoreDecorator(Component) {
   }
 
   componentDidUpdate(prevProps) {
-    // Update collapse state when props change (moved from componentWillReceiveProps)
-    if (this.props.collapse !== undefined && 
+    if (this.props.collapse !== undefined &&
         this.props.collapse !== prevProps.collapse) {
       this.setState({ collapse: this.props.collapse });
     }
@@ -56,10 +55,10 @@ export class ObsGroupControl extends addMoreDecorator(Component) {
         id: description.translationKey || 'defaultId',
       });
       return (
-              <div className={classNames('description')}
-                dangerouslySetInnerHTML={{ __html: showHelperTextHtml }}
-              >
-              </div>
+        <div
+          className={classNames('description')}
+          dangerouslySetInnerHTML={{ __html: showHelperTextHtml }}
+        />
       );
     }
     return null;
@@ -77,8 +76,9 @@ export class ObsGroupControl extends addMoreDecorator(Component) {
       patientUuid,
       showNotification,
     } = this.props;
+
     const childProps = {
-      collapse,
+      collapse: this.state.collapse,
       enabled: this.props.enabled,
       formName,
       formVersion,
@@ -92,33 +92,34 @@ export class ObsGroupControl extends addMoreDecorator(Component) {
       showNotification,
       componentStore: this.props.componentStore,
     };
+
     const groupedRowControls = getGroupedControls(this.props.metadata.controls, 'row');
-    const toggleClass = `form-builder-toggle ${classNames({ active: !this.state.collapse })}`;
-    const obsGroupClass =
-      this.state.collapse ? 'closing-group-controls' : 'active-group-controls';
     const disableClass = this.props.enabled ? '' : ' disabled';
     const hiddenClass = !this.props.hidden ? '' : 'hidden';
+
+    const title = this.props.intl.formatMessage({
+      defaultMessage: label.value,
+      id: label.translationKey || 'defaultId',
+    });
+
     return (
-      <fieldset className={ classNames('form-builder-fieldset', `${hiddenClass}`) }>
-        <legend className={`${toggleClass}${disableClass}`} onClick={ this._onCollapse}>
-          <i className="fa fa-caret-down"></i>
-          <i className="fa fa-caret-right"></i>
-          <strong className="test-obsgrp-header">
-             {
-              this.props.intl.formatMessage({
-                defaultMessage: label.value,
-                id: label.translationKey || 'defaultId',
-              })}
-          </strong>
-        </legend>
+      <div className={classNames('form-builder-fieldset', hiddenClass)}>
         {this.showAddMore()}
-        <IntlProvider {...this.props.intl}>
-          <div className={`obsGroup-controls ${obsGroupClass}${disableClass}`}>
-            {this.showDescription()}
-            {displayRowControls(groupedRowControls, this.props.children.toArray(), childProps)}
-          </div>
-        </IntlProvider>
-      </fieldset>
+        <Accordion align="start">
+          <AccordionItem
+            open={!this.state.collapse}
+            onHeadingClick={this._onCollapse}
+            title={title}
+          >
+            <IntlProvider {...this.props.intl}>
+              <div className={`obsGroup-controls${disableClass}`}>
+                {this.showDescription()}
+                {displayRowControls(groupedRowControls, this.props.children.toArray(), childProps)}
+              </div>
+            </IntlProvider>
+          </AccordionItem>
+        </Accordion>
+      </div>
     );
   }
 }
@@ -158,10 +159,5 @@ ObsGroupControl.defaultProps = {
   hidden: false,
   showAddMore: false,
   showRemove: false,
-  children: List.of([]),
+  children: List(),
 };
-const ObsGroupControlWithIntl = injectIntl(ObsGroupControl, { forwardRef: true });
-
-export { ObsGroupControlWithIntl };
-
-ComponentStore.registerComponent('obsGroupControl', ObsGroupControl);
