@@ -1,4 +1,6 @@
 @use "@carbon/react/scss/theme" as carbon-theme;
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/type' as *;
 
 $lightestGray: #eee;
 .form-builder-row {
@@ -73,6 +75,35 @@ $lightestGray: #eee;
           }
           .obs-comment-section-wrap .cds--form-item {
             width: 70%;
+          }
+          .obs-numeric-text-wrap{
+            width: fit-content;
+            display: flex;
+            align-items: center;
+            gap: $spacing-03;
+            // Beat the generic .form-field-wrap input rule that sets width/margin/padding
+            // on all descendant inputs — those overrides squash Carbon NumberInput internals
+            // and hide the step-buttons divider (cds--number__rule-divider).
+            .cds--number input[type='number'] {
+              width: auto !important;
+              margin: 0 !important;
+              padding-block: 0 !important;
+            }
+            // cds--number__controls uses position:absolute + height:100% but the
+            // parent wrapper's flex context (distorted by the input overrides above)
+            // can prevent full stretch. Assert 100% on both the panel and buttons
+            // so they fill the full 48px (size="lg") container height.
+            .cds--number__controls,
+            .cds--number__control-btn {
+              height: 100% !important;
+            }
+            .obs-numeric-range {
+              color: carbon-theme.$text-secondary;
+              @include type-style('label-01');
+              white-space: nowrap;
+              display: inline-block;
+              flex-shrink: 0;
+            }
           }
           .form-control-buttons{
             max-width: 83%;
@@ -271,6 +302,7 @@ $lightestGray: #eee;
 
       .abnormal-button{
         margin-right: 10px;
+        margin-top: 5px;
         float: left;
         line-height: 1;
         i {
