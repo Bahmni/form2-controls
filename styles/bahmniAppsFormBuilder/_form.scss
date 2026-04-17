@@ -343,6 +343,9 @@ $lightestGray: #eee;
         }
         > .cds--accordion {
           isolation: isolate;
+          .cds--accordion__heading {
+            background-color: carbon-theme.$layer-01;
+          }
         }
         .description{
           margin: 10px;
