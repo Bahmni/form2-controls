@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Date } = from '../../../src/components/bahmni-design-system/Date';
+import { Date } from '../../../src/components/bahmni-design-system/Date';
 
 describe('Date', () => {
   const mockOnChange = jest.fn();
