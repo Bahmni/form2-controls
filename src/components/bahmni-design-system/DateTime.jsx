@@ -23,7 +23,12 @@ export class DateTime extends Component {
   componentDidMount() {
     const { value, validateForm } = this.props;
     if (this.state.hasErrors || typeof value !== 'undefined' || validateForm) {
-      this.props.onChange({ value, errors: this._getAllErrors(this.state.dateValue, this.state.timeValue), triggerControlEvent: false, calledOnMount: true });
+      this.props.onChange({
+        value,
+        errors: this._getAllErrors(this.state.dateValue, this.state.timeValue),
+        triggerControlEvent: false,
+        calledOnMount: true,
+      });
     }
   }
 
