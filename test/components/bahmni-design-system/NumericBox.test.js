@@ -188,10 +188,10 @@ describe('NumericBox', () => {
     expect(rangeSpan).not.toBeInTheDocument();
   });
 
-  it('should show as disabled when disabled prop is true', () => {
+  it('should show as disabled when enabled prop is false', () => {
     const { container } = render(
       <NumericBox
-        disabled
+        enabled={false}
         formFieldPath="test1.1/1-0"
         onChange={() => {}}
         validate={false}
@@ -204,10 +204,9 @@ describe('NumericBox', () => {
     expect(input).toBeDisabled();
   });
 
-  it('should show as read-only when readOnly prop is true', () => {
+  it('should be enabled by default', () => {
     const { container } = render(
       <NumericBox
-        readOnly
         formFieldPath="test1.1/1-0"
         onChange={() => {}}
         validate={false}
@@ -217,7 +216,7 @@ describe('NumericBox', () => {
     );
 
     const input = container.querySelector('input[type="number"]');
-    expect(input).toHaveAttribute('readonly');
+    expect(input).not.toBeDisabled();
   });
 
   it('should trigger onChange when mounting component with a value', () => {

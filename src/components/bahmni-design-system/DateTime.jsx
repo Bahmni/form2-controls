@@ -12,7 +12,6 @@ export class DateTime extends Component {
     const { dateValue, timeValue } = this._parseValue(props.value);
     this.state = {
       hasErrors: false,
-      touched: false,
       dateValue,
       timeValue
     };
@@ -87,26 +86,26 @@ export class DateTime extends Component {
     try {
       // Carbon's DatePicker onChange receives an array of Date objects
       if (!dates || !Array.isArray(dates) || dates.length === 0) {
-        this.setState({ dateValue: undefined, touched: true }, this.updateParent);
+        this.setState({ dateValue: undefined }, this.updateParent);
         return;
       }
 
       const selectedDate = dates[0];
       if (!selectedDate) {
-        this.setState({ dateValue: undefined, touched: true }, this.updateParent);
+        this.setState({ dateValue: undefined }, this.updateParent);
         return;
       }
 
-      this.setState({ dateValue: selectedDate, touched: true }, this.updateParent);
+      this.setState({ dateValue: selectedDate }, this.updateParent);
     } catch (error) {
       console.error('Error in handleDateChange:', error);
-      this.setState({ dateValue: undefined, touched: true }, this.updateParent);
+      this.setState({ dateValue: undefined }, this.updateParent);
     }
   }
 
   handleTimeChange(e) {
     const timeValue = e.target.value;
-    this.setState({ timeValue, touched: true }, this.updateParent);
+    this.setState({ timeValue }, this.updateParent);
   }
 
   updateParent = () => {
@@ -136,8 +135,8 @@ export class DateTime extends Component {
 
   render() {
     const { conceptUuid, label } = this.props;
-    const { dateValue, timeValue, hasErrors, touched } = this.state;
-    const displayHasErrors = touched && hasErrors;
+    const { dateValue, timeValue, hasErrors } = this.state;
+    const displayHasErrors = hasErrors;
 
     return (
       <div className={classNames('datetime-control', {
@@ -158,6 +157,7 @@ export class DateTime extends Component {
                 placeholder="yyyy-mm-dd"
                 size="sm"
                 disabled={!this.props.enabled}
+                invalid={displayHasErrors}
               />
             </DatePicker>
           </div>
@@ -169,6 +169,7 @@ export class DateTime extends Component {
               onChange={(e) => this.handleTimeChange(e)}
               size="sm"
               disabled={!this.props.enabled}
+              invalid={displayHasErrors}
               ref={(ref) => { this.timePickerRef = ref; }}
             />
           </div>

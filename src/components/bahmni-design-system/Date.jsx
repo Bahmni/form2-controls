@@ -11,7 +11,7 @@ export class Date extends Component {
     super(props);
     const errors = this._getErrors(props.value) || [];
     const hasErrors = this._shouldValidateOnMount() ? this._hasErrors(errors) : false;
-    this.state = { hasErrors, touched: false };
+    this.state = { hasErrors };
     this.datePickerRef = null;
   }
 
@@ -58,7 +58,7 @@ export class Date extends Component {
       if (!dates || !Array.isArray(dates) || dates.length === 0) {
         const value = undefined;
         const errors = this._getErrors(value);
-        this.setState({ hasErrors: this._hasErrors(errors), touched: true });
+        this.setState({ hasErrors: this._hasErrors(errors) });
         this.props.onChange({ value, errors });
         return;
       }
@@ -67,18 +67,18 @@ export class Date extends Component {
       if (!selectedDate) {
         const value = undefined;
         const errors = this._getErrors(value);
-        this.setState({ hasErrors: this._hasErrors(errors), touched: true });
+        this.setState({ hasErrors: this._hasErrors(errors) });
         this.props.onChange({ value, errors });
         return;
       }
 
       const value = this._formatDate(selectedDate);
       const errors = this._getErrors(value);
-      this.setState({ hasErrors: this._hasErrors(errors), touched: true });
+      this.setState({ hasErrors: this._hasErrors(errors) });
       this.props.onChange({ value, errors });
     } catch (error) {
       console.error('Error in handleChange:', error);
-      this.setState({ hasErrors: true, touched: true });
+      this.setState({ hasErrors: true });
       this.props.onChange({ value: undefined, errors: [{ message: 'Invalid date' }] });
     }
   }
@@ -89,11 +89,6 @@ export class Date extends Component {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
-  }
-
-  _parseDate(dateString) {
-    if (!dateString) return undefined;
-    return new Date(dateString);
   }
 
   _shouldValidateOnMount() {
@@ -122,7 +117,7 @@ export class Date extends Component {
 
   render() {
     const { conceptUuid, label, enabled } = this.props;
-    const displayHasErrors = this.state.touched && this.state.hasErrors;
+    const displayHasErrors = this.state.hasErrors;
 
     return (
       <div className={classNames({
@@ -142,6 +137,7 @@ export class Date extends Component {
             placeholder="yyyy-mm-dd"
             size="sm"
             disabled={!enabled}
+            invalid={displayHasErrors}
           />
         </DatePicker>
       </div>

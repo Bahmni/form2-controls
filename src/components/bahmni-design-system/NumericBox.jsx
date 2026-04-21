@@ -7,10 +7,11 @@ import React, { useState, useEffect } from 'react';
 export const NumericBox = ({
   value,
   onChange,
-  disabled,
-  readOnly,
+  enabled = true,
   lowNormal,
   hiNormal,
+  lowAbsolute,
+  hiAbsolute,
   validations = [],
   formFieldPath,
   validate,
@@ -30,6 +31,8 @@ export const NumericBox = ({
     const params = {
       minNormal: lowNormal,
       maxNormal: hiNormal,
+      minAbsolute: lowAbsolute,
+      maxAbsolute: hiAbsolute,
     };
     const controlDetails = { validations: allValidations, value: val, params };
     return Validator.getErrors(controlDetails);
@@ -152,8 +155,7 @@ export const NumericBox = ({
           value={getNumericValue()}
           onChange={handleChange}
           invalid={hasErrors}
-          disabled={disabled}
-          readOnly={readOnly}
+          disabled={!enabled}
           step={1}
           {...props}
         />

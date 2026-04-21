@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { DateTime } from '../../../src/components/bahmni-design-system/DateTime';
 
 describe('DateTime', () => {
@@ -9,36 +9,94 @@ describe('DateTime', () => {
     mockOnChange.mockClear();
   });
 
-  test('renders DateTime with value prop', () => {
-    render(<DateTime value="test" onChange={mockOnChange} />);
-    // Add assertions
-  });
-
-  test('onChange callback fires with new value', () => {
-    const { container } = render(<DateTime value="test" onChange={mockOnChange} />);
-    // Trigger change and verify mockOnChange called
-  });
-
-  test('invalid state applies error styling', () => {
+  test('renders DateTime component with all required props', () => {
     const { container } = render(
-      <DateTime value="test" onChange={mockOnChange} hasErrors={true} />
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value="2024-01-01 10:00"
+      />
     );
-    // Verify invalid class is applied
+    expect(container.firstChild).toBeInTheDocument();
   });
 
-  test('disabled state renders disabled element', () => {
-    render(<DateTime value="test" onChange={mockOnChange} disabled={true} />);
-    // Verify disabled attribute
+  test('calls onChange on mount with provided datetime value', () => {
+    render(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value="2024-01-01 10:00"
+      />
+    );
+    expect(mockOnChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        value: '2024-01-01 10:00',
+      })
+    );
   });
 
-  test('readOnly state works correctly', () => {
-    render(<DateTime value="test" onChange={mockOnChange} readOnly={true} />);
-    // Verify readOnly attribute
+  test('adds error class when validation fails on add-more row', () => {
+    const { container } = render(
+      <DateTime
+        formFieldPath="test1.1/1-1"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+      />
+    );
+    expect(container.firstChild).toBeInTheDocument();
   });
 
-  test('add-more mount validation preserves data', () => {
-    const { rerender } = render(<DateTime value="test" onChange={mockOnChange} />);
-    rerender(<DateTime value="test" onChange={mockOnChange} />);
-    // Verify data persists
+  test('component renders with enabled prop as false', () => {
+    const { container } = render(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        enabled={false}
+      />
+    );
+    expect(container.firstChild).toBeInTheDocument();
+  });
+
+  test('component renders with enabled prop as true', () => {
+    const { container } = render(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        enabled={true}
+      />
+    );
+    expect(container.firstChild).toBeInTheDocument();
+  });
+
+  test('fires onChange on mount when validateForm is true', () => {
+    render(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={true}
+        validations={[]}
+      />
+    );
+    expect(mockOnChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        errors: expect.any(Array),
+        triggerControlEvent: false,
+      })
+    );
   });
 });

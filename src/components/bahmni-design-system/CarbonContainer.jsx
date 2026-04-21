@@ -11,7 +11,7 @@ const carbonComponents = {
   text: TextBox,
   obsgroupcontrol: ObsGroupControl,
   date: Date,
-  dateTime: DateTime,
+  datetime: DateTime,
   numeric: NumericBox,
 };
 
