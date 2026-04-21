@@ -6,7 +6,7 @@ import { setupAddRemoveButtonsForAddMore } from 'src/helpers/controlsParser';
 import sortBy from 'lodash/sortBy';
 import { Util } from 'src/helpers/Util';
 
-export const ControlRecord = new Record({
+const ControlRecordBase = Record({
   control: undefined,
   formFieldPath: '',
   obs: undefined,
@@ -17,10 +17,13 @@ export const ControlRecord = new Record({
   data: undefined,
   mapper: undefined,
   active: true,
+});
+
+export class ControlRecord extends ControlRecordBase {
   getObject() {
     return this.mapper.getObject(this.obs);
-  },
-});
+  }
+}
 
 export const ImmutableControlState = new Record({
   data: new ImmutableMap(),

@@ -24,10 +24,6 @@ const ControlRecordBase = Record({
 });
 
 export class ControlRecord extends ControlRecordBase {
-  getObject() {
-    return this.mapper.getObject(this.obs);
-  }
-
   getControlId() {
     return this.control && this.control.id;
   }
