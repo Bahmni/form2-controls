@@ -6,7 +6,49 @@ import { NumericBox } from 'components/NumericBox.jsx';
 import { Label } from 'components/Label.jsx';
 import { ObsControlWithIntl as ObsControl } from 'components/ObsControl.jsx';
 import { ObsGroupControlWithIntl as ObsGroupControl } from 'components/ObsGroupControl.jsx';
+import { CodedControl } from 'components/CodedControl.jsx';
 import ComponentStore from 'src/helpers/componentStore';
+
+const codedAnswers = [
+  { name: { display: 'Option A' }, uuid: 'uuid-a' },
+  { name: { display: 'Option B' }, uuid: 'uuid-b' },
+];
+
+const dropDownMetadata = {
+  controls: [{
+    concept: { answers: codedAnswers, datatype: 'Coded', description: [],
+      name: 'Chief Complaint', properties: { allowDecimal: null }, uuid: 'chief-complaint-uuid' },
+    id: '1', label: { type: 'label', value: 'Chief Complaint' },
+    properties: { addMore: false, hideLabel: false, location: { column: 0, row: 0 },
+      mandatory: false, notes: false, dropDown: true },
+    type: 'obsControl', hiAbsolute: null, hiNormal: null, lowAbsolute: null, lowNormal: null,
+  }],
+  id: 4, name: 'DropDownForm', uuid: 'form-uuid-4', version: '1', defaultLocale: 'en',
+};
+
+const buttonMetadata = {
+  controls: [{
+    concept: { answers: codedAnswers, datatype: 'Coded', description: [],
+      name: 'Smoking Status', properties: { allowDecimal: null }, uuid: 'smoking-uuid' },
+    id: '1', label: { type: 'label', value: 'Smoking Status' },
+    properties: { addMore: false, hideLabel: false, location: { column: 0, row: 0 },
+      mandatory: false, notes: false },
+    type: 'obsControl', hiAbsolute: null, hiNormal: null, lowAbsolute: null, lowNormal: null,
+  }],
+  id: 5, name: 'ButtonForm', uuid: 'form-uuid-5', version: '1', defaultLocale: 'en',
+};
+
+const freeTextMetadata = {
+  controls: [{
+    concept: { answers: [], datatype: 'freeTextAutoComplete', description: [],
+      name: 'Chief Complaint FreeText', properties: { allowDecimal: null }, uuid: 'freetext-uuid' },
+    id: '1', label: { type: 'label', value: 'Chief Complaint FreeText' },
+    properties: { addMore: false, hideLabel: false, location: { column: 0, row: 0 },
+      mandatory: false, notes: false },
+    type: 'obsControl', hiAbsolute: null, hiNormal: null, lowAbsolute: null, lowNormal: null,
+  }],
+  id: 6, name: 'FreeTextForm', uuid: 'form-uuid-6', version: '1', defaultLocale: 'en',
+};
 
 const obsGroupMetadata = {
   controls: [{
@@ -60,6 +102,7 @@ describe('CarbonContainer', () => {
     ComponentStore.registerComponent('numeric', NumericBox);
     ComponentStore.registerComponent('obsControl', ObsControl);
     ComponentStore.registerComponent('obsGroupControl', ObsGroupControl);
+    ComponentStore.registerComponent('Coded', CodedControl);
   });
 
   afterEach(() => {
@@ -67,6 +110,7 @@ describe('CarbonContainer', () => {
     ComponentStore.deRegisterComponent('numeric');
     ComponentStore.deRegisterComponent('obsControl');
     ComponentStore.deRegisterComponent('obsGroupControl');
+    ComponentStore.deRegisterComponent('Coded');
   });
 
   it('should render Carbon TextArea for text-type controls', () => {
@@ -97,6 +141,22 @@ describe('CarbonContainer', () => {
   it('should render obsGroupControl closed when collapse is true', () => {
     render(<CarbonContainer {...defaultProps} metadata={obsGroupMetadata} collapse />);
     expect(document.querySelector('.cds--accordion__item')).not.toHaveClass('cds--accordion__item--active');
+  });
+
+  it('should render Carbon Dropdown for Coded concept with dropDown property', () => {
+    render(<CarbonContainer {...defaultProps} metadata={dropDownMetadata} />);
+    expect(document.querySelector('.cds--dropdown')).toBeInTheDocument();
+  });
+
+  it('should render Carbon SelectableTags for Coded concept without dropDown or autoComplete', () => {
+    render(<CarbonContainer {...defaultProps} metadata={buttonMetadata} />);
+    expect(screen.getByText('Option A')).toBeInTheDocument();
+    expect(screen.getByText('Option B')).toBeInTheDocument();
+  });
+
+  it('should render Carbon ComboBox for freeTextAutoComplete concept', () => {
+    render(<CarbonContainer {...defaultProps} metadata={freeTextMetadata} />);
+    expect(document.querySelector('.cds--combo-box')).toBeInTheDocument();
   });
 
   it('should forward ref to the underlying Container', () => {
