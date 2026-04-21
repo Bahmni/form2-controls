@@ -42,20 +42,24 @@ export class DateTime extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // Use locally computed values instead of stale this.state after setState
+    const { dateValue, timeValue } = !isEqual(this.props.value, prevProps.value)
+      ? this._parseValue(this.props.value)
+      : this.state;
+
     if (!isEqual(this.props.value, prevProps.value)) {
-      const { dateValue, timeValue } = this._parseValue(this.props.value);
       this.setState({ dateValue, timeValue });
     }
 
     if (this.props.validate !== prevProps.validate) {
-      const errors = this._getAllErrors(this.state.dateValue, this.state.timeValue);
+      const errors = this._getAllErrors(dateValue, timeValue);
       const hasErrors = this._hasErrors(errors);
       if (this.state.hasErrors !== hasErrors) {
         this.setState({ hasErrors });
       }
     }
 
-    const errors = this._getAllErrors(this.state.dateValue, this.state.timeValue);
+    const errors = this._getAllErrors(dateValue, timeValue);
     if (this._hasErrors(errors)) {
       this.props.onChange({ value: this.props.value, errors });
     }
