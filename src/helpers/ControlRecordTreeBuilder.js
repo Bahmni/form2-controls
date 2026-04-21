@@ -7,7 +7,7 @@ import { isAnyAncestorOrControlHasAddMore,
 import ValueMapperStore from './ValueMapperStore';
 import { Obs } from './Obs';
 
-export const ControlRecord = new Record({
+const ControlRecordBase = Record({
   valueMapper: undefined,
   control: undefined,
   formFieldPath: '',
@@ -21,36 +21,35 @@ export const ControlRecord = new Record({
   errors: [],
   dataSource: undefined,
   voided: false,
-  getObject() {
-    return this.mapper.getObject(this.obs);
-  },
+});
 
+export class ControlRecord extends ControlRecordBase {
   getControlId() {
     return this.control && this.control.id;
-  },
+  }
 
   getEventScripts() {
     return this.control && this.control.events;
-  },
+  }
 
   getConceptName() {
     return this.control && this.control.concept && this.control.concept.name;
-  },
+  }
 
   getConceptType() {
     return this.control && this.control.type;
-  },
+  }
 
   getLabelName() {
     return this.control && (this.control.value || this.control.label.value);
-  },
+  }
 
   setValue(value) {
     if (this.valueMapper) {
       return this.valueMapper.setValue(this.control, value);
     }
     return value;
-  },
+  }
 
   getValue() {
     const value = this.value.value;
@@ -58,7 +57,8 @@ export const ControlRecord = new Record({
       return this.valueMapper.getValue(this.control, value);
     }
     return value;
-  },
+  }
+
   remove(formFieldPath) {
     function findIfNodeHasDataSourceWithValueInDatabase(parent) {
       if (parent.dataSource.uuid
@@ -92,7 +92,7 @@ export const ControlRecord = new Record({
       return this.set('children', updatedChildren);
     }
     return this;
-  },
+  }
 
   update(formFieldPath, value, errors) {
     if (this.formFieldPath === formFieldPath) {
@@ -108,7 +108,7 @@ export const ControlRecord = new Record({
       return this.set('children', childRecord);
     }
     return null;
-  },
+  }
 
   voidChildRecords() {
     if (this.children) {
@@ -116,7 +116,8 @@ export const ControlRecord = new Record({
       return this.set('children', childRecord);
     }
     return this.set('errors', []).set('voided', true);
-  },
+  }
+
   removeObsUuidsInDataSource() {
     if (this.dataSource && this.active) {
       let newRecord = this;
@@ -137,7 +138,8 @@ export const ControlRecord = new Record({
       return newRecord;
     }
     return this;
-  },
+  }
+
   getErrors() {
     const errorArray = [];
     const errors = this.get('errors');
@@ -157,7 +159,7 @@ export const ControlRecord = new Record({
     }
 
     return errorArray;
-  },
+  }
 
   getActive() {
     if (this.active) {
@@ -175,8 +177,8 @@ export const ControlRecord = new Record({
       return this;
     }
     return null;
-  },
-});
+  }
+}
 
 export default class ControlRecordTreeBuilder {
 
