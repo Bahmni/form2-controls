@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } f
 import PropTypes from 'prop-types';
 import { ComboBox, FilterableMultiSelect } from '@bahmni/design-system';
 import { httpInterceptor } from 'src/helpers/httpInterceptor';
-import ComponentStore from 'src/helpers/componentStore';
 import { Validator } from 'src/helpers/Validator';
 import isEmpty from 'lodash/isEmpty';
 import classNames from 'classnames';
@@ -108,6 +107,14 @@ export const AutoComplete = forwardRef(function AutoComplete({
   const debouncedOnInputChange = useRef(
     Util.debounce((input) => {
       handleInputChange(input);
+    }, 300)
+  );
+
+  const debouncedGetAsyncOptions = useRef(
+    Util.debounce((input) => {
+      getAsyncOptions(input).then(results => {
+        setOptions(results);
+      });
     }, 300)
   );
 
@@ -237,9 +244,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
           onChange={({ selectedItem }) => handleChange(selectedItem)}
           onInputChange={(inputValue) => {
             if (typeof inputValue === 'string') {
-              getAsyncOptions(inputValue).then(results => {
-                setOptions(results);
-              });
+              debouncedGetAsyncOptions.current(inputValue);
             }
           }}
         />
@@ -263,7 +268,6 @@ export const AutoComplete = forwardRef(function AutoComplete({
             debouncedOnInputChange.current(inputValue);
           }
         }}
-        shouldFilterItem={() => true}
       />
     </div>
   );
@@ -293,23 +297,3 @@ AutoComplete.propTypes = {
   value: PropTypes.any,
   valueKey: PropTypes.string,
 };
-
-const descriptor = {
-  control: AutoComplete,
-  designProperties: {
-    isTopLevelComponent: false,
-  },
-  metadata: {
-    attributes: [
-      {
-        name: 'properties',
-        dataType: 'complex',
-        attributes: [],
-      },
-    ],
-  },
-};
-
-ComponentStore.registerDesignerComponent('autoComplete', descriptor);
-
-ComponentStore.registerComponent('autoComplete', AutoComplete);
