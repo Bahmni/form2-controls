@@ -181,8 +181,9 @@ export class CodedControl extends Component {
   render() {
     const { properties } = this.props;
     const displayType = this._getDisplayType(properties);
+    const store = this.props.componentStore || ComponentStore;
     const registeredComponent =
-      ComponentStore.getRegisteredComponent(displayType);
+      store.getRegisteredComponent(displayType);
     if (registeredComponent) {
       const childProps = this._getChildProps(displayType);
       return (

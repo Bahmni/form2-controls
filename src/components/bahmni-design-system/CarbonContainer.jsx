@@ -6,6 +6,9 @@ import { ObsGroupControl } from 'components/bahmni-design-system/ObsGroupControl
 import { Date } from 'components/bahmni-design-system/Date';
 import { DateTime } from 'components/bahmni-design-system/DateTime';
 import { NumericBox } from 'components/bahmni-design-system/NumericBox';
+import { DropDown } from 'components/bahmni-design-system/DropDown';
+import { Button } from 'components/bahmni-design-system/Button';
+import { FreeTextAutoComplete } from 'components/bahmni-design-system/FreeTextAutoComplete';
 
 const carbonComponents = {
   text: TextBox,
@@ -13,6 +16,9 @@ const carbonComponents = {
   date: Date,
   datetime: DateTime,
   numeric: NumericBox,
+  dropdown: DropDown,
+  button: Button,
+  freetextautocomplete: FreeTextAutoComplete,
 };
 
 /**
