@@ -3,6 +3,8 @@ import { Container } from 'components/Container.jsx';
 import ComponentStore from 'src/helpers/componentStore';
 import { TextBox } from 'components/bahmni-design-system/TextBox';
 import { ObsGroupControl } from 'components/bahmni-design-system/ObsGroupControl';
+import 'components/bahmni-design-system/AutoComplete';
+import 'components/bahmni-design-system/FreeTextAutoComplete';
 
 const carbonComponents = {
   text: TextBox,
