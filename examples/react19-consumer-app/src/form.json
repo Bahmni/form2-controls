@@ -8,7 +8,12 @@
       "translationKey": "LABEL_23",
       "type": "label",
       "value": "To add a custom chief complaint, please choose \"Other generic\" in the \"Chief Complaint\" field",
-      "properties": { "location": { "column": 0, "row": 0 } },
+      "properties": {
+        "location": {
+          "column": 0,
+          "row": 0
+        }
+      },
       "id": "23"
     },
     {
@@ -19,7 +24,13 @@
         "value": "Chief Complaint Record",
         "id": "25"
       },
-      "properties": { "addMore": true, "location": { "column": 0, "row": 0 } },
+      "properties": {
+        "addMore": true,
+        "location": {
+          "column": 0,
+          "row": 0
+        }
+      },
       "id": "25",
       "concept": {
         "name": "Chief Complaint Record",
@@ -3409,7 +3420,9 @@
                 "resourceVersion": "2.0"
               }
             ],
-            "properties": { "allowDecimal": null }
+            "properties": {
+              "allowDecimal": null
+            }
           },
           {
             "name": "Chief complaint (text)",
@@ -3423,7 +3436,9 @@
             "hiAbsolute": null,
             "lowAbsolute": null,
             "answers": [],
-            "properties": { "allowDecimal": null }
+            "properties": {
+              "allowDecimal": null
+            }
           },
           {
             "name": "Sign/symptom duration",
@@ -3441,7 +3456,9 @@
             "hiAbsolute": null,
             "lowAbsolute": null,
             "answers": [],
-            "properties": { "allowDecimal": false }
+            "properties": {
+              "allowDecimal": false
+            }
           },
           {
             "name": "Chief Complaint Duration",
@@ -3746,7 +3763,9 @@
                 "resourceVersion": "2.0"
               }
             ],
-            "properties": { "allowDecimal": null }
+            "properties": {
+              "allowDecimal": null
+            }
           }
         ]
       },
@@ -3766,7 +3785,10 @@
             "addMore": false,
             "hideLabel": false,
             "controlEvent": true,
-            "location": { "row": 0, "column": 0 },
+            "location": {
+              "row": 0,
+              "column": 0
+            },
             "url": "",
             "autoComplete": true,
             "multiSelect": false,
@@ -7211,7 +7233,9 @@
                 "translationKey": "OTHER_GENERIC_26"
               }
             ],
-            "properties": { "allowDecimal": null }
+            "properties": {
+              "allowDecimal": null
+            }
           },
           "units": null,
           "hiNormal": null,
@@ -7237,7 +7261,10 @@
             "addMore": false,
             "hideLabel": false,
             "controlEvent": false,
-            "location": { "row": 1, "column": 0 }
+            "location": {
+              "row": 1,
+              "column": 0
+            }
           },
           "id": "27",
           "concept": {
@@ -7252,7 +7279,9 @@
             "hiAbsolute": null,
             "lowAbsolute": null,
             "answers": [],
-            "properties": { "allowDecimal": null }
+            "properties": {
+              "allowDecimal": null
+            }
           },
           "units": null,
           "hiNormal": null,
@@ -7275,7 +7304,10 @@
             "addMore": false,
             "hideLabel": false,
             "controlEvent": false,
-            "location": { "row": 2, "column": 0 }
+            "location": {
+              "row": 2,
+              "column": 0
+            }
           },
           "id": "28",
           "concept": {
@@ -7294,7 +7326,9 @@
             "hiAbsolute": null,
             "lowAbsolute": null,
             "answers": [],
-            "properties": { "allowDecimal": false }
+            "properties": {
+              "allowDecimal": false
+            }
           },
           "units": null,
           "hiNormal": null,
@@ -7317,7 +7351,10 @@
             "addMore": false,
             "hideLabel": false,
             "controlEvent": false,
-            "location": { "row": 3, "column": 0 }
+            "location": {
+              "row": 3,
+              "column": 0
+            }
           },
           "id": "29",
           "concept": {
@@ -7629,7 +7666,9 @@
                 "translationKey": "YEARS_29"
               }
             ],
-            "properties": { "allowDecimal": null }
+            "properties": {
+              "allowDecimal": null
+            }
           },
           "units": null,
           "hiNormal": null,
@@ -7654,7 +7693,10 @@
         "addMore": false,
         "hideLabel": false,
         "controlEvent": false,
-        "location": { "column": 0, "row": 1 }
+        "location": {
+          "column": 0,
+          "row": 1
+        }
       },
       "id": "7",
       "concept": {
@@ -7664,7 +7706,9 @@
         "conceptClass": "Finding",
         "conceptHandler": null,
         "answers": [],
-        "properties": { "allowDecimal": null }
+        "properties": {
+          "allowDecimal": null
+        }
       },
       "units": null,
       "hiNormal": null,
@@ -7687,7 +7731,10 @@
         "addMore": false,
         "hideLabel": false,
         "controlEvent": false,
-        "location": { "column": 0, "row": 2 }
+        "location": {
+          "column": 0,
+          "row": 2
+        }
       },
       "id": "8",
       "concept": {
@@ -8245,7 +8292,9 @@
             "translationKey": "NEVER_SMOKER_8"
           }
         ],
-        "properties": { "allowDecimal": null }
+        "properties": {
+          "allowDecimal": null
+        }
       },
       "units": null,
       "hiNormal": null,
@@ -8261,7 +8310,13 @@
         "value": "Consultation Images",
         "id": "9"
       },
-      "properties": { "addMore": false, "location": { "column": 0, "row": 3 } },
+      "properties": {
+        "addMore": false,
+        "location": {
+          "column": 0,
+          "row": 3
+        }
+      },
       "id": "9",
       "concept": {
         "name": "Consultation Images",
@@ -8283,7 +8338,9 @@
             "hiAbsolute": null,
             "lowAbsolute": null,
             "answers": [],
-            "properties": { "allowDecimal": null }
+            "properties": {
+              "allowDecimal": null
+            }
           }
         ]
       },
@@ -8303,7 +8360,10 @@
             "addMore": true,
             "hideLabel": false,
             "controlEvent": false,
-            "location": { "row": 0, "column": 0 },
+            "location": {
+              "row": 0,
+              "column": 0
+            },
             "sameLine": false
           },
           "id": "10",
@@ -8319,7 +8379,9 @@
             "hiAbsolute": null,
             "lowAbsolute": null,
             "answers": [],
-            "properties": { "allowDecimal": null }
+            "properties": {
+              "allowDecimal": null
+            }
           },
           "units": null,
           "hiNormal": null,
@@ -8337,7 +8399,13 @@
         "value": "Consultation Videos",
         "id": "20"
       },
-      "properties": { "addMore": false, "location": { "column": 0, "row": 4 } },
+      "properties": {
+        "addMore": false,
+        "location": {
+          "column": 0,
+          "row": 4
+        }
+      },
       "id": "20",
       "concept": {
         "name": "Consultation Videos",
@@ -8359,7 +8427,9 @@
             "hiAbsolute": null,
             "lowAbsolute": null,
             "answers": [],
-            "properties": { "allowDecimal": null }
+            "properties": {
+              "allowDecimal": null
+            }
           }
         ]
       },
@@ -8379,7 +8449,10 @@
             "addMore": true,
             "hideLabel": false,
             "controlEvent": false,
-            "location": { "row": 0, "column": 0 }
+            "location": {
+              "row": 0,
+              "column": 0
+            }
           },
           "id": "21",
           "concept": {
@@ -8394,7 +8467,9 @@
             "hiAbsolute": null,
             "lowAbsolute": null,
             "answers": [],
-            "properties": { "allowDecimal": null }
+            "properties": {
+              "allowDecimal": null
+            }
           },
           "units": null,
           "hiNormal": null,
@@ -8403,6 +8478,530 @@
           "lowAbsolute": null
         }
       ]
+    },
+    {
+      "type": "obsControl",
+      "label": {
+        "translationKey": "DIAGNOSIS_100",
+        "id": "100",
+        "units": "",
+        "type": "label",
+        "value": "Diagnosis (AutoComplete)"
+      },
+      "properties": {
+        "mandatory": false,
+        "notes": false,
+        "addMore": false,
+        "hideLabel": false,
+        "controlEvent": false,
+        "location": {
+          "column": 0,
+          "row": 5
+        },
+        "autoComplete": true,
+        "multiSelect": false
+      },
+      "id": "100",
+      "concept": {
+        "name": "Diagnosis",
+        "uuid": "9bb0795c-4ff0-0305-1990-000000000100",
+        "datatype": "Coded",
+        "conceptClass": "Diagnosis",
+        "conceptHandler": null,
+        "units": null,
+        "hiNormal": null,
+        "lowNormal": null,
+        "hiAbsolute": null,
+        "lowAbsolute": null,
+        "answers": [
+          {
+            "uuid": "AA01AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA01",
+            "name": {
+              "display": "Hypertension",
+              "uuid": "AA01BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB01",
+              "name": "Hypertension",
+              "locale": "en",
+              "localePreferred": true,
+              "conceptNameType": "FULLY_SPECIFIED",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA01AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA01/name/AA01BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB01",
+                  "resourceAlias": "name"
+                }
+              ],
+              "resourceVersion": "1.9"
+            },
+            "names": [
+              {
+                "display": "Hypertension",
+                "uuid": "AA01BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB01",
+                "name": "Hypertension",
+                "locale": "en",
+                "localePreferred": true,
+                "conceptNameType": "FULLY_SPECIFIED",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA01AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA01/name/AA01BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB01",
+                    "resourceAlias": "name"
+                  }
+                ],
+                "resourceVersion": "1.9"
+              }
+            ],
+            "displayString": "Hypertension",
+            "resourceVersion": "1.9"
+          },
+          {
+            "uuid": "AA02AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA02",
+            "name": {
+              "display": "Type 2 Diabetes Mellitus",
+              "uuid": "AA02BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB02",
+              "name": "Type 2 Diabetes Mellitus",
+              "locale": "en",
+              "localePreferred": true,
+              "conceptNameType": "FULLY_SPECIFIED",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA02AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA02/name/AA02BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB02",
+                  "resourceAlias": "name"
+                }
+              ],
+              "resourceVersion": "1.9"
+            },
+            "names": [
+              {
+                "display": "Type 2 Diabetes Mellitus",
+                "uuid": "AA02BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB02",
+                "name": "Type 2 Diabetes Mellitus",
+                "locale": "en",
+                "localePreferred": true,
+                "conceptNameType": "FULLY_SPECIFIED",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA02AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA02/name/AA02BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB02",
+                    "resourceAlias": "name"
+                  }
+                ],
+                "resourceVersion": "1.9"
+              }
+            ],
+            "displayString": "Type 2 Diabetes Mellitus",
+            "resourceVersion": "1.9"
+          },
+          {
+            "uuid": "AA03AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA03",
+            "name": {
+              "display": "Asthma",
+              "uuid": "AA03BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB03",
+              "name": "Asthma",
+              "locale": "en",
+              "localePreferred": true,
+              "conceptNameType": "FULLY_SPECIFIED",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA03AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA03/name/AA03BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB03",
+                  "resourceAlias": "name"
+                }
+              ],
+              "resourceVersion": "1.9"
+            },
+            "names": [
+              {
+                "display": "Asthma",
+                "uuid": "AA03BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB03",
+                "name": "Asthma",
+                "locale": "en",
+                "localePreferred": true,
+                "conceptNameType": "FULLY_SPECIFIED",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA03AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA03/name/AA03BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB03",
+                    "resourceAlias": "name"
+                  }
+                ],
+                "resourceVersion": "1.9"
+              }
+            ],
+            "displayString": "Asthma",
+            "resourceVersion": "1.9"
+          },
+          {
+            "uuid": "AA04AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA04",
+            "name": {
+              "display": "Chronic Obstructive Pulmonary Disease",
+              "uuid": "AA04BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB04",
+              "name": "Chronic Obstructive Pulmonary Disease",
+              "locale": "en",
+              "localePreferred": true,
+              "conceptNameType": "FULLY_SPECIFIED",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA04AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA04/name/AA04BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB04",
+                  "resourceAlias": "name"
+                }
+              ],
+              "resourceVersion": "1.9"
+            },
+            "names": [
+              {
+                "display": "Chronic Obstructive Pulmonary Disease",
+                "uuid": "AA04BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB04",
+                "name": "Chronic Obstructive Pulmonary Disease",
+                "locale": "en",
+                "localePreferred": true,
+                "conceptNameType": "FULLY_SPECIFIED",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA04AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA04/name/AA04BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB04",
+                    "resourceAlias": "name"
+                  }
+                ],
+                "resourceVersion": "1.9"
+              }
+            ],
+            "displayString": "Chronic Obstructive Pulmonary Disease",
+            "resourceVersion": "1.9"
+          },
+          {
+            "uuid": "AA05AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA05",
+            "name": {
+              "display": "Acute Respiratory Infection",
+              "uuid": "AA05BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB05",
+              "name": "Acute Respiratory Infection",
+              "locale": "en",
+              "localePreferred": true,
+              "conceptNameType": "FULLY_SPECIFIED",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA05AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA05/name/AA05BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB05",
+                  "resourceAlias": "name"
+                }
+              ],
+              "resourceVersion": "1.9"
+            },
+            "names": [
+              {
+                "display": "Acute Respiratory Infection",
+                "uuid": "AA05BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB05",
+                "name": "Acute Respiratory Infection",
+                "locale": "en",
+                "localePreferred": true,
+                "conceptNameType": "FULLY_SPECIFIED",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA05AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA05/name/AA05BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB05",
+                    "resourceAlias": "name"
+                  }
+                ],
+                "resourceVersion": "1.9"
+              }
+            ],
+            "displayString": "Acute Respiratory Infection",
+            "resourceVersion": "1.9"
+          },
+          {
+            "uuid": "AA06AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA06",
+            "name": {
+              "display": "Malaria",
+              "uuid": "AA06BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB06",
+              "name": "Malaria",
+              "locale": "en",
+              "localePreferred": true,
+              "conceptNameType": "FULLY_SPECIFIED",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA06AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA06/name/AA06BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB06",
+                  "resourceAlias": "name"
+                }
+              ],
+              "resourceVersion": "1.9"
+            },
+            "names": [
+              {
+                "display": "Malaria",
+                "uuid": "AA06BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB06",
+                "name": "Malaria",
+                "locale": "en",
+                "localePreferred": true,
+                "conceptNameType": "FULLY_SPECIFIED",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA06AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA06/name/AA06BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB06",
+                    "resourceAlias": "name"
+                  }
+                ],
+                "resourceVersion": "1.9"
+              }
+            ],
+            "displayString": "Malaria",
+            "resourceVersion": "1.9"
+          },
+          {
+            "uuid": "AA07AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA07",
+            "name": {
+              "display": "Tuberculosis",
+              "uuid": "AA07BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB07",
+              "name": "Tuberculosis",
+              "locale": "en",
+              "localePreferred": true,
+              "conceptNameType": "FULLY_SPECIFIED",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA07AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA07/name/AA07BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB07",
+                  "resourceAlias": "name"
+                }
+              ],
+              "resourceVersion": "1.9"
+            },
+            "names": [
+              {
+                "display": "Tuberculosis",
+                "uuid": "AA07BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB07",
+                "name": "Tuberculosis",
+                "locale": "en",
+                "localePreferred": true,
+                "conceptNameType": "FULLY_SPECIFIED",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA07AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA07/name/AA07BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB07",
+                    "resourceAlias": "name"
+                  }
+                ],
+                "resourceVersion": "1.9"
+              }
+            ],
+            "displayString": "Tuberculosis",
+            "resourceVersion": "1.9"
+          },
+          {
+            "uuid": "AA08AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA08",
+            "name": {
+              "display": "Dengue Fever",
+              "uuid": "AA08BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB08",
+              "name": "Dengue Fever",
+              "locale": "en",
+              "localePreferred": true,
+              "conceptNameType": "FULLY_SPECIFIED",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA08AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA08/name/AA08BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB08",
+                  "resourceAlias": "name"
+                }
+              ],
+              "resourceVersion": "1.9"
+            },
+            "names": [
+              {
+                "display": "Dengue Fever",
+                "uuid": "AA08BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB08",
+                "name": "Dengue Fever",
+                "locale": "en",
+                "localePreferred": true,
+                "conceptNameType": "FULLY_SPECIFIED",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA08AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA08/name/AA08BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB08",
+                    "resourceAlias": "name"
+                  }
+                ],
+                "resourceVersion": "1.9"
+              }
+            ],
+            "displayString": "Dengue Fever",
+            "resourceVersion": "1.9"
+          },
+          {
+            "uuid": "AA09AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA09",
+            "name": {
+              "display": "Anemia",
+              "uuid": "AA09BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB09",
+              "name": "Anemia",
+              "locale": "en",
+              "localePreferred": true,
+              "conceptNameType": "FULLY_SPECIFIED",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA09AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA09/name/AA09BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB09",
+                  "resourceAlias": "name"
+                }
+              ],
+              "resourceVersion": "1.9"
+            },
+            "names": [
+              {
+                "display": "Anemia",
+                "uuid": "AA09BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB09",
+                "name": "Anemia",
+                "locale": "en",
+                "localePreferred": true,
+                "conceptNameType": "FULLY_SPECIFIED",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA09AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA09/name/AA09BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB09",
+                    "resourceAlias": "name"
+                  }
+                ],
+                "resourceVersion": "1.9"
+              }
+            ],
+            "displayString": "Anemia",
+            "resourceVersion": "1.9"
+          },
+          {
+            "uuid": "AA10AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA10",
+            "name": {
+              "display": "Typhoid Fever",
+              "uuid": "AA10BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB10",
+              "name": "Typhoid Fever",
+              "locale": "en",
+              "localePreferred": true,
+              "conceptNameType": "FULLY_SPECIFIED",
+              "links": [
+                {
+                  "rel": "self",
+                  "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA10AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA10/name/AA10BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB10",
+                  "resourceAlias": "name"
+                }
+              ],
+              "resourceVersion": "1.9"
+            },
+            "names": [
+              {
+                "display": "Typhoid Fever",
+                "uuid": "AA10BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB10",
+                "name": "Typhoid Fever",
+                "locale": "en",
+                "localePreferred": true,
+                "conceptNameType": "FULLY_SPECIFIED",
+                "links": [
+                  {
+                    "rel": "self",
+                    "uri": "http://localhost/openmrs/ws/rest/v1/concept/AA10AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA10/name/AA10BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB10",
+                    "resourceAlias": "name"
+                  }
+                ],
+                "resourceVersion": "1.9"
+              }
+            ],
+            "displayString": "Typhoid Fever",
+            "resourceVersion": "1.9"
+          }
+        ],
+        "properties": {
+          "allowDecimal": null
+        }
+      },
+      "units": null,
+      "hiNormal": null,
+      "lowNormal": null,
+      "hiAbsolute": null,
+      "lowAbsolute": null
+    },
+    {
+      "type": "obsControl",
+      "label": {
+        "translationKey": "LOCATION_101",
+        "id": "101",
+        "units": "",
+        "type": "label",
+        "value": "Location"
+      },
+      "properties": {
+        "mandatory": false,
+        "notes": false,
+        "addMore": false,
+        "hideLabel": false,
+        "controlEvent": false,
+        "location": {
+          "row": 6,
+          "column": 0
+        },
+        "style": "autocomplete"
+      },
+      "id": "101",
+      "concept": {
+        "name": "Location",
+        "uuid": "9bb0795c-4ff0-0305-1990-000000000101",
+        "datatype": "LocationObsHandler",
+        "conceptClass": "Location",
+        "conceptHandler": "LocationObsHandler",
+        "units": null,
+        "hiNormal": null,
+        "lowNormal": null,
+        "hiAbsolute": null,
+        "lowAbsolute": null,
+        "answers": [],
+        "properties": {
+          "allowDecimal": null
+        }
+      },
+      "units": null,
+      "hiNormal": null,
+      "lowNormal": null,
+      "hiAbsolute": null,
+      "lowAbsolute": null
+    },
+    {
+      "type": "obsControl",
+      "label": {
+        "translationKey": "PROVIDER_102",
+        "id": "102",
+        "units": "",
+        "type": "label",
+        "value": "Provider"
+      },
+      "properties": {
+        "mandatory": false,
+        "notes": false,
+        "addMore": false,
+        "hideLabel": false,
+        "controlEvent": false,
+        "location": {
+          "row": 7,
+          "column": 0
+        },
+        "style": "autocomplete"
+      },
+      "id": "102",
+      "concept": {
+        "name": "Provider",
+        "uuid": "9bb0795c-4ff0-0305-1990-000000000102",
+        "datatype": "ProviderObsHandler",
+        "conceptClass": "Provider",
+        "conceptHandler": "ProviderObsHandler",
+        "units": null,
+        "hiNormal": null,
+        "lowNormal": null,
+        "hiAbsolute": null,
+        "lowAbsolute": null,
+        "answers": [],
+        "properties": {
+          "allowDecimal": null
+        }
+      },
+      "units": null,
+      "hiNormal": null,
+      "lowNormal": null,
+      "hiAbsolute": null,
+      "lowAbsolute": null
     }
   ],
   "events": {
