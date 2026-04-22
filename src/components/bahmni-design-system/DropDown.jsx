@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown } from '@bahmni/design-system';
+import { Dropdown, FilterableMultiSelect } from '@bahmni/design-system';
 import { Validator } from 'src/helpers/Validator';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
@@ -12,6 +12,7 @@ export class DropDown extends Component {
     const hasErrors = this._isCreateByAddMore() ? this._hasErrors(errors) : false;
     this.state = { hasErrors };
     this.handleChange = this.handleChange.bind(this);
+    this.handleMultiSelectChange = this.handleMultiSelectChange.bind(this);
   }
 
   componentDidMount() {
@@ -71,9 +72,31 @@ export class DropDown extends Component {
     this.props.onValueChange(selectedItem, errors);
   }
 
+  handleMultiSelectChange({ selectedItems }) {
+    const errors = this._getErrors(selectedItems);
+    this.setState({ hasErrors: this._hasErrors(errors) });
+    this.props.onValueChange(selectedItems, errors);
+  }
+
   render() {
-    const { conceptUuid, enabled, options, value } = this.props;
+    const { conceptUuid, enabled, multiSelect, options, value } = this.props;
     const errors = this._getErrors(value);
+    if (multiSelect) {
+      return (
+        <FilterableMultiSelect
+          id={conceptUuid || 'dropdown'}
+          disabled={!enabled}
+          invalid={this.state.hasErrors}
+          invalidText={this._getInvalidText(errors)}
+          items={options}
+          itemToString={(item) => item?.name || ''}
+          placeholder=""
+          onChange={this.handleMultiSelectChange}
+          selectedItems={value || []}
+          titleText=""
+        />
+      );
+    }
     return (
       <Dropdown
         id={conceptUuid || 'dropdown'}
@@ -95,6 +118,7 @@ DropDown.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
   formFieldPath: PropTypes.string,
+  multiSelect: PropTypes.bool,
   onValueChange: PropTypes.func.isRequired,
   options: PropTypes.array.isRequired,
   validate: PropTypes.bool.isRequired,
