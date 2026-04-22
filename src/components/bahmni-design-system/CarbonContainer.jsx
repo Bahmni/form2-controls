@@ -7,6 +7,8 @@ import { Date } from 'components/bahmni-design-system/Date';
 import { DateTime } from 'components/bahmni-design-system/DateTime';
 import { NumericBox } from 'components/bahmni-design-system/NumericBox';
 import { AutoComplete } from 'components/bahmni-design-system/AutoComplete';
+import { Location } from 'components/bahmni-design-system/Location';
+import { Provider } from 'components/bahmni-design-system/Provider';
 
 const carbonComponents = {
   text: TextBox,
@@ -15,6 +17,8 @@ const carbonComponents = {
   datetime: DateTime,
   numeric: NumericBox,
   autocomplete: AutoComplete,
+  locationobshandler: Location,
+  providerobshandler: Provider,
 };
 
 /**
