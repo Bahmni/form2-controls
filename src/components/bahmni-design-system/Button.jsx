@@ -97,7 +97,7 @@ export class Button extends Component {
   }
 
   _isCreateByAddMore() {
-    return this.props.formFieldPath.split('-')[1] !== '0';
+    return !!this.props.formFieldPath && this.props.formFieldPath.split('-')[1] !== '0';
   }
 
   render() {
