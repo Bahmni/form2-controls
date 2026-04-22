@@ -91,7 +91,8 @@ export class FreeTextAutoComplete extends Component {
         invalid={this.state.hasErrors}
         invalidText={this._getInvalidText(errors)}
         items={options}
-        itemToString={(item) => (typeof item === 'string' ? item : item?.label || item?.name || '')}
+        itemToString={(item) => (typeof item === 'string' ? item
+          : item?.label || item?.name?.display || item?.name || '')}
         onChange={this.handleChange}
         selectedItem={this.state.value}
         titleText=""
