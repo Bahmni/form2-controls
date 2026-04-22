@@ -1,9 +1,7 @@
 import React from 'react';
-import { storiesOf } from '@kadira/storybook';
 import StoryWrapper from './StoryWrapper';
 import { Container } from 'src/components/Container.jsx';
 import '../styles/styles.scss';
-import '../node_modules/react-select/dist/react-select.css';
 
 const form = {
   id: 1,
@@ -322,11 +320,14 @@ const obsList = [
   },
 ];
 
-storiesOf('Forms', module)
-  .add('Multi Select', () =>
+export default {
+  title: 'Forms',
+};
+
+export const MultiSelect = {
+  render: () => (
     <StoryWrapper json={form}>
-      <Container metadata={form} observations={obsList}
-        validate={ false }
-      />
+      <Container metadata={form} observations={obsList} validate={false} translations={{ labels: {}, concepts: {} }} />
     </StoryWrapper>
-  );
+  ),
+};
