@@ -3,6 +3,7 @@ import { Container } from 'components/Container.jsx';
 import ComponentStore from 'src/helpers/componentStore';
 import { TextBox } from 'components/bahmni-design-system/TextBox';
 import { ObsGroupControl } from 'components/bahmni-design-system/ObsGroupControl';
+import { SectionWithIntl } from 'components/bahmni-design-system/Section';
 import { Date } from 'components/bahmni-design-system/Date';
 import { DateTime } from 'components/bahmni-design-system/DateTime';
 import { NumericBox } from 'components/bahmni-design-system/NumericBox';
@@ -16,6 +17,7 @@ import { Provider } from 'components/bahmni-design-system/Provider';
 const carbonComponents = {
   text: TextBox,
   obsgroupcontrol: ObsGroupControl,
+  section: SectionWithIntl,
   date: Date,
   datetime: DateTime,
   numeric: NumericBox,
