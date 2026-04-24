@@ -9,6 +9,7 @@ import { NumericBox } from 'components/bahmni-design-system/NumericBox';
 import { DropDown } from 'components/bahmni-design-system/DropDown';
 import { Button } from 'components/bahmni-design-system/Button';
 import { FreeTextAutoComplete } from 'components/bahmni-design-system/FreeTextAutoComplete';
+import { RadioButton } from 'components/bahmni-design-system/RadioButton';
 
 const carbonComponents = {
   text: TextBox,
@@ -19,6 +20,7 @@ const carbonComponents = {
   dropdown: DropDown,
   button: Button,
   freetextautocomplete: FreeTextAutoComplete,
+  radio: RadioButton,
 };
 
 /**
