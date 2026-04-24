@@ -8482,6 +8482,93 @@
     {
       "type": "obsControl",
       "label": {
+        "translationKey": "SMOKING_STATUS_DROPDOWN",
+        "type": "label",
+        "value": "Smoking Status (Dropdown)",
+        "id": "9001"
+      },
+      "properties": {
+        "mandatory": false,
+        "notes": false,
+        "dropDown": true,
+        "location": { "column": 0, "row": 10 }
+      },
+      "id": "9001",
+      "concept": {
+        "name": "Smoking Status",
+        "uuid": "c2a43174-c9db-4e54-8516-17372c83537a",
+        "datatype": "Coded",
+        "conceptClass": "Question",
+        "conceptHandler": null,
+        "answers": [
+          { "uuid": "ans-smoking-1", "name": { "display": "Never Smoked", "name": "Never Smoked", "locale": "en" } },
+          { "uuid": "ans-smoking-2", "name": { "display": "Former Smoker", "name": "Former Smoker", "locale": "en" } },
+          { "uuid": "ans-smoking-3", "name": { "display": "Current Smoker", "name": "Current Smoker", "locale": "en" } }
+        ],
+        "properties": { "allowDecimal": null }
+      }
+    },
+    {
+      "type": "obsControl",
+      "label": {
+        "translationKey": "PAIN_LEVEL_BUTTON",
+        "type": "label",
+        "value": "Pain Level (Button)",
+        "id": "9002"
+      },
+      "properties": {
+        "mandatory": false,
+        "notes": false,
+        "location": { "column": 0, "row": 11 }
+      },
+      "id": "9002",
+      "concept": {
+        "name": "Pain Level",
+        "uuid": "c2a43174-c9db-4e54-8516-17372c83537b",
+        "datatype": "Coded",
+        "conceptClass": "Question",
+        "conceptHandler": null,
+        "answers": [
+          { "uuid": "ans-pain-1", "name": { "display": "Mild", "name": "Mild", "locale": "en" } },
+          { "uuid": "ans-pain-2", "name": { "display": "Moderate", "name": "Moderate", "locale": "en" } },
+          { "uuid": "ans-pain-3", "name": { "display": "Severe", "name": "Severe", "locale": "en" } }
+        ],
+        "properties": { "allowDecimal": null }
+      }
+    },
+    {
+      "type": "obsControl",
+      "label": {
+        "translationKey": "CHIEF_COMPLAINT_DETAIL_FREETEXTAUTOCOMPLETE",
+        "type": "label",
+        "value": "Chief Complaint Detail (FreeTextAutoComplete)",
+        "id": "9003"
+      },
+      "properties": {
+        "mandatory": false,
+        "notes": false,
+        "location": { "column": 0, "row": 12 }
+      },
+      "id": "9003",
+      "concept": {
+        "name": "Chief Complaint Detail",
+        "uuid": "c2a43174-c9db-4e54-8516-17372c83537c",
+        "datatype": "freeTextAutoComplete",
+        "conceptClass": "Question",
+        "conceptHandler": null,
+        "answers": [
+          { "uuid": "ans-cc-1", "name": { "display": "Headache", "name": "Headache", "locale": "en" } },
+          { "uuid": "ans-cc-2", "name": { "display": "Chest Pain", "name": "Chest Pain", "locale": "en" } },
+          { "uuid": "ans-cc-3", "name": { "display": "Shortness of Breath", "name": "Shortness of Breath", "locale": "en" } },
+          { "uuid": "ans-cc-4", "name": { "display": "Abdominal Pain", "name": "Abdominal Pain", "locale": "en" } },
+          { "uuid": "ans-cc-5", "name": { "display": "Fever", "name": "Fever", "locale": "en" } }
+        ],
+        "properties": { "allowDecimal": null }
+      }
+    },
+    {
+      "type": "obsControl",
+      "label": {
         "translationKey": "DIAGNOSIS_100",
         "id": "100",
         "units": "",

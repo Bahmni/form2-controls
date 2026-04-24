@@ -93,6 +93,7 @@ export class ObsControl extends addMoreDecorator(Component) {
       conceptClass,
       conceptHandler,
       intl,
+      componentStore: this.props.componentStore || ComponentStore,
     });
   }
 
