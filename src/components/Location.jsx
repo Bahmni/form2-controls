@@ -11,18 +11,30 @@ export class Location extends Component {
   constructor(props) {
     super(props);
     this.state = { locationData: [] };
+    this._isMounted = false;
     this.onValueChange = this.onValueChange.bind(this);
   }
 
   componentDidMount() {
+    this._isMounted = true;
     const { properties } = this.props;
     const url = properties.URL || '/openmrs/ws/rest/v1/location?v=custom:(id,name,uuid)';
     httpInterceptor
       .get(url)
-      .then((data) => this.setState({ locationData: data.results }))
+      .then((data) => {
+        if (this._isMounted) {
+          this.setState({ locationData: data.results });
+        }
+      })
       .catch(() => {
-        this.props.showNotification('Failed to fetch location data', Constants.messageType.error);
+        if (this._isMounted) {
+          this.props.showNotification('Failed to fetch location data', Constants.messageType.error);
+        }
       });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   onValueChange(value, errors) {
