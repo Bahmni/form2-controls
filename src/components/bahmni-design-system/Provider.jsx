@@ -10,19 +10,32 @@ export class Provider extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { providerData: [] };
+    this.state = { providerData: [], loaded: false };
+    this._isMounted = false;
     this.onValueChange = this.onValueChange.bind(this);
   }
 
   componentDidMount() {
+    this._isMounted = true;
     const { properties } = this.props;
     const url = properties.URL || '/openmrs/ws/rest/v1/provider?v=custom:(id,name,uuid)';
     httpInterceptor
       .get(url)
-      .then((data) => this.setState({ providerData: data.results }))
+      .then((data) => {
+        if (this._isMounted) {
+          this.setState({ providerData: data.results, loaded: true });
+        }
+      })
       .catch(() => {
-        this.props.showNotification('Failed to fetch provider data', Constants.messageType.error);
+        if (this._isMounted) {
+          this.props.showNotification('Failed to fetch provider data', Constants.messageType.error);
+          this.setState({ loaded: true });
+        }
       });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   onValueChange(value, errors) {
@@ -36,22 +49,29 @@ export class Provider extends Component {
 
   render() {
     const value = this.props.value ? this._getValue(parseInt(this.props.value, 10)) : undefined;
-    const { properties } = this.props;
+    const { properties, enabled, formFieldPath, validate, validateForm, validations, conceptUuid } = this.props;
     const isSearchable = (properties.style === 'autocomplete');
     const minimumInput = isSearchable ? 2 : 0;
-    const isLoading = this.state.providerData.length === 0 && this.props.value;
+    const isLoading = !this.state.loaded && this.props.value;
     if (isLoading) {
       return (
         <Spinner show={isLoading} />
       );
     }
     return (
-      <AutoComplete {...this.props}
+      <AutoComplete
         asynchronous={false}
+        conceptUuid={conceptUuid}
+        enabled={enabled}
+        formFieldPath={formFieldPath}
         minimumInput={minimumInput}
+        multiSelect={false}
         onValueChange={this.onValueChange}
         options={this.state.providerData}
         searchable={isSearchable}
+        validate={validate}
+        validateForm={validateForm}
+        validations={validations}
         value={value}
       />
     );
@@ -67,6 +87,7 @@ Provider.propTypes = {
   properties: PropTypes.object.isRequired,
   showNotification: PropTypes.func.isRequired,
   validate: PropTypes.bool.isRequired,
+  validateForm: PropTypes.bool,
   validations: PropTypes.array.isRequired,
   value: PropTypes.string,
 };

@@ -32,6 +32,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
   labelKey = 'display',
   minimumInput = 3,
   multiSelect = false,
+  onBlur,
   onValueChange,
   options: propOptions = [],
   optionsUrl = '/openmrs/ws/rest/v1/concept?v=full&q=',
@@ -92,7 +93,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
       const searchedInputs = input.trim().split(' ');
       const filteredOptions = currentOptions.filter(option =>
         searchedInputs.every(searchedInput =>
-          option[currentLabelKey] && option[currentLabelKey].match(new RegExp(searchedInput, 'gi'))
+          option[currentLabelKey] && option[currentLabelKey].toLowerCase().includes(searchedInput.toLowerCase())
         )
       );
       setOptions(filteredOptions);
@@ -133,7 +134,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
       setOptions(propOptions);
     }
     const errors = getErrors(validations, propValue) || [];
-    if (initialHasErrors || propValue !== undefined || validateForm) {
+    if (onValueChange && (initialHasErrors || propValue !== undefined || validateForm)) {
       onValueChange(propValue, errors);
     }
   }, []);
@@ -150,7 +151,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
     const newHasErrors = hasErrors(errors);
     setValue(propValue);
     setHasError(newHasErrors);
-    if (newHasErrors) {
+    if (onValueChange && (newHasErrors || validateChanged)) {
       onValueChange(propValue, errors);
     }
   }, [propValue, validate, validations, onValueChange]);
@@ -171,13 +172,13 @@ export const AutoComplete = forwardRef(function AutoComplete({
       setValue(undefined);
       setHasError(hasErrors(errors));
       if (onValueChange) {
-        onValueChange(undefined, errors);
+        onValueChange(null, errors);
       }
     } else if (!selectedValue) {
       setValue(undefined);
       setHasError(hasErrors(errors));
       if (onValueChange) {
-        onValueChange(undefined, errors);
+        onValueChange(null, errors);
       }
     } else {
       setValue(selectedValue);
@@ -210,6 +211,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
     return (
       <div className={className}>
         <FilterableMultiSelect
+          key={JSON.stringify(propValue)}
           id={conceptUuid}
           disabled={!enabled}
           invalid={hasError}
@@ -229,11 +231,12 @@ export const AutoComplete = forwardRef(function AutoComplete({
           id={conceptUuid}
           disabled={!enabled}
           invalid={hasError}
-          invalidText={hasError ? 'Invalid value' : ''}
+          invalidText={hasError ? (getErrors(validations, propValue)?.[0]?.message || 'Invalid value') : ''}
           items={safeOptions}
           itemToString={(item) => (item ? item[labelKey] || '' : '')}
           selectedItem={value || null}
           onChange={({ selectedItem }) => handleChange(selectedItem)}
+          onBlur={onBlur}
           onInputChange={(inputValue) => {
             if (typeof inputValue === 'string') {
               debouncedGetAsyncOptions.current(inputValue);
@@ -250,11 +253,12 @@ export const AutoComplete = forwardRef(function AutoComplete({
         id={conceptUuid}
         disabled={!enabled}
         invalid={hasError}
-        invalidText={hasError ? 'Invalid value' : ''}
+        invalidText={hasError ? (getErrors(validations, propValue)?.[0]?.message || 'Invalid value') : ''}
         items={safeOptions}
         itemToString={(item) => (item ? item[labelKey] || '' : '')}
         selectedItem={value || null}
         onChange={({ selectedItem }) => handleChange(selectedItem)}
+        onBlur={onBlur}
         onInputChange={(inputValue) => {
           if (typeof inputValue === 'string') {
             debouncedOnInputChange.current(inputValue);
@@ -277,6 +281,7 @@ AutoComplete.propTypes = {
   labelKey: PropTypes.string,
   minimumInput: PropTypes.number,
   multiSelect: PropTypes.bool,
+  onBlur: PropTypes.func,
   onValueChange: PropTypes.func,
   options: PropTypes.array,
   optionsUrl: PropTypes.string,

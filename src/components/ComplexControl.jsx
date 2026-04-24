@@ -5,7 +5,8 @@ import ComponentStore from 'src/helpers/componentStore';
 export class ComplexControl extends PureComponent {
   render() {
     const { conceptHandler } = this.props;
-    const registeredComplexControl = ComponentStore.getRegisteredComponent(conceptHandler);
+    const store = this.props.componentStore || ComponentStore;
+    const registeredComplexControl = store.getRegisteredComponent(conceptHandler);
 
     if (registeredComplexControl) {
       return React.createElement(registeredComplexControl, {
@@ -19,6 +20,7 @@ export class ComplexControl extends PureComponent {
 
 ComplexControl.propTypes = {
   addMore: PropTypes.bool,
+  componentStore: PropTypes.object,
   conceptHandler: PropTypes.string.isRequired,
   enabled: PropTypes.bool,
   formFieldPath: PropTypes.string,
