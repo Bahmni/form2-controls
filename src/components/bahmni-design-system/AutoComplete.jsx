@@ -46,7 +46,6 @@ export const AutoComplete = forwardRef(function AutoComplete({
 }, ref) {
   const [value, setValue] = useState(propValue);
   const [options, setOptions] = useState([]);
-  const [noResultsText, setNoResultsText] = useState('');
 
   const initialErrors = getErrors(validations, propValue) || [];
   const initialHasErrors = isCreateByAddMore(formFieldPath)
@@ -56,9 +55,9 @@ export const AutoComplete = forwardRef(function AutoComplete({
 
   // Keep a stable ref to current props for use inside debounced function
   const propsRef = useRef({
-    url, options: propOptions, minimumInput, terminologyServiceConfig, labelKey,
+    url, options: propOptions, minimumInput, terminologyServiceConfig, labelKey, optionsUrl,
   });
-  propsRef.current = { url, options: propOptions, minimumInput, terminologyServiceConfig, labelKey };
+  propsRef.current = { url, options: propOptions, minimumInput, terminologyServiceConfig, labelKey, optionsUrl };
 
   // Track previous prop values to detect changes (skip initial mount for update effect)
   const prevPropValue = useRef(undefined);
@@ -76,7 +75,6 @@ export const AutoComplete = forwardRef(function AutoComplete({
 
     if (input.length < currentMinInput) {
       setOptions([]);
-      setNoResultsText('Type to search');
       return;
     }
 
@@ -86,11 +84,9 @@ export const AutoComplete = forwardRef(function AutoComplete({
         .then(data => {
           const responses = Util.formatConcepts(data);
           setOptions(responses);
-          setNoResultsText('No Results Found');
         })
         .catch(() => {
           setOptions([]);
-          setNoResultsText('No Results Found');
         });
     } else {
       const searchedInputs = input.trim().split(' ');
@@ -100,7 +96,6 @@ export const AutoComplete = forwardRef(function AutoComplete({
         )
       );
       setOptions(filteredOptions);
-      setNoResultsText('No Results Found');
     }
   }
 
@@ -171,7 +166,6 @@ export const AutoComplete = forwardRef(function AutoComplete({
     const errors = getErrors(validations, selectedValue);
     if (!asynchronous && minimumInput !== 0) {
       setOptions([]);
-      setNoResultsText('');
     }
     if (Array.isArray(selectedValue) && selectedValue.length === 0) {
       setValue(undefined);
@@ -195,9 +189,10 @@ export const AutoComplete = forwardRef(function AutoComplete({
   }
 
   async function getAsyncOptions(input) {
-    if (input.length >= minimumInput) {
+    const { optionsUrl: currentUrl, minimumInput: currentMinInput } = propsRef.current;
+    if (input.length >= currentMinInput) {
       try {
-        const data = await httpInterceptor.get(optionsUrl + input);
+        const data = await httpInterceptor.get(currentUrl + input);
         return data.results || [];
       } catch (e) {
         return [];

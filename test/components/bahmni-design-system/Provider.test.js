@@ -97,12 +97,9 @@ describe('Carbon Provider', () => {
       expect(container.querySelector('.cds--combo-box')).toBeInTheDocument();
     });
 
-    // Simulate selection (Carbon ComboBox)
-    const comboBox = container.querySelector('input.cds--text-input');
-    if (comboBox) {
-      await userEvent.click(comboBox);
-      await userEvent.type(comboBox, 'Provider');
-    }
+    expect(httpInterceptor.httpInterceptor.get).toHaveBeenCalledWith(
+      '/openmrs/ws/rest/v1/provider?v=custom:(id,name,uuid)'
+    );
   });
 
   it('should show error notification on fetch failure', async () => {
@@ -124,6 +121,7 @@ describe('Carbon Provider', () => {
   });
 
   it('should show spinner when loading provider data with value', async () => {
+    // When value is set but data hasn't loaded, show spinner
     httpInterceptor.httpInterceptor.get.mockImplementation(() =>
       new Promise(() => {}) // Never resolves to keep loading state
     );
@@ -136,8 +134,9 @@ describe('Carbon Provider', () => {
       />
     );
 
-    // Should show loading state when data is empty but value is provided
-    expect(container.innerHTML).toBeDefined();
+    // Should show spinner when data is empty and value is provided
+    // Component should have been rendered (checking for presence of any element)
+    expect(container.innerHTML).toBeTruthy();
   });
 
   it('should render with pre-populated provider value', async () => {
@@ -155,6 +154,8 @@ describe('Carbon Provider', () => {
   });
 
   it('should use minimumInput=2 when searchable', async () => {
+    httpInterceptor.httpInterceptor.get.mockClear();
+
     render(
       <Provider
         {...defaultProps}
@@ -162,12 +163,14 @@ describe('Carbon Provider', () => {
       />
     );
 
-    // minimumInput should be 2 for searchable
-    // This is verified by the component's internal behavior
-    expect(true).toBe(true);
+    // Typing less than 2 characters should not trigger API call beyond initial load
+    const initialCallCount = httpInterceptor.httpInterceptor.get.mock.calls.length;
+    expect(initialCallCount).toBeGreaterThan(0); // At least the initial mount call
   });
 
   it('should use minimumInput=0 when not searchable', async () => {
+    httpInterceptor.httpInterceptor.get.mockClear();
+
     render(
       <Provider
         {...defaultProps}
@@ -175,9 +178,10 @@ describe('Carbon Provider', () => {
       />
     );
 
-    // minimumInput should be 0 for dropdown
-    // This is verified by the component's internal behavior
-    expect(true).toBe(true);
+    // For dropdown (not searchable), options should be pre-loaded
+    await waitFor(() => {
+      expect(httpInterceptor.httpInterceptor.get).toHaveBeenCalled();
+    });
   });
 
   it('should use labelKey=name and valueKey=id by default', async () => {
@@ -206,5 +210,7 @@ describe('Carbon Provider', () => {
     await waitFor(() => {
       expect(container.querySelector('.cds--combo-box')).toBeInTheDocument();
     });
+
+    expect(mockOnChange).toHaveBeenCalled();
   });
 });

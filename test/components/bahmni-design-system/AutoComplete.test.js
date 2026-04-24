@@ -587,13 +587,12 @@ describe('Carbon AutoComplete', () => {
           onValueChange={mockOnValueChange}
           options={options}
           minimumInput={0}
+          value={options[0]}
         />
       );
 
-      const input = document.querySelector('input');
-      fireEvent.change(input, { target: { value: '' } });
-      // Simulate the ComboBox onChange with selectedItem=null (clear)
       expect(document.querySelector('.obs-control-select-wrapper')).toBeInTheDocument();
+      expect(mockOnValueChange).toHaveBeenCalledWith(options[0], expect.any(Array));
     });
 
     it('should call onValueChange with undefined when value is cleared', () => {
@@ -609,6 +608,7 @@ describe('Carbon AutoComplete', () => {
       );
 
       expect(container.querySelector('.obs-control-select-wrapper')).toBeInTheDocument();
+      expect(mockOnValueChange).toHaveBeenCalled();
     });
   });
 

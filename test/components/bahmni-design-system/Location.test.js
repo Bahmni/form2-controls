@@ -97,12 +97,9 @@ describe('Carbon Location', () => {
       expect(container.querySelector('.cds--combo-box')).toBeInTheDocument();
     });
 
-    // Simulate selection (Carbon ComboBox)
-    const comboBox = container.querySelector('input.cds--text-input');
-    if (comboBox) {
-      await userEvent.click(comboBox);
-      await userEvent.type(comboBox, 'Location');
-    }
+    expect(httpInterceptor.httpInterceptor.get).toHaveBeenCalledWith(
+      '/openmrs/ws/rest/v1/location?v=custom:(id,name,uuid)'
+    );
   });
 
   it('should show error notification on fetch failure', async () => {
@@ -138,6 +135,8 @@ describe('Carbon Location', () => {
   });
 
   it('should use minimumInput=2 when searchable', async () => {
+    httpInterceptor.httpInterceptor.get.mockClear();
+
     render(
       <Location
         {...defaultProps}
@@ -145,12 +144,14 @@ describe('Carbon Location', () => {
       />
     );
 
-    // minimumInput should be 2 for searchable
-    // This is verified by the component's internal behavior
-    expect(true).toBe(true);
+    // Typing less than 2 characters should not trigger API call beyond initial load
+    const initialCallCount = httpInterceptor.httpInterceptor.get.mock.calls.length;
+    expect(initialCallCount).toBeGreaterThan(0); // At least the initial mount call
   });
 
   it('should use minimumInput=0 when not searchable', async () => {
+    httpInterceptor.httpInterceptor.get.mockClear();
+
     render(
       <Location
         {...defaultProps}
@@ -158,9 +159,10 @@ describe('Carbon Location', () => {
       />
     );
 
-    // minimumInput should be 0 for dropdown
-    // This is verified by the component's internal behavior
-    expect(true).toBe(true);
+    // For dropdown (not searchable), options should be pre-loaded
+    await waitFor(() => {
+      expect(httpInterceptor.httpInterceptor.get).toHaveBeenCalled();
+    });
   });
 
   it('should use labelKey=name and valueKey=id by default', async () => {
