@@ -61,6 +61,7 @@
     "eslint-import-resolver-webpack": "^0.4.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jest": "^27.9.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-jsx-control-statements": "^2.1.1",
     "eslint-plugin-react": "^7.37.5",
     "fetch-mock": "^5.1.2",
