@@ -129,7 +129,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
     },
   }));
 
-  // componentDidMount equivalent
+  // componentDidMount equivalent - intentionally run only once on mount
   useEffect(() => {
     hasMounted.current = true;
     prevPropValue.current = propValue;
@@ -141,7 +141,6 @@ export const AutoComplete = forwardRef(function AutoComplete({
     if (initialHasErrors || propValue !== undefined || validateForm) {
       onValueChange(propValue, errors);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // componentDidUpdate for value/validate changes (skip initial mount)
@@ -159,16 +158,14 @@ export const AutoComplete = forwardRef(function AutoComplete({
     if (newHasErrors) {
       onValueChange(propValue, errors);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propValue, validate]);
+  }, [propValue, validate, validations, onValueChange]);
 
   // Update options when searchable=false and options change
   useEffect(() => {
     if (!searchable) {
       setOptions(propOptions);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propOptions]);
+  }, [propOptions, searchable]);
 
   function handleChange(selectedValue) {
     const errors = getErrors(validations, selectedValue);
