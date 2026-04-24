@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
+import classNames from 'classnames';
 import { IntlProvider, injectIntl } from 'react-intl';
 import addMoreDecorator from 'components/AddMoreDecorator';
 import { getGroupedControls, displayRowControls } from 'src/helpers/controlsParser';
@@ -20,10 +21,8 @@ export class Section extends addMoreDecorator(Component) {
     this.onRemoveControl = this.onRemoveControl.bind(this);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.collapse !== undefined &&
-        (this.props.collapse !== prevProps.collapse ||
-         (this.props.collapse !== prevState.collapse && prevProps.collapse === this.props.collapse))) {
+  componentDidUpdate(prevProps) {
+    if (this.props.collapse !== undefined && this.props.collapse !== prevProps.collapse) {
       this.setState({ collapse: this.props.collapse });
     }
   }
@@ -84,7 +83,7 @@ export class Section extends addMoreDecorator(Component) {
     });
 
     return (
-      <div className="form-builder-fieldset">
+      <div className={classNames('form-builder-fieldset', { hidden: this.props.hidden })}>
         {this.showAddMore()}
         <Accordion align="start">
           <AccordionItem
@@ -110,6 +109,7 @@ Section.propTypes = {
   enabled: PropTypes.bool,
   formName: PropTypes.string.isRequired,
   formVersion: PropTypes.string.isRequired,
+  hidden: PropTypes.bool,
   metadata: PropTypes.shape({
     id: PropTypes.string.isRequired,
     label: PropTypes.shape({
@@ -131,6 +131,7 @@ Section.propTypes = {
 Section.defaultProps = {
   children: List(),
   enabled: true,
+  hidden: false,
 };
 
 export const SectionWithIntl = injectIntl(Section, { forwardRef: true });
