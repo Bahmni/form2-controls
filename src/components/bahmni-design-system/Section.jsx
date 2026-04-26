@@ -89,7 +89,7 @@ export class Section extends addMoreDecorator(Component) {
           <AccordionItem
             open={!this.state.collapse}
             onHeadingClick={this._onCollapse}
-            title={<strong className="test-section-label">{title}</strong>}
+            title={title}
           >
             <IntlProvider {...this.props.intl}>
               <div className={`obsGroup-controls${disableClass}`}>

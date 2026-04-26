@@ -143,12 +143,6 @@ describe('Carbon Section', () => {
     ComponentStore.deRegisterComponent('numeric');
   });
 
-  it('should have test-section-label class on section title', () => {
-    renderWithIntl(<SectionWithIntl {...defaultProps} />);
-
-    expect(document.querySelector('.test-section-label')).toBeInTheDocument();
-  });
-
   it('should render AddMore control above accordion header when addMore is enabled', () => {
     const addMoreMetadata = {
       ...metadata,
