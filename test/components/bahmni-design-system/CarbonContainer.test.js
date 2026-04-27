@@ -62,6 +62,17 @@ const obsGroupMetadata = {
   id: 3, name: 'ObsGroupForm', uuid: 'form-uuid-3', version: '1', defaultLocale: 'en',
 };
 
+const sectionMetadata = {
+  controls: [{
+    controls: [],
+    id: '1',
+    label: { type: 'label', value: 'Patient History' },
+    properties: { location: { column: 0, row: 0 } },
+    type: 'section',
+  }],
+  id: 4, name: 'SectionForm', uuid: 'form-uuid-4', version: '1', defaultLocale: 'en',
+};
+
 const defaultProps = {
   collapse: false,
   locale: 'en',
@@ -157,6 +168,26 @@ describe('CarbonContainer', () => {
   it('should render Carbon ComboBox for freeTextAutoComplete concept', () => {
     render(<CarbonContainer {...defaultProps} metadata={freeTextMetadata} />);
     expect(document.querySelector('.cds--combo-box')).toBeInTheDocument();
+  });
+
+  it('should render Carbon Accordion for section type', () => {
+    render(<CarbonContainer {...defaultProps} metadata={sectionMetadata} />);
+    expect(document.querySelector('.cds--accordion')).toBeInTheDocument();
+  });
+
+  it('should render section label as accordion title', () => {
+    render(<CarbonContainer {...defaultProps} metadata={sectionMetadata} />);
+    expect(screen.getByText('Patient History')).toBeInTheDocument();
+  });
+
+  it('should render section open when collapse is false', () => {
+    render(<CarbonContainer {...defaultProps} metadata={sectionMetadata} collapse={false} />);
+    expect(document.querySelector('.cds--accordion__item')).toHaveClass('cds--accordion__item--active');
+  });
+
+  it('should render section closed when collapse is true', () => {
+    render(<CarbonContainer {...defaultProps} metadata={sectionMetadata} collapse />);
+    expect(document.querySelector('.cds--accordion__item')).not.toHaveClass('cds--accordion__item--active');
   });
 
   it('should forward ref to the underlying Container', () => {
