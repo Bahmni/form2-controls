@@ -79,12 +79,12 @@ export class RadioButton extends Component {
       >
         {options.map((option) => {
           const labelText = option[this.props.nameKey];
-          const isChecked = this.props.value &&
+          const isChecked = !!this.props.value &&
             this.props.value[this.props.valueKey] === option[this.props.valueKey];
           return (
             <CarbonRadioButton
-              key={labelText}
-              id={`${conceptUuid}-${labelText}`}
+              key={option[this.props.valueKey]}
+              id={`${conceptUuid}-${option[this.props.valueKey]}`}
               labelText={labelText}
               name={name}
               value={option[this.props.valueKey]}

@@ -104,6 +104,87 @@ describe('Carbon RadioButton', () => {
     expect(container.firstChild).not.toHaveClass('form-builder-error');
   });
 
+  it('should use conceptUuid as container id', () => {
+    const { container } = render(
+      <RadioButton
+        conceptUuid="test-uuid"
+        formFieldPath="test1.1/1-0"
+        onValueChange={mockOnValueChange}
+        options={options}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+      />
+    );
+
+    expect(container.firstChild).toHaveAttribute('id', 'test-uuid');
+  });
+
+  it('should disable radio buttons when enabled is false', () => {
+    render(
+      <RadioButton
+        conceptUuid="test-uuid"
+        formFieldPath="test1.1/1-0"
+        onValueChange={mockOnValueChange}
+        options={options}
+        enabled={false}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+      />
+    );
+
+    const radioInputs = screen.getAllByRole('radio');
+    radioInputs.forEach(input => expect(input).toBeDisabled());
+  });
+
+  it('should call onValueChange on mount when value is defined', () => {
+    const value = { name: 'Yes', value: true };
+    render(
+      <RadioButton
+        conceptUuid="test-uuid"
+        formFieldPath="test1.1/1-0"
+        onValueChange={mockOnValueChange}
+        options={options}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value={value}
+      />
+    );
+
+    expect(mockOnValueChange).toHaveBeenCalledWith(value, [], true);
+  });
+
+  it('should call onValueChange on mount when validateForm is true', () => {
+    render(
+      <RadioButton
+        conceptUuid="test-uuid"
+        formFieldPath="test1.1/1-0"
+        onValueChange={mockOnValueChange}
+        options={options}
+        validate={false}
+        validateForm
+        validations={[]}
+      />
+    );
+
+    expect(mockOnValueChange).toHaveBeenCalledWith(undefined, [], true);
+  });
+
+  it('should not crash when formFieldPath is undefined', () => {
+    expect(() => render(
+      <RadioButton
+        conceptUuid="test-uuid"
+        onValueChange={mockOnValueChange}
+        options={options}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+      />
+    )).not.toThrow();
+  });
+
   it('should change selection when a different radio button is clicked', () => {
     const { rerender } = render(
       <RadioButton
