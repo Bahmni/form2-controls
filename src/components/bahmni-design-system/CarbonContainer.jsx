@@ -13,6 +13,7 @@ import { FreeTextAutoComplete } from 'components/bahmni-design-system/FreeTextAu
 import { AutoComplete } from 'components/bahmni-design-system/AutoComplete';
 import { Location } from 'components/bahmni-design-system/Location';
 import { Provider } from 'components/bahmni-design-system/Provider';
+import { RadioButton } from 'components/bahmni-design-system/RadioButton';
 
 const carbonComponents = {
   text: TextBox,
@@ -27,6 +28,7 @@ const carbonComponents = {
   autocomplete: AutoComplete,
   locationobshandler: Location,
   providerobshandler: Provider,
+  radio: RadioButton,
 };
 
 /**

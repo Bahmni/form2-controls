@@ -38,6 +38,18 @@ const buttonMetadata = {
   id: 5, name: 'ButtonForm', uuid: 'form-uuid-5', version: '1', defaultLocale: 'en',
 };
 
+const radioMetadata = {
+  controls: [{
+    concept: { answers: codedAnswers, datatype: 'Coded', description: [],
+      name: 'Pain Location', properties: { allowDecimal: null }, uuid: 'pain-uuid' },
+    id: '1', label: { type: 'label', value: 'Pain Location' },
+    properties: { addMore: false, hideLabel: false, location: { column: 0, row: 0 },
+      mandatory: false, notes: false, radio: true },
+    type: 'obsControl', hiAbsolute: null, hiNormal: null, lowAbsolute: null, lowNormal: null,
+  }],
+  id: 7, name: 'RadioForm', uuid: 'form-uuid-7', version: '1', defaultLocale: 'en',
+};
+
 const freeTextMetadata = {
   controls: [{
     concept: { answers: [], datatype: 'freeTextAutoComplete', description: [],
@@ -161,6 +173,14 @@ describe('CarbonContainer', () => {
 
   it('should render Carbon SelectableTags for Coded concept without dropDown or autoComplete', () => {
     render(<CarbonContainer {...defaultProps} metadata={buttonMetadata} />);
+    expect(screen.getByText('Option A')).toBeInTheDocument();
+    expect(screen.getByText('Option B')).toBeInTheDocument();
+  });
+
+  it('should render Carbon RadioButtons for Coded concept with radio property', () => {
+    render(<CarbonContainer {...defaultProps} metadata={radioMetadata} />);
+    const radioInputs = screen.getAllByRole('radio');
+    expect(radioInputs).toHaveLength(2);
     expect(screen.getByText('Option A')).toBeInTheDocument();
     expect(screen.getByText('Option B')).toBeInTheDocument();
   });

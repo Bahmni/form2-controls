@@ -174,6 +174,8 @@ export class CodedControl extends Component {
       return 'autoComplete';
     } else if (properties.dropDown) {
       return 'dropDown';
+    } else if (properties.radio) {
+      return 'radio';
     }
     return 'button';
   }
