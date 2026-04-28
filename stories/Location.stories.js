@@ -2,7 +2,6 @@ import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import { Location } from 'src/components/Location.jsx';
-import '../styles/styles.scss';
 
 const mockLocations = [
   { id: 101, name: 'General Ward', uuid: 'loc-uuid-101' },
@@ -11,8 +10,6 @@ const mockLocations = [
   { id: 104, name: 'ICU', uuid: 'loc-uuid-104' },
   { id: 105, name: 'Maternity Ward', uuid: 'loc-uuid-105' },
 ];
-
-httpInterceptor.get = () => Promise.resolve({ results: mockLocations });
 
 const defaultProps = {
   onChange: action('onChange'),
@@ -27,6 +24,12 @@ const defaultProps = {
 export default {
   title: 'Atomic Controls/Location',
   component: Location,
+  decorators: [
+    (Story) => {
+      httpInterceptor.get = () => Promise.resolve({ results: mockLocations });
+      return <Story />;
+    },
+  ],
   parameters: {
     docs: {
       description: {
@@ -34,7 +37,11 @@ export default {
           'Location selector that fetches location list from the OpenMRS REST API on mount. ' +
           'In these stories, the HTTP call is mocked with local test data. ' +
           'Observation value is stored as the location id (as a string). ' +
-          'Set properties.style="autocomplete" to enable searchable mode.',
+          'Set properties.style="autocomplete" to enable searchable mode.\n\n' +
+          'Accessibility (WCAG 2.1 AA): Inherits AutoComplete accessibility — combobox role with ' +
+          'arrow-key navigation (SC 2.1.1, 4.1.2); visible focus ring (SC 2.4.7); ' +
+          'loading state announced via aria-busy (SC 4.1.3); ' +
+          'mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).',
       },
     },
   },
@@ -63,6 +70,16 @@ export const Disabled = {
       {...defaultProps}
       enabled={false}
       value="101"
+    />
+  ),
+};
+
+export const WithValidationError = {
+  render: () => (
+    <Location
+      {...defaultProps}
+      validate={true}
+      validations={['mandatory']}
     />
   ),
 };

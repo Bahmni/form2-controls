@@ -4,7 +4,6 @@ import { RadioButton } from 'src/components/RadioButton.jsx';
 import { TextBox } from 'src/components/TextBox.jsx';
 import { injectIntl } from 'react-intl';
 import { Label } from 'src/components/Label.jsx';
-import '../styles/styles.scss';
 
 const LabelWithIntl = injectIntl(Label);
 
@@ -36,7 +35,13 @@ export default {
         component:
           'Radio button group for single-select coded observations. ' +
           'Each option maps to a stored value in the observation record. ' +
-          'Clicking an option sets the observation value to that option\'s value field.',
+          'Clicking an option sets the observation value to that option\'s value field.\n\n' +
+          'Accessibility (WCAG 2.1 AA): Radio inputs are keyboard navigable with arrow keys (SC 2.1.1); ' +
+          'checked state announced by screen readers via native input type (SC 4.1.2); ' +
+          'visible focus ring on each radio option (SC 2.4.7); ' +
+          'selected state not conveyed by colour alone (SC 1.4.1); ' +
+          'group should be wrapped in <fieldset>/<legend> for accessible group labelling (SC 1.3.1). ' +
+          'Note: the component does not expose an enabled prop — use a <fieldset disabled> wrapper.',
       },
     },
   },
@@ -68,6 +73,38 @@ export const MultipleOptions = {
       options={frequencyOptions}
       value="occasionally"
       conceptUuid="smoking-frequency-uuid"
+    />
+  ),
+};
+
+export const Disabled = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'RadioButton does not expose an enabled prop. This story uses a <fieldset disabled> ' +
+          'wrapper, which disables native <input> elements and is announced as disabled by screen readers (SC 4.1.2).',
+      },
+    },
+  },
+  render: () => (
+    <fieldset disabled style={{ border: 'none', padding: 0, margin: 0 }}>
+      <RadioButton
+        {...defaultProps}
+        options={yesNoOptions}
+        value="yes"
+      />
+    </fieldset>
+  ),
+};
+
+export const WithValidationError = {
+  render: () => (
+    <RadioButton
+      {...defaultProps}
+      options={yesNoOptions}
+      validate={true}
+      validations={['mandatory']}
     />
   ),
 };

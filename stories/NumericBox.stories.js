@@ -1,7 +1,6 @@
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { NumericBox } from 'src/components/NumericBox.jsx';
-import '../styles/styles.scss';
 
 const defaultProps = {
   onChange: action('onChange'),
@@ -22,7 +21,10 @@ export default {
         component:
           'Numeric input for quantitative observations (e.g. blood pressure, temperature). ' +
           'Supports normal range display and absolute range validation. ' +
-          'Observation value is stored as a number.',
+          'Observation value is stored as a number.\n\n' +
+          'Accessibility (WCAG 2.1 AA): Keyboard navigable (SC 2.1.1); visible focus ring (SC 2.4.7); ' +
+          'out-of-range errors announced via aria-invalid (SC 3.3.1); ' +
+          'numeric inputmode declared for mobile keyboards (SC 1.3.5); text contrast ≥ 4.5:1 (SC 1.4.3).',
       },
     },
   },

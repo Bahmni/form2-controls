@@ -1,7 +1,6 @@
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { AutoComplete } from 'src/components/AutoComplete.jsx';
-import '../styles/styles.scss';
 
 const medicationOptions = [
   { uuid: 'med-uuid-1', name: 'Paracetamol', display: 'Paracetamol' },
@@ -36,7 +35,11 @@ export default {
           'Searchable select control for coded observations. ' +
           'Supports synchronous option lists, client-side search filtering, ' +
           'and asynchronous HTTP loading for large concept sets. ' +
-          'Observation value is stored as the selected option object.',
+          'Observation value is stored as the selected option object.\n\n' +
+          'Accessibility (WCAG 2.1 AA): Combobox pattern with listbox popup (SC 1.3.1, 4.1.2); ' +
+          'keyboard navigable with arrow keys and Enter to select (SC 2.1.1); ' +
+          'visible focus ring (SC 2.4.7); suggestions announced via aria-live region (SC 4.1.3); ' +
+          'mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).',
       },
     },
   },
@@ -77,6 +80,16 @@ export const Disabled = {
       {...defaultProps}
       enabled={false}
       value={{ uuid: 'med-uuid-1', name: 'Paracetamol', display: 'Paracetamol' }}
+    />
+  ),
+};
+
+export const WithValidationError = {
+  render: () => (
+    <AutoComplete
+      {...defaultProps}
+      validate={true}
+      validations={['mandatory']}
     />
   ),
 };

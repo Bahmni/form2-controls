@@ -3,7 +3,6 @@ import { action } from '@storybook/addon-actions';
 import { injectIntl } from 'react-intl';
 import { Label } from 'src/components/Label.jsx';
 import { TextBox } from 'src/components/TextBox.jsx';
-import '../styles/styles.scss';
 
 const LabelWithIntl = injectIntl(Label);
 
@@ -23,7 +22,10 @@ export default {
         component:
           'Static display label rendered alongside a form control. ' +
           'Not an observation control — it has no value binding. ' +
-          'Supports i18n via translationKey and optional unit suffix.',
+          'Supports i18n via translationKey and optional unit suffix.\n\n' +
+          'Accessibility (WCAG 2.1 AA): Rendered as a <label> element for programmatic association ' +
+          'with the adjacent form control via htmlFor/id (SC 1.3.1); ' +
+          'non-interactive — does not receive focus (SC 2.1.1); text contrast ≥ 4.5:1 (SC 1.4.3).',
       },
     },
   },
