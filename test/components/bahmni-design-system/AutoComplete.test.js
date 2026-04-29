@@ -880,7 +880,7 @@ describe('Carbon AutoComplete', () => {
   describe('Edge cases', () => {
     it('should handle validateForm changing to true', () => {
       const validations = [constants.validations.mandatory];
-      const { rerender } = render(
+      const { rerender, container } = render(
         <AutoComplete
           asynchronous={false}
           formFieldPath="test/1-0"
@@ -904,6 +904,7 @@ describe('Carbon AutoComplete', () => {
         />
       );
 
+      expect(container.querySelector('.form-builder-error')).toBeTruthy();
       expect(mockOnValueChange).toHaveBeenCalledWith(
         undefined,
         expect.arrayContaining([

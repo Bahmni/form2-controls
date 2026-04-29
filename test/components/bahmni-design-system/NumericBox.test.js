@@ -88,7 +88,7 @@ describe('NumericBox', () => {
     );
   });
 
-  it('should handle null value and display as 0', () => {
+  it('should handle null value and display as empty', () => {
     const { container } = render(
       <NumericBox
         formFieldPath="test1.1/1-0"
@@ -101,11 +101,10 @@ describe('NumericBox', () => {
     );
 
     const input = container.querySelector('input[type="number"]');
-    // null value is displayed as 0 due to getNumericValue() function
-    expect(input).toHaveValue(0);
+    expect(input).toHaveValue(null);
   });
 
-  it('should display 0 as default value when undefined', () => {
+  it('should display empty when value is undefined', () => {
     const { container } = render(
       <NumericBox
         formFieldPath="test1.1/1-0"
@@ -117,8 +116,7 @@ describe('NumericBox', () => {
     );
 
     const input = container.querySelector('input[type="number"]');
-    // getNumericValue() returns 0 for undefined values (Carbon NumberInput compatibility)
-    expect(input).toHaveValue(0);
+    expect(input).toHaveValue(null);
   });
 
   it('should display normal range when both lowNormal and hiNormal are provided', () => {
@@ -402,7 +400,7 @@ describe('NumericBox', () => {
     );
 
     const input = container.querySelector('input[type="number"]');
-    expect(input).toHaveValue(0);
+    expect(input).toHaveValue(null);
   });
 
   it('should validate with custom validations', () => {

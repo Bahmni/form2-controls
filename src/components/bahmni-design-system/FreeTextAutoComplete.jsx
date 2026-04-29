@@ -27,7 +27,8 @@ export class FreeTextAutoComplete extends Component {
       this.isValueChanged ||
       this.state.hasErrors !== nextState.hasErrors ||
       !isEqual(this.state.value, nextState.value) ||
-      this.props.enabled !== nextProps.enabled
+      this.props.enabled !== nextProps.enabled ||
+      this.props.validate !== nextProps.validate
     );
   }
 
@@ -45,11 +46,8 @@ export class FreeTextAutoComplete extends Component {
       }
     }
 
-    const errors = this._getErrors(this.props.value);
-    if (this._hasErrors(errors)) {
-      this.props.onChange({ value: this.props.value, errors });
-    }
     if (this.isValueChanged) {
+      const errors = this._getErrors(this.props.value);
       this.props.onChange({ value: this.props.value, errors });
     }
   }
@@ -66,10 +64,6 @@ export class FreeTextAutoComplete extends Component {
     return !!this.props.formFieldPath && this.props.formFieldPath.split('-')[1] !== '0';
   }
 
-  _getInvalidText(errors) {
-    return errors && errors.length > 0 ? errors[0].message : '';
-  }
-
   handleChange({ selectedItem, inputValue }) {
     // selectedItem is null for custom-typed values; use inputValue in that case
     const value = selectedItem !== null && selectedItem !== undefined
@@ -82,14 +76,12 @@ export class FreeTextAutoComplete extends Component {
 
   render() {
     const { conceptUuid, enabled, options } = this.props;
-    const errors = this._getErrors(this.props.value);
     return (
       <ComboBox
         id={conceptUuid || 'free-text-autocomplete'}
         allowCustomValue
         disabled={!enabled}
         invalid={this.state.hasErrors}
-        invalidText={this._getInvalidText(errors)}
         items={options}
         itemToString={(item) => (typeof item === 'string' ? item
           : item?.label || item?.name?.display || item?.name || '')}

@@ -50,19 +50,15 @@ export const NumericBox = ({
   useEffect(() => {
     if (isInitialized) return;
 
-    // Don't show errors on mount - only show them after user interaction or form validation
     setHasErrors(false);
     setHasWarnings(false);
 
-    // Call onChange on mount with the value if it exists
-    if (typeof value !== 'undefined' || validateForm) {
-      onChange({
-        value,
-        errors: [],
-        triggerControlEvent: false,
-        calledOnMount: true,
-      });
-    }
+    onChange({
+      value,
+      errors: _getErrors(value),
+      triggerControlEvent: false,
+      calledOnMount: true,
+    });
 
     setIsInitialized(true);
   }, []);
@@ -142,19 +138,21 @@ export const NumericBox = ({
   // Ensure value is always numeric (never string) for Carbon NumberInput.toFixed() compatibility
   const getNumericValue = () => {
     if (value === null || value === undefined || value === '') {
-      return 0;
+      return '';
     }
     const num = parseFloat(value);
-    return isNaN(num) ? 0 : num;
+    return isNaN(num) ? '' : num;
   };
 
   return (
     <div className="obs-numeric-text-wrap">
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <NumberInput
+          allowEmpty
           value={getNumericValue()}
           onChange={handleChange}
           invalid={hasErrors}
+          warn={hasWarnings}
           disabled={!enabled}
           step={1}
           {...props}

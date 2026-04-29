@@ -27,7 +27,8 @@ export class DropDown extends Component {
     return (
       this.isValueChanged ||
       this.state.hasErrors !== nextState.hasErrors ||
-      this.props.enabled !== nextProps.enabled
+      this.props.enabled !== nextProps.enabled ||
+      this.props.validate !== nextProps.validate
     );
   }
 
@@ -41,13 +42,6 @@ export class DropDown extends Component {
       }
     }
 
-    const errors = this._getErrors(this.props.value);
-    if (this._hasErrors(errors)) {
-      this.props.onValueChange(this.props.value, errors);
-    }
-    if (this.isValueChanged) {
-      this.props.onValueChange(this.props.value, errors);
-    }
   }
 
   _hasErrors(errors) {
@@ -60,10 +54,6 @@ export class DropDown extends Component {
 
   _isCreateByAddMore() {
     return !!this.props.formFieldPath && this.props.formFieldPath.split('-')[1] !== '0';
-  }
-
-  _getInvalidText(errors) {
-    return errors && errors.length > 0 ? errors[0].message : '';
   }
 
   handleChange({ selectedItem }) {
@@ -80,14 +70,12 @@ export class DropDown extends Component {
 
   render() {
     const { conceptUuid, enabled, multiSelect, options, value } = this.props;
-    const errors = this._getErrors(value);
     if (multiSelect) {
       return (
         <FilterableMultiSelect
           id={conceptUuid || 'dropdown'}
           disabled={!enabled}
           invalid={this.state.hasErrors}
-          invalidText={this._getInvalidText(errors)}
           items={options}
           itemToString={(item) => item?.name || ''}
           placeholder=""
@@ -102,7 +90,6 @@ export class DropDown extends Component {
         id={conceptUuid || 'dropdown'}
         disabled={!enabled}
         invalid={this.state.hasErrors}
-        invalidText={this._getInvalidText(errors)}
         items={options}
         itemToString={(item) => item?.name || ''}
         label=""
