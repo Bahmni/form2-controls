@@ -1,0 +1,297 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import { SelectableTag } from '@bahmni/design-system';
+import { Label } from 'components/Label.jsx';
+import ComponentStore from 'src/helpers/componentStore';
+import find from 'lodash/find';
+import { Comment } from 'components/Comment.jsx';
+import { getValidations } from 'src/helpers/controlsHelper';
+import { UnSupportedComponent } from 'components/UnSupportedComponent.jsx';
+import constants from 'src/constants';
+import { Util } from 'src/helpers/Util';
+import { injectIntl } from 'react-intl';
+import addMoreDecorator from '../AddMoreDecorator';
+
+export class ObsControl extends addMoreDecorator(Component) {
+
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.onChange = this.onChange.bind(this);
+    this.onCommentChange = this.onCommentChange.bind(this);
+    this.onAddControl = this.onAddControl.bind(this);
+    this.onRemoveControl = this.onRemoveControl.bind(this);
+    this.onValueChangeDone = this.onValueChangeDone.bind(this);
+    this.setAbnormal = this.setAbnormal.bind(this);
+  }
+
+  isAllowedToTriggerControlEvent(triggerControlEvent) {
+    return triggerControlEvent === undefined || triggerControlEvent;
+  }
+
+  onValueChangeDone(triggerControlEvent) {
+    if (this.props.onEventTrigger && this.isAllowedToTriggerControlEvent(triggerControlEvent)) {
+      this.props.onEventTrigger(this.props.formFieldPath, 'onValueChange');
+    }
+  }
+
+  onChange({ value, errors, calledOnMount, triggerControlEvent }) {
+    const { metadata: { properties } } = this.props;
+    const isAbnormalPropertyEnabled = find(properties, (val, key) => (key === 'abnormal' && val));
+    const isAbnormal = find(errors, (err) => err.type === constants.errorTypes.warning
+                                              && err.message === constants.validations.allowRange);
+    let interpretation = isAbnormalPropertyEnabled && isAbnormal ? 'ABNORMAL' : null;
+    if (calledOnMount) {
+      interpretation = this.props.value.interpretation;
+    }
+    const obsValue = { value, comment: this.props.value.comment, interpretation };
+    this.setState({
+      errors,
+    });
+    this.props.onValueChanged(
+      this.props.formFieldPath,
+      obsValue,
+      errors,
+       () => this.onValueChangeDone(triggerControlEvent));
+  }
+
+  onCommentChange(comment) {
+    this.props.onValueChanged(
+      this.props.formFieldPath,
+      { value: this.props.value.value, comment, interpretation: this.props.value.interpretation },
+      undefined
+    );
+  }
+
+  displayObsControl(registeredComponent) {
+    const { onControlAdd, hidden, enabled, metadata,
+      metadata: { concept }, validate, validateForm, formFieldPath,
+      showNotification, intl } = this.props;
+    const options = metadata.options || concept.answers;
+    const { conceptClass, conceptHandler } = concept;
+    const validations = getValidations(metadata.properties, concept.properties);
+    const isAddMoreEnabled =
+      find(metadata.properties, (value, key) => (key === 'addMore' && value));
+    return React.createElement(registeredComponent, {
+      hidden,
+      enabled,
+      properties: metadata.properties,
+      options,
+      onChange: this.onChange,
+      onControlAdd,
+      onEventTrigger: this.onEventTrigger,
+      validate,
+      validateForm,
+      formFieldPath,
+      patientUuid: this.props.patientUuid,
+      conceptUuid: this.props.metadata.concept.uuid,
+      addMore: isAddMoreEnabled,
+      validations,
+      value: this.props.value.value,
+      ...this._numericContext(metadata),
+      showNotification,
+      conceptClass,
+      conceptHandler,
+      intl,
+      componentStore: this.props.componentStore || ComponentStore,
+    });
+  }
+
+  _numericContext(metadata) {
+    return {
+      hiNormal: metadata.hiNormal,
+      lowNormal: metadata.lowNormal,
+      hiAbsolute: metadata.hiAbsolute,
+      lowAbsolute: metadata.lowAbsolute,
+    };
+  }
+
+  _getUnits(units) {
+    return units ? `(${units})` : '';
+  }
+
+  displayLabel() {
+    const { enabled, intl, hidden, metadata: { properties, label, units, concept } } = this.props;
+    const { concept: { description } } = this.props.metadata;
+    const hideLabel = find(properties, (value, key) => (key === 'hideLabel' && value));
+    const labelMetadata = { ...label, ...concept, units: this._getUnits(units) };
+    const showHintButton = this.state && this.state.showHintButton;
+    const labelComponent = (<Label enabled={enabled} hidden={hidden}
+      intl={intl} metadata={labelMetadata}
+    />);
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 'var(--cds-spacing-02)' }}>
+        {!hideLabel && labelComponent}
+        {!hideLabel && this.markMandatory()}
+        {!hideLabel && description && description.value &&
+        <i className="fa fa-question-circle form-builder-tooltip-trigger"
+          onClick={() => this.setState({ showHintButton: !showHintButton })}
+        />}
+      </div>
+    );
+  }
+
+  markMandatory() {
+    const { properties } = this.props.metadata;
+    const isMandatory = find(properties, (value, key) => (key === 'mandatory' && value));
+    if (isMandatory) {
+      return <span className="form-builder-asterisk">*</span>;
+    }
+    return null;
+  }
+
+  showHelperText() {
+    const { concept: { description } } = this.props.metadata;
+    if (description && description.value) {
+      const showHelperTextHtml = this.props.intl.formatHTMLMessage({
+        defaultMessage: description.value,
+        id: description.translationKey || 'defaultId',
+      });
+      return (
+          <div className={classNames('form-builder-tooltip-wrap',
+              { active: this.state.showHintButton === true })}>
+          <p className="form-builder-tooltip-description">
+            <i className="fa fa-caret-down"></i>
+            <span className="details hint" dangerouslySetInnerHTML={{ __html: showHelperTextHtml }}>
+            </span>
+          </p>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  showComment() {
+    const { metadata: { properties } } = this.props;
+    const isAddCommentsEnabled = find(properties, (value, key) => (key === 'notes' && value));
+    if (isAddCommentsEnabled) {
+      const comment = this.props.value.comment;
+      const value = this.props.value.value;
+      const { concept } = this.props.metadata;
+      return (
+        <Comment
+          comment={comment} conceptHandler={concept.conceptHandler}
+          datatype={concept.datatype} onCommentChange={this.onCommentChange}
+          value={value}
+        />
+      );
+    }
+    return null;
+  }
+
+  isCreateByAddMore() {
+    return (this.props.formFieldPath.split('-')[1] !== '0');
+  }
+
+  showAbnormalButton() {
+    const { metadata: { properties }, value } = this.props;
+    const isAbnormal = find(properties, (val, key) => (key === 'abnormal' && val));
+    const isAbnormalObs = (value.interpretation === 'ABNORMAL');
+    if (isAbnormal) {
+      return (
+        <SelectableTag
+          size="lg"
+          text="Abnormal"
+          selected={isAbnormalObs}
+          disabled={!value.value}
+          onChange={this.setAbnormal}
+        />
+      );
+    }
+    return null;
+  }
+
+  setAbnormal() {
+    const { value, onValueChanged, formFieldPath } = this.props;
+    const { errors } = this.state;
+    if (value.value) {
+      const interpretation = value.interpretation === 'ABNORMAL' ? null : 'ABNORMAL';
+      if (!errors || errors.length === 0) {
+        onValueChanged(
+          formFieldPath,
+          { value: this.props.value.value, comment: this.props.value.comment, interpretation },
+          undefined
+        );
+      } else {
+        const hasCriticalError = errors.some(error => error.type === 'error');
+        onValueChanged(
+          formFieldPath,
+          { value: this.props.value.value, comment: this.props.value.comment, interpretation },
+          hasCriticalError ? errors : undefined
+        );
+      }
+    }
+  }
+
+  render() {
+    const { concept } = this.props.metadata;
+    const store = this.props.componentStore || ComponentStore;
+    const registeredComponent = store.getRegisteredComponent(concept.datatype);
+    const complexClass = Util.isComplexMediaConcept(concept) ? 'complex-component' : '';
+    const addMoreComplexClass = complexClass && this.isCreateByAddMore() ?
+        'add-more-complex-component' : '';
+    if (registeredComponent) {
+      return (
+          <div className={classNames('form-field-wrap clearfix', `${complexClass}`)}>
+              {this.showHelperText()}
+              <div className="form-field-content-wrap">
+                  <div className={classNames('label-wrap fl', `${addMoreComplexClass}`)}>
+                      {this.displayLabel()}
+                  </div>
+                  <div className={classNames('obs-control-field')}>
+                      {this.displayObsControl(registeredComponent)}
+                      {this.showAbnormalButton()}
+                      {this.showAddMore()}
+                      {this.showComment()}
+                  </div>
+              </div>
+          </div>
+      );
+    }
+    return (
+        <div>
+          <UnSupportedComponent
+            message={ `The component with concept datatype ${concept.datatype} is not supported` }
+          />
+        </div>
+    );
+  }
+}
+
+ObsControl.propTypes = {
+  children: PropTypes.array,
+  collapse: PropTypes.bool,
+  enabled: PropTypes.bool,
+  metadata: PropTypes.shape({
+    concept: PropTypes.object.isRequired,
+    displayType: PropTypes.string,
+    id: PropTypes.string.isRequired,
+    label: PropTypes.shape({
+      type: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
+    }).isRequired,
+    properties: PropTypes.object,
+    type: PropTypes.string.isRequired,
+  }),
+  onControlAdd: PropTypes.func,
+  onControlRemove: PropTypes.func,
+  onValueChanged: PropTypes.func.isRequired,
+  showAddMore: PropTypes.bool.isRequired,
+  showNotification: PropTypes.func.isRequired,
+  showRemove: PropTypes.bool.isRequired,
+  validate: PropTypes.bool.isRequired,
+  validateForm: PropTypes.bool.isRequired,
+  value: PropTypes.object.isRequired,
+};
+
+ObsControl.defaultProps = {
+  enabled: true,
+  hidden: false,
+  showAddMore: false,
+  showRemove: false,
+};
+
+const ObsControlWithIntl = injectIntl(ObsControl, { forwardRef: true });
+
+export { ObsControlWithIntl };
