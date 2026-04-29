@@ -592,7 +592,7 @@ describe('Carbon AutoComplete', () => {
       expect(mockOnValueChange).toHaveBeenCalledWith(options[0], expect.any(Array));
     });
 
-    it('should call onValueChange with undefined when value is cleared', () => {
+    it('should call onValueChange with null when value is cleared', async () => {
       const { container } = render(
         <AutoComplete
           asynchronous={false}
@@ -604,7 +604,15 @@ describe('Carbon AutoComplete', () => {
       );
 
       expect(container.querySelector('.obs-control-select-wrapper')).toBeInTheDocument();
-      expect(mockOnValueChange).toHaveBeenCalled();
+      mockOnValueChange.mockClear();
+
+      const clearButton = container.querySelector('.cds--list-box__selection');
+      expect(clearButton).toBeTruthy();
+      fireEvent.click(clearButton);
+
+      await waitFor(() => {
+        expect(mockOnValueChange).toHaveBeenCalledWith(null, expect.any(Array));
+      });
     });
   });
 
@@ -748,6 +756,7 @@ describe('Carbon AutoComplete', () => {
 
       const clearButton = container.querySelector('.cds--list-box__selection');
       expect(clearButton).toBeTruthy();
+
       fireEvent.click(clearButton);
       await waitFor(() => {
         expect(mockOnValueChange).toHaveBeenCalledWith(null, expect.any(Array));
@@ -814,6 +823,9 @@ describe('Carbon AutoComplete', () => {
       expect(input.value).toBe('fever headache');
       expect(Util.getAnswers).not.toHaveBeenCalled();
 
+      await waitFor(() => {
+        expect(container.querySelectorAll('[role="option"]').length).toBeGreaterThan(0);
+      });
       const listItems = container.querySelectorAll('[role="option"]');
       const visibleTexts = Array.from(listItems).map(el => el.textContent);
       expect(visibleTexts).toContain('fever headache pain');
@@ -826,7 +838,7 @@ describe('Carbon AutoComplete', () => {
   describe('minimumInput threshold blocks search', () => {
     it('should not trigger a search when typed input is below minimumInput', async () => {
       const user = userEvent.setup();
-      render(
+      const { container } = render(
         <AutoComplete
           asynchronous={false}
           formFieldPath="test/1-0"
@@ -836,7 +848,7 @@ describe('Carbon AutoComplete', () => {
         />
       );
 
-      const input = document.querySelector('input');
+      const input = container.querySelector('input');
       await user.type(input, 'ab');
 
       expect(Util.getAnswers).not.toHaveBeenCalled();

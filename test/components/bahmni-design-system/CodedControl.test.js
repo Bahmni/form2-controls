@@ -170,7 +170,7 @@ describe('CodedControl — Carbon integration (carbonStore)', () => {
     );
   });
 
-  it('fires onChange with null value when AutoComplete selection is cleared', async () => {
+  it('fires onChange with undefined value when AutoComplete selection is cleared', async () => {
     const existingValue = { name: 'Malaria', value: 'malaria-uuid' };
     const { container } = render(
       <CodedControl
@@ -243,6 +243,10 @@ describe('CodedControl — Carbon integration (carbonStore)', () => {
     expect(translatingIntl.formatMessage).toHaveBeenCalledWith(
       expect.objectContaining({ id: 'TYPHOID', defaultMessage: 'Typhoid' })
     );
+
+    fireEvent.click(screen.getByRole('combobox'));
+    const listbox = await screen.findByRole('listbox');
+    expect(listbox).toHaveTextContent('Paludisme');
   });
 
   it('uses global ComponentStore when no componentStore prop is provided', () => {
