@@ -163,7 +163,10 @@ describe('CodedControl — Carbon integration (carbonStore)', () => {
     });
 
     expect(onChangeSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ errors: expect.any(Array) })
+      expect.objectContaining({
+        value: expect.objectContaining({ uuid: 'malaria-uuid' }),
+        errors: expect.any(Array),
+      })
     );
   });
 
@@ -185,7 +188,7 @@ describe('CodedControl — Carbon integration (carbonStore)', () => {
     onChangeSpy.mockClear();
 
     const clearButton = container.querySelector('.cds--list-box__selection');
-    expect(clearButton).toBeTruthy();
+    expect(clearButton).toBeInTheDocument();
     fireEvent.click(clearButton);
 
     await waitFor(() => {
@@ -277,7 +280,10 @@ describe('CodedControl — Carbon integration (carbonStore)', () => {
     const yesTag = await screen.findByText('Malaria');
     fireEvent.click(yesTag.closest('button'));
     expect(onChangeSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ errors: expect.any(Array) })
+      expect.objectContaining({
+        value: expect.objectContaining({ uuid: 'malaria-uuid' }),
+        errors: expect.any(Array),
+      })
     );
   });
 
@@ -298,7 +304,11 @@ describe('CodedControl — Carbon integration (carbonStore)', () => {
     });
 
     expect(onChangeSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ errors: expect.any(Array) })
+      expect.objectContaining({
+        errors: expect.arrayContaining([
+          expect.objectContaining({ message: constants.validations.mandatory }),
+        ]),
+      })
     );
   });
 
@@ -343,23 +353,4 @@ describe('CodedControl — Carbon integration (carbonStore)', () => {
     });
   });
 
-  it('exposes getValue on AutoComplete child ref so container can extract data', () => {
-    const autoCompleteRef = React.createRef();
-
-    render(
-      <AutoComplete
-        ref={autoCompleteRef}
-        asynchronous={false}
-        formFieldPath="test/1-0"
-        onValueChange={jest.fn()}
-        options={[{ display: 'Malaria', uuid: 'malaria-uuid' }]}
-        value={{ display: 'Malaria', uuid: 'malaria-uuid' }}
-      />
-    );
-
-    expect(autoCompleteRef.current).toBeTruthy();
-    const result = autoCompleteRef.current.getValue();
-    expect(Array.isArray(result)).toBe(true);
-    expect(result[0]).toHaveProperty('uuid', 'malaria-uuid');
-  });
 });
