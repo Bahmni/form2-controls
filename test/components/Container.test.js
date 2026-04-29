@@ -581,6 +581,24 @@ describe('Container', () => {
 
       expect(screen.getByText(/pulse.*\/min/i)).toBeInTheDocument();
     });
+
+    it('should fallback to original text when translation key equals its value (untranslated entry)', () => {
+      const metadata = createNumericControlMetadata({
+        controls: [{
+          ...createNumericControlMetadata().controls[0],
+          label: { type: 'label', value: 'Pulse(/min)', translationKey: 'PULSE_LABEL' },
+        }],
+      });
+      const translations = {
+        labels: { PULSE_LABEL: 'PULSE_LABEL' },
+        concepts: {},
+      };
+
+      renderContainer({ metadata, translations });
+
+      expect(screen.queryByText(/PULSE_LABEL/)).not.toBeInTheDocument();
+      expect(screen.getByText(/Pulse/)).toBeInTheDocument();
+    });
   });
 
   describe('Coverage Improvements', () => {

@@ -120,4 +120,58 @@ describe('Carbon TextBox', () => {
 
     expect(screen.getByRole('textbox')).toHaveClass('cds--text-area--invalid');
   });
+
+  it('should show invalid state when validate changes to true with mandatory field and no value', () => {
+    const validations = [constants.validations.mandatory];
+    const { rerender } = render(
+      <TextBox
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={validations}
+      />
+    );
+
+    mockOnChange.mockClear();
+
+    rerender(
+      <TextBox
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={true}
+        validateForm={false}
+        validations={validations}
+      />
+    );
+
+    expect(screen.getByRole('textbox')).toHaveClass('cds--text-area--invalid');
+  });
+
+  it('should not call onChange when validate changes to true', () => {
+    const validations = [constants.validations.mandatory];
+    const { rerender } = render(
+      <TextBox
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={validations}
+      />
+    );
+
+    mockOnChange.mockClear();
+
+    rerender(
+      <TextBox
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={true}
+        validateForm={false}
+        validations={validations}
+      />
+    );
+
+    expect(mockOnChange).not.toHaveBeenCalled();
+  });
 });

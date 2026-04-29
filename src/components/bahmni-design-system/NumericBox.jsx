@@ -146,7 +146,7 @@ export const NumericBox = ({
 
   return (
     <div className="obs-numeric-text-wrap">
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--cds-spacing-03)' }}>
         <NumberInput
           allowEmpty
           value={getNumericValue()}
