@@ -7,6 +7,7 @@ import isEqual from 'lodash/isEqual';
 import find from 'lodash/find';
 import filter from 'lodash/filter';
 import clone from 'lodash/clone';
+import constants from 'src/constants';
 
 export class Button extends Component {
   constructor(props) {
@@ -29,7 +30,8 @@ export class Button extends Component {
     return (
       this.isValueChanged ||
       this.state.hasErrors !== nextState.hasErrors ||
-      this.props.enabled !== nextProps.enabled
+      this.props.enabled !== nextProps.enabled ||
+      this.props.validate !== nextProps.validate
     );
   }
 
@@ -43,11 +45,8 @@ export class Button extends Component {
       }
     }
 
-    const errors = this._getErrors(this.props.value);
-    if (this._hasErrors(errors)) {
-      this.props.onValueChange(this.props.value, errors);
-    }
     if (this.isValueChanged) {
+      const errors = this._getErrors(this.props.value);
       this.props.onValueChange(this.props.value, errors);
     }
   }
@@ -89,7 +88,7 @@ export class Button extends Component {
   }
 
   _hasErrors(errors) {
-    return !isEmpty(errors);
+    return !isEmpty(errors.filter(e => e.type !== constants.errorTypes.warning));
   }
 
   _getErrors(value) {

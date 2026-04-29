@@ -4,13 +4,14 @@ import { Validator } from 'src/helpers/Validator';
 import isEmpty from 'lodash/isEmpty';
 import { TextArea } from '@bahmni/design-system';
 import isEqual from 'lodash/isEqual';
+import constants from 'src/constants';
 
 export class TextBox extends Component {
   constructor(props) {
     super(props);
     const errors = this._getErrors(props.value) || [];
     const hasErrors = this._isCreateByAddMore() ? this._hasErrors(errors) : false;
-    this.state = { hasErrors };
+    this.state = { hasErrors, hasWarnings: false };
   }
 
   componentDidMount() {
@@ -23,8 +24,10 @@ export class TextBox extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     this.isValueChanged = this.props.value !== nextProps.value;
     if (this.props.enabled !== nextProps.enabled ||
+      this.props.validate !== nextProps.validate ||
       this.isValueChanged ||
-      this.state.hasErrors !== nextState.hasErrors) {
+      this.state.hasErrors !== nextState.hasErrors ||
+      this.state.hasWarnings !== nextState.hasWarnings) {
       return true;
     }
     return false;
@@ -35,22 +38,24 @@ export class TextBox extends Component {
         !isEqual(this.props.value, prevProps.value)) {
       const errors = this._getErrors(this.props.value);
       const hasErrors = this._hasErrors(errors);
-      if (this.state.hasErrors !== hasErrors) {
-        this.setState({ hasErrors });
+      const hasWarnings = this._hasWarnings(errors);
+      if (this.state.hasErrors !== hasErrors || this.state.hasWarnings !== hasWarnings) {
+        this.setState({ hasErrors, hasWarnings });
       }
     }
 
-    const errors = this._getErrors(this.props.value);
-    if (this._hasErrors(errors)) {
-      this.props.onChange({ value: this.props.value, errors });
-    }
     if (this.isValueChanged) {
+      const errors = this._getErrors(this.props.value);
       this.props.onChange({ value: this.props.value, errors });
     }
   }
 
   _hasErrors(errors) {
-    return !isEmpty(errors);
+    return !isEmpty(errors.filter(e => e.type !== constants.errorTypes.warning));
+  }
+
+  _hasWarnings(errors) {
+    return !isEmpty(errors.filter(e => e.type === constants.errorTypes.warning));
   }
 
   _getErrors(value) {
@@ -66,7 +71,7 @@ export class TextBox extends Component {
   handleChange(e) {
     const value = e.target.value;
     const errors = this._getErrors(value);
-    this.setState({ hasErrors: this._hasErrors(errors) });
+    this.setState({ hasErrors: this._hasErrors(errors), hasWarnings: this._hasWarnings(errors) });
     this.props.onChange({ value, errors });
   }
 
@@ -78,6 +83,7 @@ export class TextBox extends Component {
           disabled={!this.props.enabled}
           id={this.props.conceptUuid}
           invalid={this.state.hasErrors}
+          warn={this.state.hasWarnings}
           labelText=""
           onChange={(e) => this.handleChange(e)}
           rows={3}

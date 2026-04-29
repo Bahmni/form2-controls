@@ -707,7 +707,7 @@ describe('Carbon AutoComplete', () => {
   describe('Edge cases', () => {
     it('should handle validateForm changing to true', () => {
       const validations = [constants.validations.mandatory];
-      const { rerender } = render(
+      const { rerender, container } = render(
         <AutoComplete
           asynchronous={false}
           formFieldPath="test/1-0"
@@ -731,13 +731,8 @@ describe('Carbon AutoComplete', () => {
         />
       );
 
-      // When value is undefined and validate changes, errors should be reported
-      expect(mockOnValueChange).toHaveBeenCalledWith(
-        undefined,
-        expect.arrayContaining([
-          expect.objectContaining({ message: constants.validations.mandatory }),
-        ])
-      );
+      expect(mockOnValueChange).not.toHaveBeenCalled();
+      expect(container.querySelector('.form-builder-error')).toBeTruthy();
     });
 
     it('should have obs-control-select-wrapper as the outer div class', () => {

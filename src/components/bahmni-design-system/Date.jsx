@@ -4,14 +4,14 @@ import { DatePicker, DatePickerInput } from '@bahmni/design-system';
 import { Validator } from 'src/helpers/Validator';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
-import classNames from 'classnames';
+import constants from 'src/constants';
 
 export class Date extends Component {
   constructor(props) {
     super(props);
     const errors = this._getErrors(props.value) || [];
     const hasErrors = this._shouldValidateOnMount() ? this._hasErrors(errors) : false;
-    this.state = { hasErrors };
+    this.state = { hasErrors, hasWarnings: false };
     this.datePickerRef = null;
   }
 
@@ -25,8 +25,10 @@ export class Date extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     this.isValueChanged = this.props.value !== nextProps.value;
     if (this.props.enabled !== nextProps.enabled ||
+        this.props.validate !== nextProps.validate ||
         this.isValueChanged ||
-        this.state.hasErrors !== nextState.hasErrors) {
+        this.state.hasErrors !== nextState.hasErrors ||
+        this.state.hasWarnings !== nextState.hasWarnings) {
       return true;
     }
     return false;
@@ -37,17 +39,15 @@ export class Date extends Component {
         !isEqual(this.props.value, prevProps.value)) {
       const errors = this._getErrors(this.props.value);
       const hasErrors = this._hasErrors(errors);
+      const hasWarnings = this._hasWarnings(errors);
 
-      if (this.state.hasErrors !== hasErrors) {
-        this.setState({ hasErrors });
+      if (this.state.hasErrors !== hasErrors || this.state.hasWarnings !== hasWarnings) {
+        this.setState({ hasErrors, hasWarnings });
       }
     }
 
-    const errors = this._getErrors(this.props.value);
-    if (this._hasErrors(errors)) {
-      this.props.onChange({ value: this.props.value, errors });
-    }
     if (this.isValueChanged) {
+      const errors = this._getErrors(this.props.value);
       this.props.onChange({ value: this.props.value, errors });
     }
   }
@@ -58,7 +58,7 @@ export class Date extends Component {
       if (!dates || !Array.isArray(dates) || dates.length === 0) {
         const value = undefined;
         const errors = this._getErrors(value);
-        this.setState({ hasErrors: this._hasErrors(errors) });
+        this.setState({ hasErrors: this._hasErrors(errors), hasWarnings: this._hasWarnings(errors) });
         this.props.onChange({ value, errors });
         return;
       }
@@ -67,14 +67,14 @@ export class Date extends Component {
       if (!selectedDate) {
         const value = undefined;
         const errors = this._getErrors(value);
-        this.setState({ hasErrors: this._hasErrors(errors) });
+        this.setState({ hasErrors: this._hasErrors(errors), hasWarnings: this._hasWarnings(errors) });
         this.props.onChange({ value, errors });
         return;
       }
 
       const value = this._formatDate(selectedDate);
       const errors = this._getErrors(value);
-      this.setState({ hasErrors: this._hasErrors(errors) });
+      this.setState({ hasErrors: this._hasErrors(errors), hasWarnings: this._hasWarnings(errors) });
       this.props.onChange({ value, errors });
     } catch (error) {
       console.error('Error in handleChange:', error);
@@ -106,7 +106,11 @@ export class Date extends Component {
   }
 
   _hasErrors(errors) {
-    return !isEmpty(errors);
+    return !isEmpty(errors.filter(e => e.type !== constants.errorTypes.warning));
+  }
+
+  _hasWarnings(errors) {
+    return !isEmpty(errors.filter(e => e.type === constants.errorTypes.warning));
   }
 
   _getErrors(value) {
@@ -117,30 +121,25 @@ export class Date extends Component {
 
   render() {
     const { conceptUuid, label, enabled } = this.props;
-    const displayHasErrors = this.state.hasErrors;
 
     return (
-      <div className={classNames({
-        'form-builder-error': displayHasErrors,
-        'form-builder-warning': false
-      })}>
-        <DatePicker
-          datePickerType="single"
-          dateFormat="Y-m-d"
-          value={this.props.value}
-          onChange={(dates) => this.handleChange(dates)}
-          ref={(ref) => { this.datePickerRef = ref; }}
-        >
-          <DatePickerInput
-            id={conceptUuid}
-            labelText={label}
-            placeholder="yyyy-mm-dd"
-            size="sm"
-            disabled={!enabled}
-            invalid={displayHasErrors}
-          />
-        </DatePicker>
-      </div>
+      <DatePicker
+        datePickerType="single"
+        dateFormat="Y-m-d"
+        value={this.props.value}
+        onChange={(dates) => this.handleChange(dates)}
+        ref={(ref) => { this.datePickerRef = ref; }}
+      >
+        <DatePickerInput
+          id={conceptUuid}
+          labelText={label}
+          placeholder="yyyy-mm-dd"
+          size="sm"
+          disabled={!enabled}
+          invalid={this.state.hasErrors}
+          warn={this.state.hasWarnings}
+        />
+      </DatePicker>
     );
   }
 }
