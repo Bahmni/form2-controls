@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { Date } from '../../../src/components/bahmni-design-system/Date';
+import constants from 'src/constants';
 
 describe('Date', () => {
   const mockOnChange = jest.fn();
@@ -98,5 +99,59 @@ describe('Date', () => {
         triggerControlEvent: false,
       })
     );
+  });
+
+  test('should show invalid state when validate changes to true with mandatory field and no value', () => {
+    const validations = [constants.validations.mandatory];
+    const { rerender } = render(
+      <Date
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={validations}
+      />
+    );
+
+    mockOnChange.mockClear();
+
+    rerender(
+      <Date
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={true}
+        validateForm={false}
+        validations={validations}
+      />
+    );
+
+    expect(document.querySelector('[data-invalid]')).toBeTruthy();
+  });
+
+  test('should not call onChange when validate changes to true', () => {
+    const validations = [constants.validations.mandatory];
+    const { rerender } = render(
+      <Date
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={validations}
+      />
+    );
+
+    mockOnChange.mockClear();
+
+    rerender(
+      <Date
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={true}
+        validateForm={false}
+        validations={validations}
+      />
+    );
+
+    expect(mockOnChange).not.toHaveBeenCalled();
   });
 });

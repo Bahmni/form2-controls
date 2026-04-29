@@ -105,7 +105,7 @@ export class Button extends Component {
       <div
         id={conceptUuid}
         className={this.state.hasErrors ? 'form-builder-error' : ''}
-        style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}
+        style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 'var(--cds-spacing-03)' }}
       >
         {options.map((option) => (
           <SelectableTag
