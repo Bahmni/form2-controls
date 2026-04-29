@@ -13,6 +13,7 @@ $lightestGray: #eee;
     padding-top: 5px;
     box-sizing: border-box;
     clear: both;
+    overflow-wrap: break-word;
 
     .form-builder-column {
       min-height: 50px;
@@ -113,6 +114,10 @@ $lightestGray: #eee;
             .cds--number__controls,
             .cds--number__control-btn {
               height: 100% !important;
+            }
+
+            .cds--form-requirement {
+              display: none;
             }
 
             .obs-numeric-range {
