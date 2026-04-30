@@ -118,6 +118,13 @@ const commonProps = {
 export default {
   title: 'Complex Controls/ComplexControl',
   component: ComplexControl,
+  argTypes: {
+    conceptHandler: { control: 'text', description: 'componentStore key used to look up the registered widget' },
+    addMore: { control: 'boolean', description: 'Show Add More button above the widget' },
+    validate: { control: 'boolean', description: 'Trigger field-level validation' },
+    onChange: { action: 'onChange' },
+    showNotification: { action: 'showNotification' },
+  },
   parameters: {
     docs: {
       description: {
@@ -170,7 +177,17 @@ export const WithNestedChildControls = {
   ),
 };
 
-export const RealWorldEcgExample = {
+export const EcgConceptHandlerExample = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Simulated ECG recording control. In production an ECG module would register itself ' +
+          'as `componentStore.registerComponent("ecg", EcgWidget)` — here the same `vitalsHandler` ' +
+          'mock is reused to illustrate the dispatch mechanism with a notes-enabled metadata shape.',
+      },
+    },
+  },
   render: () => (
     <StoryWrapper json={ecgMetadata}>
       <ComplexControl

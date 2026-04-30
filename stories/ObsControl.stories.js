@@ -1,5 +1,4 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
 import { ObsControlWithIntl as ObsControl } from 'src/components/ObsControl.jsx';
 import StoryWrapper from './StoryWrapper';
 
@@ -103,6 +102,14 @@ const emptyValue = { value: undefined, comment: undefined, interpretation: undef
 export default {
   title: 'Complex Controls/ObsControl',
   component: ObsControl,
+  argTypes: {
+    validate: { control: 'boolean', description: 'Trigger field-level validation' },
+    validateForm: { control: 'boolean', description: 'Trigger form-level validation' },
+    onValueChanged: { action: 'onValueChanged' },
+    showNotification: { action: 'showNotification' },
+    onControlAdd: { action: 'onControlAdd' },
+    onControlRemove: { action: 'onControlRemove' },
+  },
   parameters: {
     docs: {
       description: {
@@ -163,8 +170,6 @@ export const TextBoxObsControlWithAddMoreEnabled = {
         formUuid={'fbc5d897-64e4-4cc1-90a3-47fde7a98026'}
         metadata={addMoreControl}
         value={emptyValue}
-        onControlAdd={action('add clicked')}
-        onControlRemove={action('remove clicked')}
       />
     </StoryWrapper>
   ),

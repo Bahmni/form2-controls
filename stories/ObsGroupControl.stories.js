@@ -134,12 +134,18 @@ const commonGroupProps = {
   validate: false,
   validateForm: false,
   showNotification: () => {},
-  children: List(),
 };
 
 export default {
   title: 'Complex Controls/ObsGroupControl',
   component: ObsGroupControl,
+  argTypes: {
+    collapse: { control: 'boolean', description: 'Render the group in its collapsed state' },
+    validate: { control: 'boolean', description: 'Trigger field-level validation' },
+    validateForm: { control: 'boolean', description: 'Trigger form-level validation' },
+    onValueChanged: { action: 'onValueChanged' },
+    showNotification: { action: 'showNotification' },
+  },
   parameters: {
     docs: {
       description: {
@@ -189,7 +195,6 @@ export const DefaultGroupWithChildObservations = {
           {...commonGroupProps}
           metadata={pulseMetadata}
           obs={pulseDataObs}
-          value={pulseDataObs}
         />
       </StoryWrapper>
     );
@@ -215,7 +220,43 @@ export const CollapsedGroup = {
           collapse={true}
           metadata={pulseMetadata}
           obs={pulseDataObs}
-          value={pulseDataObs}
+        />
+      </StoryWrapper>
+    );
+  },
+};
+
+export const AddMoreGroup = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'When `showAddMore` is true (set by the parent AddMoreDecorator in production), an Add ' +
+          'button appears above the group legend, allowing clinicians to record multiple instances ' +
+          'of the same obs group within one encounter — e.g., repeated blood pressure readings.',
+      },
+    },
+  },
+  render: () => {
+    const pulseObs = new Obs({
+      concept: pulseMetadata.controls[0].concept,
+      formFieldPath: 'f.1/6-0',
+      formNamespace: 'bahmni',
+    });
+    const pulseDataObs = new Obs({
+      concept: pulseMetadata.concept,
+      formNamespace: 'f/5',
+      groupMembers: List.of(pulseObs),
+    });
+    return (
+      <StoryWrapper json={pulseMetadata}>
+        <ObsGroupControl
+          {...commonGroupProps}
+          metadata={pulseMetadata}
+          obs={pulseDataObs}
+          showAddMore={true}
+          onControlAdd={() => {}}
+          onControlRemove={() => {}}
         />
       </StoryWrapper>
     );
@@ -251,7 +292,6 @@ export const RealFormUsageVitalsGroup = {
           formName="VitalsForm"
           metadata={vitalsMetadata}
           obs={vitalsGroupObs}
-          value={vitalsGroupObs}
         />
       </StoryWrapper>
     );
