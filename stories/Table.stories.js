@@ -232,6 +232,11 @@ const tableInFormContext = {
 export default {
   title: 'Complex Controls/Table',
   component: Table,
+  argTypes: {
+    collapse: { control: 'boolean', description: 'Render the table in its collapsed state' },
+    validate: { control: 'boolean', description: 'Trigger field-level validation' },
+    validateForm: { control: 'boolean', description: 'Trigger form-level validation' },
+  },
   parameters: {
     docs: {
       description: {
@@ -269,6 +274,7 @@ export const BasicTableWithHeaders = {
         metadata={basicTableForm}
         observations={[]}
         patient={{}}
+        translate={false}
         translations={{ labels: {}, concepts: {} }}
         validate={false}
         validateForm={false}
@@ -285,6 +291,7 @@ export const TableWithDataBinding = {
         metadata={tableWithDataForm}
         observations={tableWithDataObservations}
         patient={{}}
+        translate={false}
         translations={{ labels: {}, concepts: {} }}
         validate={false}
         validateForm={false}
@@ -301,6 +308,7 @@ export const TableInFormMetadataContext = {
         metadata={tableInFormContext}
         observations={[]}
         patient={{}}
+        translate={false}
         translations={{ labels: {}, concepts: {} }}
         validate={false}
         validateForm={false}

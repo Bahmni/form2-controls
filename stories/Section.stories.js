@@ -41,8 +41,8 @@ const sectionWithGroupedControls = {
             uuid: 'c36bc411-3f10-11e4-adec-0800271c1b75',
             datatype: 'Text',
             conceptClass: 'Misc',
-            lowNormal: '60',
-            hiNormal: '120',
+            lowNormal: 60,
+            hiNormal: 120,
           },
         },
         {
@@ -169,6 +169,11 @@ const nestedSectionsMetadata = {
 export default {
   title: 'Complex Controls/Section',
   component: Section,
+  argTypes: {
+    collapse: { control: 'boolean', description: 'Render the section in its collapsed state' },
+    validate: { control: 'boolean', description: 'Trigger field-level validation' },
+    validateForm: { control: 'boolean', description: 'Trigger form-level validation' },
+  },
   parameters: {
     docs: {
       description: {
