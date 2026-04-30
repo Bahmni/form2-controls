@@ -216,6 +216,44 @@ describe('CodedControl — Carbon integration (carbonStore)', () => {
     expect(container.querySelector('.cds--multi-select--filterable')).toBeInTheDocument();
   });
 
+  it('fires onChange with array of selected items when multiple values are selected in multi-select', async () => {
+    const { container } = render(
+      <CodedControl
+        {...baseProps}
+        onChange={onChangeSpy}
+        properties={{ autoComplete: true, multiSelect: true }}
+      />
+    );
+
+    await waitFor(() => {
+      expect(container.querySelector('.cds--multi-select--filterable')).toBeInTheDocument();
+    });
+
+    onChangeSpy.mockClear();
+
+    const combobox = screen.getByRole('combobox');
+    fireEvent.click(combobox);
+
+    const listbox = await screen.findByRole('listbox');
+    const items = listbox.querySelectorAll('[role="option"]');
+    expect(items.length).toBeGreaterThan(1);
+
+    fireEvent.click(items[0]);
+    fireEvent.click(items[1]);
+
+    await waitFor(() => {
+      const lastCall = onChangeSpy.mock.calls[onChangeSpy.mock.calls.length - 1];
+      expect(lastCall).toBeDefined();
+      const payload = lastCall[0];
+      expect(Array.isArray(payload.value)).toBe(true);
+      expect(payload.value.length).toBe(2);
+      payload.value.forEach((item) => {
+        expect(item).toHaveProperty('uuid');
+        expect(item).toHaveProperty('name');
+      });
+    });
+  });
+
   it('passes translated labels to Carbon components (i18n)', async () => {
     const translatingIntl = {
       formatMessage: jest.fn(({ id, defaultMessage }) => {

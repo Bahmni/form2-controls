@@ -593,6 +593,7 @@ describe('Carbon AutoComplete', () => {
     });
 
     it('should call onValueChange with null when value is cleared', async () => {
+      const user = userEvent.setup();
       const { container } = render(
         <AutoComplete
           asynchronous={false}
@@ -607,8 +608,8 @@ describe('Carbon AutoComplete', () => {
       mockOnValueChange.mockClear();
 
       const clearButton = container.querySelector('.cds--list-box__selection');
-      expect(clearButton).toBeTruthy();
-      fireEvent.click(clearButton);
+      expect(clearButton).toBeInTheDocument();
+      await user.click(clearButton);
 
       await waitFor(() => {
         expect(mockOnValueChange).toHaveBeenCalledWith(null, expect.any(Array));
@@ -836,14 +837,15 @@ describe('Carbon AutoComplete', () => {
   });
 
   describe('minimumInput threshold blocks search', () => {
-    it('should not trigger a search when typed input is below minimumInput', async () => {
+    it('should not trigger an async fetch when typed input is below minimumInput', async () => {
       const user = userEvent.setup();
+      httpInterceptor.get.mockResolvedValue({ results: [] });
       const { container } = render(
         <AutoComplete
-          asynchronous={false}
+          asynchronous
           formFieldPath="test/1-0"
           onValueChange={mockOnValueChange}
-          options={options}
+          options={[]}
           minimumInput={5}
         />
       );
@@ -851,7 +853,7 @@ describe('Carbon AutoComplete', () => {
       const input = container.querySelector('input');
       await user.type(input, 'ab');
 
-      expect(Util.getAnswers).not.toHaveBeenCalled();
+      expect(httpInterceptor.get).not.toHaveBeenCalled();
     });
 
     it('should set empty options when typed input is below minimumInput', async () => {

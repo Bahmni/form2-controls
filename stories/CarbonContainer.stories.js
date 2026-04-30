@@ -58,7 +58,7 @@ const carbonFormMetadata = (control) => ({
 
 const carbonCommonProps = {
   observations: [],
-  patient: {},
+  patient: { uuid: 'demo-patient-uuid' },
   translations: {},
   validate: false,
   validateForm: false,
