@@ -1,16 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import PropTypes from 'prop-types';
-import { RadioButton as CarbonRadioButton } from '@carbon/react';
-import { Validator } from 'src/helpers/Validator';
-import isEmpty from 'lodash/isEmpty';
-import isEqual from 'lodash/isEqual';
+import PropTypes from "prop-types";
+import {
+  RadioButton as CarbonRadioButton,
+  RadioButtonGroup,
+} from "@carbon/react";
+import { Validator } from "src/helpers/Validator";
+import isEmpty from "lodash/isEmpty";
+import isEqual from "lodash/isEqual";
 
 export class RadioButton extends Component {
   constructor(props) {
     super(props);
     const errors = this._getErrors(props.value) || [];
-    const hasErrors = this._isCreateByAddMore() ? this._hasErrors(errors) : false;
+    const hasErrors = this._isCreateByAddMore()
+      ? this._hasErrors(errors)
+      : false;
     this.state = { hasErrors };
     this.changeValue = this.changeValue.bind(this);
   }
@@ -23,17 +28,18 @@ export class RadioButton extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    this.isValueChanged = !isEqual(this.props.value, nextProps.value);
     return (
-      this.isValueChanged ||
+      !isEqual(this.props.value, nextProps.value) ||
       this.state.hasErrors !== nextState.hasErrors ||
-      this.props.enabled !== nextProps.enabled
+      this.props.enabled !== nextProps.enabled ||
+      this.props.validate !== nextProps.validate
     );
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.validate !== prevProps.validate ||
-        !isEqual(this.props.value, prevProps.value)) {
+    const isValueChanged = !isEqual(prevProps.value, this.props.value);
+
+    if (this.props.validate !== prevProps.validate || isValueChanged) {
       const errors = this._getErrors(this.props.value);
       const hasErrors = this._hasErrors(errors);
       if (this.state.hasErrors !== hasErrors) {
@@ -42,14 +48,10 @@ export class RadioButton extends Component {
     }
 
     const errors = this._getErrors(this.props.value);
-    if (this._hasErrors(errors)) {
-      this.props.onValueChange(this.props.value, errors);
-    }
-    if (this.isValueChanged) {
+    if (this._hasErrors(errors) || isValueChanged) {
       this.props.onValueChange(this.props.value, errors);
     }
   }
-
   changeValue(option) {
     const errors = this._getErrors(option);
     this.setState({ hasErrors: this._hasErrors(errors) });
@@ -65,36 +67,48 @@ export class RadioButton extends Component {
   }
 
   _isCreateByAddMore() {
-    return !!this.props.formFieldPath && this.props.formFieldPath.split('-')[1] !== '0';
+    return (
+      !!this.props.formFieldPath &&
+      this.props.formFieldPath.split("-")[1] !== "0"
+    );
   }
 
   render() {
     const { options, enabled, conceptUuid } = this.props;
     const name = `radio-${conceptUuid}`;
+
     return (
-      <div
+      <RadioButtonGroup
         id={conceptUuid}
-        className={this.state.hasErrors ? 'form-builder-error' : ''}
-        style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}
-      >
-        {options.map((option) => {
-          const labelText = option[this.props.nameKey];
-          const isChecked = !!this.props.value &&
-            this.props.value[this.props.valueKey] === option[this.props.valueKey];
-          return (
-            <CarbonRadioButton
-              key={option[this.props.valueKey]}
-              id={`${conceptUuid}-${option[this.props.valueKey]}`}
-              labelText={labelText}
-              name={name}
-              value={option[this.props.valueKey]}
-              checked={isChecked}
-              disabled={!enabled}
-              onChange={() => this.changeValue(option)}
-            />
+        legendText=""
+        name={name}
+        valueSelected={
+          this.props.value ? this.props.value[this.props.valueKey] : ""
+        }
+        onChange={(selectedValue) => {
+          const option = options.find(
+            (o) => o[this.props.valueKey] === selectedValue,
           );
-        })}
-      </div>
+          this.changeValue(option);
+        }}
+        onBlur={this.props.onBlur}
+        disabled={!enabled}
+        invalid={this.state.hasErrors}
+        className={
+          this.state.hasErrors
+            ? "form-builder-error form-builder-radio-wrapper"
+            : "form-builder-radio-wrapper"
+        }
+      >
+        {options.map((option) => (
+          <CarbonRadioButton
+            key={option[this.props.valueKey]}
+            id={`${conceptUuid}-${option[this.props.valueKey]}`}
+            labelText={option[this.props.nameKey]}
+            value={option[this.props.valueKey]}
+          />
+        ))}
+      </RadioButtonGroup>
     );
   }
 }
@@ -104,19 +118,21 @@ RadioButton.propTypes = {
   enabled: PropTypes.bool,
   formFieldPath: PropTypes.string,
   nameKey: PropTypes.string,
+  onBlur: PropTypes.func,
   onValueChange: PropTypes.func.isRequired,
   options: PropTypes.array.isRequired,
-  validate: PropTypes.bool.isRequired,
-  validateForm: PropTypes.bool.isRequired,
-  validations: PropTypes.array.isRequired,
+  validate: PropTypes.bool,
+  validateForm: PropTypes.bool,
+  validations: PropTypes.array,
   value: PropTypes.any,
   valueKey: PropTypes.string,
 };
 
 RadioButton.defaultProps = {
   enabled: true,
-  nameKey: 'name',
-  valueKey: 'value',
+  nameKey: "name",
+  onBlur: () => {},
+  valueKey: "value",
   validate: false,
   validateForm: false,
   validations: [],
