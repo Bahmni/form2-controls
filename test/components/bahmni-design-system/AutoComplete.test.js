@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { AutoComplete } from 'components/bahmni-design-system/AutoComplete';
 import constants from 'src/constants';
 
-// jsdom doesn't implement scrollIntoView - needed by Carbon ComboBox
 window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
 jest.mock('src/helpers/Util', () => ({
@@ -298,7 +297,6 @@ describe('Carbon AutoComplete', () => {
       const input = document.querySelector('input');
       await user.type(input, 'o');
 
-      // Should not call getAnswers for URL-less mode
       expect(Util.getAnswers).not.toHaveBeenCalled();
     });
 
@@ -375,7 +373,6 @@ describe('Carbon AutoComplete', () => {
         expect(Util.getAnswers).toHaveBeenCalled();
       });
 
-      // Component should still be rendered after error
       expect(document.querySelector('.obs-control-select-wrapper')).toBeInTheDocument();
     });
   });
@@ -595,8 +592,8 @@ describe('Carbon AutoComplete', () => {
       expect(mockOnValueChange).toHaveBeenCalledWith(options[0], expect.any(Array));
     });
 
-    it('should call onValueChange with undefined when value is cleared', () => {
-      // Test that clearing calls with undefined
+    it('should call onValueChange with null when value is cleared', async () => {
+      const user = userEvent.setup();
       const { container } = render(
         <AutoComplete
           asynchronous={false}
@@ -608,7 +605,15 @@ describe('Carbon AutoComplete', () => {
       );
 
       expect(container.querySelector('.obs-control-select-wrapper')).toBeInTheDocument();
-      expect(mockOnValueChange).toHaveBeenCalled();
+      mockOnValueChange.mockClear();
+
+      const clearButton = container.querySelector('.cds--list-box__selection');
+      expect(clearButton).toBeInTheDocument();
+      await user.click(clearButton);
+
+      await waitFor(() => {
+        expect(mockOnValueChange).toHaveBeenCalledWith(null, expect.any(Array));
+      });
     });
   });
 
@@ -704,6 +709,174 @@ describe('Carbon AutoComplete', () => {
     });
   });
 
+  describe('invalidText and ComboBox error display', () => {
+    it('should render ComboBox with invalidText derived from the first validation error', () => {
+      const validations = [constants.validations.mandatory];
+      const { container } = render(
+        <AutoComplete
+          asynchronous={false}
+          formFieldPath="test/1-1"
+          onValueChange={mockOnValueChange}
+          options={options}
+          validations={validations}
+        />
+      );
+
+      expect(container.querySelector('.cds--combo-box')).toBeInTheDocument();
+      expect(container.querySelector('[data-invalid]')).toBeTruthy();
+    });
+
+    it('should not show invalidText when there are no errors', () => {
+      const { container } = render(
+        <AutoComplete
+          asynchronous={false}
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+          validations={[]}
+        />
+      );
+
+      expect(container.querySelector('[data-invalid]')).toBeFalsy();
+    });
+  });
+
+  describe('Clearing selection fires onValueChange with null', () => {
+    it('should call onValueChange with null when selection is cleared', async () => {
+      const { container } = render(
+        <AutoComplete
+          asynchronous={false}
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+          value={options[0]}
+        />
+      );
+
+      mockOnValueChange.mockClear();
+
+      const clearButton = container.querySelector('.cds--list-box__selection');
+      expect(clearButton).toBeTruthy();
+
+      fireEvent.click(clearButton);
+      await waitFor(() => {
+        expect(mockOnValueChange).toHaveBeenCalledWith(null, expect.any(Array));
+      });
+    });
+  });
+
+  describe('Pre-populated value shown in ComboBox input', () => {
+    it('should display pre-populated value text in the input', () => {
+      const { container } = render(
+        <AutoComplete
+          asynchronous={false}
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+          value={options[0]}
+        />
+      );
+
+      const input = container.querySelector('input');
+      expect(input).toBeInTheDocument();
+      expect(input.value).toBe('one');
+    });
+
+    it('should display nothing in input when value is null', () => {
+      const { container } = render(
+        <AutoComplete
+          asynchronous={false}
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+          value={null}
+        />
+      );
+
+      const input = container.querySelector('input');
+      expect(input).toBeInTheDocument();
+      expect(input.value).toBe('');
+    });
+  });
+
+  describe('Multi-term regex search filtering', () => {
+    it('should filter options matching all terms in a space-separated query', async () => {
+      const multiWordOptions = [
+        { display: 'fever headache pain', uuid: 'uuid-fhp' },
+        { display: 'fever only', uuid: 'uuid-fo' },
+        { display: 'headache only', uuid: 'uuid-ho' },
+        { display: 'nothing relevant', uuid: 'uuid-nr' },
+      ];
+      const user = userEvent.setup();
+      const { container } = render(
+        <AutoComplete
+          asynchronous={false}
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+          options={multiWordOptions}
+          minimumInput={1}
+        />
+      );
+
+      const input = container.querySelector('input');
+      await user.type(input, 'fever headache');
+
+      expect(input.value).toBe('fever headache');
+      expect(Util.getAnswers).not.toHaveBeenCalled();
+
+      await waitFor(() => {
+        expect(container.querySelectorAll('[role="option"]').length).toBeGreaterThan(0);
+      });
+      const listItems = container.querySelectorAll('[role="option"]');
+      const visibleTexts = Array.from(listItems).map(el => el.textContent);
+      expect(visibleTexts).toContain('fever headache pain');
+      expect(visibleTexts).not.toContain('fever only');
+      expect(visibleTexts).not.toContain('headache only');
+      expect(visibleTexts).not.toContain('nothing relevant');
+    });
+  });
+
+  describe('minimumInput threshold blocks search', () => {
+    it('should not trigger an async fetch when typed input is below minimumInput', async () => {
+      const user = userEvent.setup();
+      httpInterceptor.get.mockResolvedValue({ results: [] });
+      const { container } = render(
+        <AutoComplete
+          asynchronous
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+          options={[]}
+          minimumInput={5}
+        />
+      );
+
+      const input = container.querySelector('input');
+      await user.type(input, 'ab');
+
+      expect(httpInterceptor.get).not.toHaveBeenCalled();
+    });
+
+    it('should set empty options when typed input is below minimumInput', async () => {
+      const user = userEvent.setup();
+      const { container } = render(
+        <AutoComplete
+          asynchronous={false}
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+          minimumInput={4}
+        />
+      );
+
+      const input = container.querySelector('input');
+      await user.type(input, 'on');
+
+      expect(container.querySelector('.cds--combo-box')).toBeInTheDocument();
+      const listItems = container.querySelectorAll('[role="option"]');
+      expect(listItems.length).toBe(0);
+    });
+  });
+
   describe('Edge cases', () => {
     it('should handle validateForm changing to true', () => {
       const validations = [constants.validations.mandatory];
@@ -731,7 +904,6 @@ describe('Carbon AutoComplete', () => {
         />
       );
 
-      // When value is undefined and validate changes, errors should be reported
       expect(mockOnValueChange).toHaveBeenCalledWith(
         undefined,
         expect.arrayContaining([
