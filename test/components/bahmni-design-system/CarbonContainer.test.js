@@ -196,4 +196,28 @@ describe('CarbonContainer', () => {
     expect(ref.current).toBeTruthy();
     expect(typeof ref.current.getValue).toBe('function');
   });
+
+  it('should render the Carbon ObsControl (with SelectableTag abnormal button) for obsControl type', () => {
+    const abnormalMetadata = {
+      controls: [{
+        concept: { answers: [], datatype: 'Numeric', description: [],
+          name: 'Pulse', properties: { allowDecimal: true }, uuid: 'pulse-uuid' },
+        id: '1', label: { type: 'label', value: 'Pulse' },
+        properties: { addMore: false, hideLabel: false, location: { column: 0, row: 0 },
+          mandatory: false, notes: false, abnormal: true },
+        type: 'obsControl', hiAbsolute: null, hiNormal: 100, lowAbsolute: null, lowNormal: 60,
+      }],
+      id: 10, name: 'AbnormalForm', uuid: 'form-uuid-10', version: '1', defaultLocale: 'en',
+    };
+    const observations = [{
+      concept: { uuid: 'pulse-uuid' },
+      formFieldPath: 'AbnormalForm.1/1-0',
+      value: 120,
+      voided: false,
+    }];
+
+    render(<CarbonContainer {...defaultProps} metadata={abnormalMetadata} observations={observations} />);
+
+    expect(screen.getByText('Abnormal')).toBeInTheDocument();
+  });
 });
