@@ -9143,6 +9143,63 @@
       "lowNormal": null,
       "hiAbsolute": null,
       "lowAbsolute": null
+    },
+    {
+      "type": "obsControl",
+      "label": {
+        "translationKey": "PAIN_LOCATION_RADIOBUTTON_103",
+        "type": "label",
+        "value": "Pain Location (RadioButton)",
+        "id": "103"
+      },
+      "properties": {
+        "mandatory": false,
+        "notes": false,
+        "addMore": false,
+        "hideLabel": false,
+        "controlEvent": false,
+        "location": {
+          "row": 8,
+          "column": 0
+        },
+        "radio": true
+      },
+      "id": "103",
+      "concept": {
+        "name": "Pain Location",
+        "uuid": "9bb0795c-4ff0-0305-1990-000000000103",
+        "datatype": "Coded",
+        "conceptClass": "Question",
+        "conceptHandler": null,
+        "units": null,
+        "hiNormal": null,
+        "lowNormal": null,
+        "hiAbsolute": null,
+        "lowAbsolute": null,
+        "answers": [
+          {
+            "uuid": "pain-loc-head",
+            "name": { "display": "Head", "name": "Head", "locale": "en" },
+            "displayString": "Head"
+          },
+          {
+            "uuid": "pain-loc-chest",
+            "name": { "display": "Chest", "name": "Chest", "locale": "en" },
+            "displayString": "Chest"
+          },
+          {
+            "uuid": "pain-loc-abdomen",
+            "name": { "display": "Abdomen", "name": "Abdomen", "locale": "en" },
+            "displayString": "Abdomen"
+          }
+        ],
+        "properties": { "allowDecimal": null }
+      },
+      "units": null,
+      "hiNormal": null,
+      "lowNormal": null,
+      "hiAbsolute": null,
+      "lowAbsolute": null
     }
   ],
   "events": {

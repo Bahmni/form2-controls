@@ -1,6 +1,6 @@
 @use "@carbon/react/scss/theme" as carbon-theme;
-@use '@carbon/react/scss/spacing' as *;
-@use '@carbon/react/scss/type' as *;
+@use "@carbon/react/scss/spacing" as *;
+@use "@carbon/react/scss/type" as *;
 
 $lightestGray: #eee;
 
@@ -100,7 +100,7 @@ $lightestGray: #eee;
             // Beat the generic .form-field-wrap input rule that sets width/margin/padding
             // on all descendant inputs — those overrides squash Carbon NumberInput internals
             // and hide the step-buttons divider (cds--number__rule-divider).
-            .cds--number input[type='number'] {
+            .cds--number input[type="number"] {
               width: auto !important;
               margin: 0 !important;
               padding-block: 0 !important;
@@ -117,7 +117,7 @@ $lightestGray: #eee;
 
             .obs-numeric-range {
               color: carbon-theme.$text-secondary;
-              @include type-style('label-01');
+              @include type-style("label-01");
               white-space: nowrap;
               display: inline-block;
               flex-shrink: 0;
@@ -130,6 +130,12 @@ $lightestGray: #eee;
 
           .cds--list-box {
             max-width: calc(100% - $spacing-07);
+          }
+
+          .form-builder-radio-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $spacing-03;
           }
         }
 
@@ -181,7 +187,7 @@ $lightestGray: #eee;
         input.computed-value {
           border: 0;
           color: #363463;
-          background: #FFFFFF;
+          background: #ffffff;
           pointer-events: none;
         }
 
@@ -342,7 +348,6 @@ $lightestGray: #eee;
               display: block;
             }
           }
-
         }
       }
 
@@ -357,7 +362,7 @@ $lightestGray: #eee;
 
         .form-builder-remove {
           padding: 2px 0;
-          color: #9D0101;
+          color: #9d0101;
           margin-left: 10px;
         }
 
@@ -450,14 +455,14 @@ $lightestGray: #eee;
           z-index: 1;
         }
 
-        >.form-builder-clone {
+        > .form-builder-clone {
           position: absolute;
           right: 20px;
           top: -7px;
           z-index: 1;
         }
 
-        >.cds--accordion {
+        > .cds--accordion {
           isolation: isolate;
 
           .cds--accordion__heading {
@@ -523,18 +528,18 @@ $lightestGray: #eee;
   padding-top: 5px;
 
   .row-wrapper {
-    flex: 1
+    flex: 1;
   }
 
   .form-builder-row {
     display: flex;
 
     .form-builder-column-wrapper {
-      border: 1px dotted #BBB;
+      border: 1px dotted #bbb;
 
       .form-builder-column {
         .form-field-wrap {
-          >div {
+          > div {
             width: 90.5%;
           }
 
@@ -559,7 +564,7 @@ $lightestGray: #eee;
     .control-wrapper-content,
     .form-builder-label {
       flex: 1;
-      border: 1px dotted #BBB;
+      border: 1px dotted #bbb;
       padding: 5px;
     }
 
@@ -580,19 +585,22 @@ $lightestGray: #eee;
   border-radius: 5px;
   border: 1px solid #c0c0c0;
   border-top: none;
-
 }
 
 .closing-group-controls {
   display: none;
 }
 
-.concept-set-group .form-builder-row .form-builder-column .form-builder-fieldset>.form-builder-clone {
+.concept-set-group
+  .form-builder-row
+  .form-builder-column
+  .form-builder-fieldset
+  > .form-builder-clone {
   right: 10px;
   top: -14px;
 }
 
-.Select.is-disabled>.Select-control {
+.Select.is-disabled > .Select-control {
   background: #eee;
   border: #ccc 1px solid;
   color: #ccc;
@@ -643,7 +651,7 @@ $lightestGray: #eee;
   }
 
   .obs-disabled {
-    opacity: .1;
+    opacity: 0.1;
     pointer-events: none;
     border: 3px solid black;
   }
@@ -690,7 +698,7 @@ $lightestGray: #eee;
     }
 
     .delete-button {
-      color: #F40428;
+      color: #f40428;
     }
 
     .restore-button {
@@ -737,11 +745,15 @@ $lightestGray: #eee;
       padding: 0;
       position: relative;
       cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-      transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+      box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.12),
+        0 1px 2px rgba(0, 0, 0, 0.24);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
       &:hover {
-        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+        box-shadow:
+          0 14px 28px rgba(0, 0, 0, 0.25),
+          0 10px 10px rgba(0, 0, 0, 0.22);
         border-color: $lightestGray;
       }
 
