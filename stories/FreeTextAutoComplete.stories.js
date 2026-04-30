@@ -1,5 +1,4 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
 import { FreeTextAutoComplete } from 'src/components/FreeTextAutoComplete.jsx';
 
 const suggestionOptions = [
@@ -10,19 +9,24 @@ const suggestionOptions = [
   { label: 'Fatigue', value: 'fatigue' },
 ];
 
-const defaultProps = {
-  onChange: action('onChange'),
-  options: [],
-  multi: false,
-  clearable: false,
-  backspaceRemoves: false,
-  deleteRemoves: false,
-  conceptUuid: 'free-text-concept-uuid',
-};
-
 export default {
   title: 'Atomic Controls/FreeTextAutoComplete',
   component: FreeTextAutoComplete,
+  args: {
+    options: [],
+    multi: false,
+    clearable: false,
+    backspaceRemoves: false,
+    deleteRemoves: false,
+    conceptUuid: 'free-text-concept-uuid',
+  },
+  argTypes: {
+    onChange: { action: 'onChange' },
+    multi: { control: 'boolean' },
+    clearable: { control: 'boolean' },
+    backspaceRemoves: { control: 'boolean' },
+    deleteRemoves: { control: 'boolean' },
+  },
   parameters: {
     docs: {
       description: {
@@ -40,43 +44,28 @@ export default {
   },
 };
 
-export const Default = {
-  render: () => (
-    <FreeTextAutoComplete
-      {...defaultProps}
-    />
-  ),
-};
+export const Default = {};
 
 export const WithOptions = {
-  render: () => (
-    <FreeTextAutoComplete
-      {...defaultProps}
-      options={suggestionOptions}
-    />
-  ),
+  args: {
+    options: suggestionOptions,
+  },
 };
 
 export const MultiSelect = {
-  render: () => (
-    <FreeTextAutoComplete
-      {...defaultProps}
-      options={suggestionOptions}
-      multi={true}
-      clearable={true}
-    />
-  ),
+  args: {
+    options: suggestionOptions,
+    multi: true,
+    clearable: true,
+  },
 };
 
 export const Clearable = {
-  render: () => (
-    <FreeTextAutoComplete
-      {...defaultProps}
-      options={suggestionOptions}
-      clearable={true}
-      value={{ label: 'Headache', value: 'headache' }}
-    />
-  ),
+  args: {
+    options: suggestionOptions,
+    clearable: true,
+    value: { label: 'Headache', value: 'headache' },
+  },
 };
 
 export const Disabled = {
@@ -85,20 +74,20 @@ export const Disabled = {
       description: {
         story:
           'FreeTextAutoComplete does not expose an enabled/isDisabled prop. ' +
-          'This story uses pointer-events: none and reduced opacity to simulate the disabled appearance. ' +
-          'For a fully accessible disabled state, wire isDisabled through to the underlying CreatableSelect.',
+          'A <fieldset disabled> wrapper is used so screen readers announce the group as disabled (SC 4.1.2), ' +
+          'consistent with the RadioButton disabled pattern.',
       },
     },
   },
-  render: () => (
-    <div style={{ opacity: 0.5, pointerEvents: 'none' }}>
-      <FreeTextAutoComplete
-        {...defaultProps}
-        options={suggestionOptions}
-        value={{ label: 'Headache', value: 'headache' }}
-      />
-    </div>
+  render: (args) => (
+    <fieldset disabled style={{ border: 'none', padding: 0, margin: 0 }}>
+      <FreeTextAutoComplete {...args} />
+    </fieldset>
   ),
+  args: {
+    options: suggestionOptions,
+    value: { label: 'Headache', value: 'headache' },
+  },
 };
 
 export const WithValidationError = {
@@ -112,12 +101,12 @@ export const WithValidationError = {
       },
     },
   },
-  render: () => (
+  render: (args) => (
     <div className="form-builder-error">
-      <FreeTextAutoComplete
-        {...defaultProps}
-        options={suggestionOptions}
-      />
+      <FreeTextAutoComplete {...args} />
     </div>
   ),
+  args: {
+    options: suggestionOptions,
+  },
 };

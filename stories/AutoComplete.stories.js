@@ -1,5 +1,5 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
+import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import { AutoComplete } from 'src/components/AutoComplete.jsx';
 
 const medicationOptions = [
@@ -10,24 +10,30 @@ const medicationOptions = [
   { uuid: 'med-uuid-5', name: 'Atorvastatin', display: 'Atorvastatin' },
 ];
 
-const defaultProps = {
-  onValueChange: action('onValueChange'),
-  options: medicationOptions,
-  asynchronous: false,
-  minimumInput: 0,
-  searchable: false,
-  enabled: true,
-  multiSelect: false,
-  formFieldPath: 'test/1-0',
-  validations: [],
-  labelKey: 'display',
-  valueKey: 'uuid',
-  conceptUuid: 'autocomplete-concept-uuid',
-};
-
 export default {
   title: 'Atomic Controls/AutoComplete',
   component: AutoComplete,
+  args: {
+    options: medicationOptions,
+    asynchronous: false,
+    minimumInput: 0,
+    searchable: false,
+    enabled: true,
+    multiSelect: false,
+    formFieldPath: 'test/1-0',
+    validations: [],
+    labelKey: 'display',
+    valueKey: 'uuid',
+    conceptUuid: 'autocomplete-concept-uuid',
+  },
+  argTypes: {
+    onValueChange: { action: 'onValueChange' },
+    enabled: { control: 'boolean' },
+    searchable: { control: 'boolean' },
+    multiSelect: { control: 'boolean' },
+    asynchronous: { control: 'boolean' },
+    minimumInput: { control: 'number' },
+  },
   parameters: {
     docs: {
       description: {
@@ -45,51 +51,61 @@ export default {
   },
 };
 
-export const SynchronousSelect = {
-  render: () => (
-    <AutoComplete
-      {...defaultProps}
-    />
-  ),
-};
+export const SynchronousSelect = {};
 
 export const SearchableSelect = {
-  render: () => (
-    <AutoComplete
-      {...defaultProps}
-      searchable={true}
-      minimumInput={0}
-    />
-  ),
+  args: {
+    searchable: true,
+    minimumInput: 0,
+  },
 };
 
 export const MultiSelect = {
-  render: () => (
-    <AutoComplete
-      {...defaultProps}
-      multiSelect={true}
-      searchable={true}
-      minimumInput={0}
-    />
-  ),
+  args: {
+    multiSelect: true,
+    searchable: true,
+    minimumInput: 0,
+  },
+};
+
+export const AsynchronousSelect = {
+  decorators: [
+    (Story) => {
+      const original = httpInterceptor.get;
+      httpInterceptor.get = () => Promise.resolve({ results: medicationOptions });
+      const result = <Story />;
+      httpInterceptor.get = original;
+      return result;
+    },
+  ],
+  args: {
+    asynchronous: true,
+    options: [],
+    minimumInput: 2,
+    searchable: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Async loading mode (AC 7.1): options are fetched via httpInterceptor.get on user input. ' +
+          'The HTTP call is mocked here; in production it queries the OpenMRS concept API. ' +
+          'Type at least 2 characters to trigger the mocked fetch.',
+      },
+    },
+  },
 };
 
 export const Disabled = {
-  render: () => (
-    <AutoComplete
-      {...defaultProps}
-      enabled={false}
-      value={{ uuid: 'med-uuid-1', name: 'Paracetamol', display: 'Paracetamol' }}
-    />
-  ),
+  args: {
+    enabled: false,
+    value: { uuid: 'med-uuid-1', name: 'Paracetamol', display: 'Paracetamol' },
+  },
 };
 
 export const WithValidationError = {
-  render: () => (
-    <AutoComplete
-      {...defaultProps}
-      validate={true}
-      validations={['mandatory']}
-    />
-  ),
+  args: {
+    validate: true,
+    validations: ['mandatory'],
+  },
 };

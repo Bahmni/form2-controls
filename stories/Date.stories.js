@@ -1,20 +1,24 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
 import { Date } from 'src/components/Date.jsx';
-
-const defaultProps = {
-  onChange: action('onChange'),
-  validate: false,
-  validateForm: false,
-  validations: [],
-  enabled: true,
-  formFieldPath: 'test/1-0',
-  conceptUuid: 'date-concept-uuid',
-};
 
 export default {
   title: 'Atomic Controls/Date',
   component: Date,
+  args: {
+    validate: false,
+    validateForm: false,
+    validations: [],
+    enabled: true,
+    formFieldPath: 'test/1-0',
+    conceptUuid: 'date-concept-uuid',
+  },
+  argTypes: {
+    onChange: { action: 'onChange' },
+    enabled: { control: 'boolean' },
+    validate: { control: 'boolean' },
+    validateForm: { control: 'boolean' },
+    value: { control: 'text' },
+  },
   parameters: {
     docs: {
       description: {
@@ -31,39 +35,24 @@ export default {
   },
 };
 
-export const Default = {
-  render: () => (
-    <Date
-      {...defaultProps}
-    />
-  ),
-};
+export const Default = {};
 
 export const WithValue = {
-  render: () => (
-    <Date
-      {...defaultProps}
-      value="2024-01-15"
-    />
-  ),
+  args: {
+    value: '2024-01-15',
+  },
 };
 
 export const Disabled = {
-  render: () => (
-    <Date
-      {...defaultProps}
-      enabled={false}
-      value="2024-01-15"
-    />
-  ),
+  args: {
+    enabled: false,
+    value: '2024-01-15',
+  },
 };
 
 export const WithValidationError = {
-  render: () => (
-    <Date
-      {...defaultProps}
-      validate={true}
-      validations={['mandatory']}
-    />
-  ),
+  args: {
+    validate: true,
+    validations: ['mandatory'],
+  },
 };

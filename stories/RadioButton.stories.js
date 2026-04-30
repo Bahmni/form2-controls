@@ -19,16 +19,19 @@ const frequencyOptions = [
   { name: 'Multiple times per day', value: 'multiple' },
 ];
 
-const defaultProps = {
-  onValueChange: action('onValueChange'),
-  validate: false,
-  validations: [],
-  conceptUuid: 'radio-concept-uuid',
-};
-
 export default {
   title: 'Atomic Controls/RadioButton',
   component: RadioButton,
+  args: {
+    validate: false,
+    validations: [],
+    conceptUuid: 'radio-concept-uuid',
+    options: yesNoOptions,
+  },
+  argTypes: {
+    onValueChange: { action: 'onValueChange' },
+    validate: { control: 'boolean' },
+  },
   parameters: {
     docs: {
       description: {
@@ -47,34 +50,20 @@ export default {
   },
 };
 
-export const Default = {
-  render: () => (
-    <RadioButton
-      {...defaultProps}
-      options={yesNoOptions}
-    />
-  ),
-};
+export const Default = {};
 
 export const WithSelection = {
-  render: () => (
-    <RadioButton
-      {...defaultProps}
-      options={yesNoOptions}
-      value="yes"
-    />
-  ),
+  args: {
+    value: 'yes',
+  },
 };
 
 export const MultipleOptions = {
-  render: () => (
-    <RadioButton
-      {...defaultProps}
-      options={frequencyOptions}
-      value="occasionally"
-      conceptUuid="smoking-frequency-uuid"
-    />
-  ),
+  args: {
+    options: frequencyOptions,
+    value: 'occasionally',
+    conceptUuid: 'smoking-frequency-uuid',
+  },
 };
 
 export const Disabled = {
@@ -87,26 +76,22 @@ export const Disabled = {
       },
     },
   },
-  render: () => (
+  render: (args) => (
     <fieldset disabled style={{ border: 'none', padding: 0, margin: 0 }}>
-      <RadioButton
-        {...defaultProps}
-        options={yesNoOptions}
-        value="yes"
-      />
+      <RadioButton {...args} />
     </fieldset>
   ),
+  args: {
+    options: yesNoOptions,
+    value: 'yes',
+  },
 };
 
 export const WithValidationError = {
-  render: () => (
-    <RadioButton
-      {...defaultProps}
-      options={yesNoOptions}
-      validate={true}
-      validations={['mandatory']}
-    />
-  ),
+  args: {
+    validate: true,
+    validations: ['mandatory'],
+  },
 };
 
 export const InObservationForm = {

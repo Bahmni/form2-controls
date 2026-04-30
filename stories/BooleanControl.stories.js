@@ -1,6 +1,6 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
 import { injectIntl } from 'react-intl';
+// Side-effect import: registers 'button' in ComponentStore, required for BooleanControl to render
 import 'src/components/Button.jsx';
 import { BooleanControl } from 'src/components/BooleanControl.jsx';
 
@@ -11,19 +11,24 @@ const yesNoOptions = [
   { name: 'No', value: false, translationKey: '' },
 ];
 
-const defaultProps = {
-  onChange: action('onChange'),
-  validate: false,
-  validateForm: false,
-  validations: [],
-  enabled: true,
-  formFieldPath: 'test/1-0',
-  options: yesNoOptions,
-};
-
 export default {
   title: 'Atomic Controls/BooleanControl',
   component: BooleanControl,
+  render: (args) => <BooleanControlWithIntl {...args} />,
+  args: {
+    validate: false,
+    validateForm: false,
+    validations: [],
+    enabled: true,
+    formFieldPath: 'test/1-0',
+    options: yesNoOptions,
+  },
+  argTypes: {
+    onChange: { action: 'onChange' },
+    enabled: { control: 'boolean' },
+    validate: { control: 'boolean' },
+    validateForm: { control: 'boolean' },
+  },
   parameters: {
     docs: {
       description: {
@@ -40,48 +45,26 @@ export default {
   },
 };
 
-export const Default = {
-  render: () => (
-    <BooleanControlWithIntl
-      {...defaultProps}
-    />
-  ),
-};
+export const Default = {};
 
 export const WithTrueSelected = {
-  render: () => (
-    <BooleanControlWithIntl
-      {...defaultProps}
-      value={true}
-    />
-  ),
+  args: { value: true },
 };
 
 export const WithFalseSelected = {
-  render: () => (
-    <BooleanControlWithIntl
-      {...defaultProps}
-      value={false}
-    />
-  ),
+  args: { value: false },
 };
 
 export const Disabled = {
-  render: () => (
-    <BooleanControlWithIntl
-      {...defaultProps}
-      enabled={false}
-      value={false}
-    />
-  ),
+  args: {
+    enabled: false,
+    value: false,
+  },
 };
 
 export const WithValidationError = {
-  render: () => (
-    <BooleanControlWithIntl
-      {...defaultProps}
-      validate={true}
-      validations={['mandatory']}
-    />
-  ),
+  args: {
+    validate: true,
+    validations: ['mandatory'],
+  },
 };

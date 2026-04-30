@@ -1,5 +1,4 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
 import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import { Provider } from 'src/components/Provider.jsx';
 
@@ -11,26 +10,32 @@ const mockProviders = [
   { id: 205, name: 'Dr. Fatima Al-Hassan', uuid: 'prov-uuid-205' },
 ];
 
-const defaultProps = {
-  onChange: action('onChange'),
-  showNotification: action('showNotification'),
-  validate: false,
-  validations: [],
-  enabled: true,
-  formFieldPath: 'test/1-0',
-  properties: {},
-  conceptUuid: 'provider-concept-uuid',
-};
-
 export default {
   title: 'Atomic Controls/Provider',
   component: Provider,
   decorators: [
     (Story) => {
+      const original = httpInterceptor.get;
       httpInterceptor.get = () => Promise.resolve({ results: mockProviders });
-      return <Story />;
+      const result = <Story />;
+      httpInterceptor.get = original;
+      return result;
     },
   ],
+  args: {
+    validate: false,
+    validations: [],
+    enabled: true,
+    formFieldPath: 'test/1-0',
+    properties: {},
+    conceptUuid: 'provider-concept-uuid',
+  },
+  argTypes: {
+    onChange: { action: 'onChange' },
+    showNotification: { action: 'showNotification' },
+    enabled: { control: 'boolean' },
+    validate: { control: 'boolean' },
+  },
   parameters: {
     docs: {
       description: {
@@ -48,21 +53,12 @@ export default {
   },
 };
 
-export const Default = {
-  render: () => (
-    <Provider
-      {...defaultProps}
-    />
-  ),
-};
+export const Default = {};
 
 export const AutocompleteStyle = {
-  render: () => (
-    <Provider
-      {...defaultProps}
-      properties={{ style: 'autocomplete' }}
-    />
-  ),
+  args: {
+    properties: { style: 'autocomplete' },
+  },
 };
 
 export const Disabled = {
@@ -75,20 +71,14 @@ export const Disabled = {
       },
     },
   },
-  render: () => (
-    <Provider
-      {...defaultProps}
-      enabled={false}
-    />
-  ),
+  args: {
+    enabled: false,
+  },
 };
 
 export const WithValidationError = {
-  render: () => (
-    <Provider
-      {...defaultProps}
-      validate={true}
-      validations={['mandatory']}
-    />
-  ),
+  args: {
+    validate: true,
+    validations: ['mandatory'],
+  },
 };

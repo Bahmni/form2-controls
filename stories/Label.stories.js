@@ -16,6 +16,14 @@ const defaultMetadata = {
 export default {
   title: 'Atomic Controls/Label',
   component: Label,
+  render: (args) => <LabelWithIntl {...args} />,
+  args: {
+    metadata: defaultMetadata,
+    enabled: true,
+  },
+  argTypes: {
+    enabled: { control: 'boolean' },
+  },
   parameters: {
     docs: {
       description: {
@@ -31,42 +39,30 @@ export default {
   },
 };
 
-export const Default = {
-  render: () => (
-    <LabelWithIntl
-      metadata={defaultMetadata}
-      enabled={true}
-    />
-  ),
-};
+export const Default = {};
 
 export const WithUnits = {
-  render: () => (
-    <LabelWithIntl
-      metadata={{
-        value: 'Systolic Blood Pressure',
-        uuid: 'systolic-bp-uuid',
-        type: 'label',
-        units: 'mmHg',
-        translationKey: '',
-      }}
-      enabled={true}
-    />
-  ),
+  args: {
+    metadata: {
+      value: 'Systolic Blood Pressure',
+      uuid: 'systolic-bp-uuid',
+      type: 'label',
+      units: 'mmHg',
+      translationKey: '',
+    },
+  },
 };
 
 export const Disabled = {
-  render: () => (
-    <LabelWithIntl
-      metadata={{
-        value: 'Chief Complaint',
-        uuid: 'chief-complaint-uuid',
-        type: 'label',
-        translationKey: '',
-      }}
-      enabled={false}
-    />
-  ),
+  args: {
+    metadata: {
+      value: 'Chief Complaint',
+      uuid: 'chief-complaint-uuid',
+      type: 'label',
+      translationKey: '',
+    },
+    enabled: false,
+  },
 };
 
 export const LabelWithTextBoxInForm = {

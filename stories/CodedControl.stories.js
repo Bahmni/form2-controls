@@ -1,8 +1,10 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
 import { injectIntl } from 'react-intl';
+// Side-effect import: registers 'button' in ComponentStore, required for CodedControl button display
 import 'src/components/Button.jsx';
+// Side-effect import: registers 'autoComplete' in ComponentStore, required for CodedControl autocomplete display
 import 'src/components/AutoComplete.jsx';
+// Side-effect import: registers 'dropDown' in ComponentStore, required for CodedControl dropdown display
 import 'src/components/DropDown.jsx';
 import { CodedControl } from 'src/components/CodedControl.jsx';
 
@@ -16,21 +18,27 @@ const codedOptions = [
   { name: 'Always', uuid: 'always-uuid', translationKey: '' },
 ];
 
-const defaultProps = {
-  onChange: action('onChange'),
-  showNotification: action('showNotification'),
-  validate: false,
-  validateForm: false,
-  validations: [],
-  enabled: true,
-  formFieldPath: 'test/1-0',
-  conceptUuid: 'coded-concept-uuid',
-  options: codedOptions,
-};
-
 export default {
   title: 'Atomic Controls/CodedControl',
   component: CodedControl,
+  render: (args) => <CodedControlWithIntl {...args} />,
+  args: {
+    validate: false,
+    validateForm: false,
+    validations: [],
+    enabled: true,
+    formFieldPath: 'test/1-0',
+    conceptUuid: 'coded-concept-uuid',
+    options: codedOptions,
+    properties: { multiSelect: false, autoComplete: false, dropDown: false },
+  },
+  argTypes: {
+    onChange: { action: 'onChange' },
+    showNotification: { action: 'showNotification' },
+    enabled: { control: 'boolean' },
+    validate: { control: 'boolean' },
+    validateForm: { control: 'boolean' },
+  },
   parameters: {
     docs: {
       description: {
@@ -49,60 +57,38 @@ export default {
   },
 };
 
-export const ButtonDisplay = {
-  render: () => (
-    <CodedControlWithIntl
-      {...defaultProps}
-      properties={{ multiSelect: false, autoComplete: false, dropDown: false }}
-    />
-  ),
-};
+export const ButtonDisplay = {};
 
 export const DropDownDisplay = {
-  render: () => (
-    <CodedControlWithIntl
-      {...defaultProps}
-      properties={{ multiSelect: false, autoComplete: false, dropDown: true }}
-    />
-  ),
+  args: {
+    properties: { multiSelect: false, autoComplete: false, dropDown: true },
+  },
 };
 
 export const AutoCompleteDisplay = {
-  render: () => (
-    <CodedControlWithIntl
-      {...defaultProps}
-      properties={{ multiSelect: false, autoComplete: true, dropDown: false }}
-    />
-  ),
+  args: {
+    properties: { multiSelect: false, autoComplete: true, dropDown: false },
+  },
 };
 
 export const MultiSelectButtonDisplay = {
-  render: () => (
-    <CodedControlWithIntl
-      {...defaultProps}
-      properties={{ multiSelect: true, autoComplete: false, dropDown: false }}
-    />
-  ),
+  args: {
+    properties: { multiSelect: true, autoComplete: false, dropDown: false },
+  },
 };
 
 export const Disabled = {
-  render: () => (
-    <CodedControlWithIntl
-      {...defaultProps}
-      enabled={false}
-      value={{ name: 'Sometimes', uuid: 'sometimes-uuid', translationKey: '' }}
-      properties={{ multiSelect: false, autoComplete: false, dropDown: false }}
-    />
-  ),
+  args: {
+    enabled: false,
+    value: { name: 'Sometimes', uuid: 'sometimes-uuid', translationKey: '' },
+    properties: { multiSelect: false, autoComplete: false, dropDown: false },
+  },
 };
 
 export const WithValidationError = {
-  render: () => (
-    <CodedControlWithIntl
-      {...defaultProps}
-      validate={true}
-      validations={['mandatory']}
-      properties={{ multiSelect: false, autoComplete: false, dropDown: false }}
-    />
-  ),
+  args: {
+    validate: true,
+    validations: ['mandatory'],
+    properties: { multiSelect: false, autoComplete: false, dropDown: false },
+  },
 };

@@ -1,20 +1,24 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
 import { TextBox } from 'src/components/TextBox.jsx';
-
-const defaultProps = {
-  onChange: action('onChange'),
-  validate: false,
-  validateForm: false,
-  validations: [],
-  enabled: true,
-  formFieldPath: 'test/1-0',
-  conceptUuid: 'textbox-concept-uuid',
-};
 
 export default {
   title: 'Atomic Controls/TextBox',
   component: TextBox,
+  args: {
+    validate: false,
+    validateForm: false,
+    validations: [],
+    enabled: true,
+    formFieldPath: 'test/1-0',
+    conceptUuid: 'textbox-concept-uuid',
+  },
+  argTypes: {
+    onChange: { action: 'onChange' },
+    enabled: { control: 'boolean' },
+    validate: { control: 'boolean' },
+    validateForm: { control: 'boolean' },
+    value: { control: 'text' },
+  },
   parameters: {
     docs: {
       description: {
@@ -29,49 +33,31 @@ export default {
   },
 };
 
-export const Default = {
-  render: () => (
-    <TextBox
-      {...defaultProps}
-    />
-  ),
-};
+export const Default = {};
 
 export const WithValue = {
-  render: () => (
-    <TextBox
-      {...defaultProps}
-      value="Patient reports mild headache since yesterday morning."
-    />
-  ),
+  args: {
+    value: 'Patient reports mild headache since yesterday morning.',
+  },
 };
 
 export const Disabled = {
-  render: () => (
-    <TextBox
-      {...defaultProps}
-      enabled={false}
-    />
-  ),
+  args: {
+    enabled: false,
+  },
 };
 
 export const ReadOnly = {
-  render: () => (
-    <TextBox
-      {...defaultProps}
-      enabled={false}
-      value="Chief complaint: fever for 3 days."
-    />
-  ),
+  args: {
+    enabled: false,
+    value: 'Chief complaint: fever for 3 days.',
+  },
 };
 
 export const WithValidationError = {
-  render: () => (
-    <TextBox
-      {...defaultProps}
-      validate={true}
-      validations={['mandatory']}
-      value={undefined}
-    />
-  ),
+  args: {
+    validate: true,
+    validations: ['mandatory'],
+    value: undefined,
+  },
 };

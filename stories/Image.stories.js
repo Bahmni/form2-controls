@@ -1,22 +1,25 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
 import { Image } from 'src/components/Image.jsx';
-
-const defaultProps = {
-  onChange: action('onChange'),
-  onControlAdd: action('onControlAdd'),
-  showNotification: action('showNotification'),
-  validate: false,
-  validations: [],
-  enabled: true,
-  formFieldPath: 'test/1-0',
-  patientUuid: 'patient-uuid-12345',
-  addMore: false,
-};
 
 export default {
   title: 'Atomic Controls/Image',
   component: Image,
+  args: {
+    validate: false,
+    validations: [],
+    enabled: true,
+    formFieldPath: 'test/1-0',
+    patientUuid: 'patient-uuid-12345',
+    addMore: false,
+  },
+  argTypes: {
+    onChange: { action: 'onChange' },
+    onControlAdd: { action: 'onControlAdd' },
+    showNotification: { action: 'showNotification' },
+    enabled: { control: 'boolean' },
+    validate: { control: 'boolean' },
+    addMore: { control: 'boolean' },
+  },
   parameters: {
     docs: {
       description: {
@@ -24,6 +27,10 @@ export default {
           'File upload control for image (JPG, PNG, etc.) and PDF observations. ' +
           'Shows a cloud upload icon before a file is selected, and a preview after upload. ' +
           'Full upload requires a Bahmni backend; these stories demonstrate the UI states only.\n\n' +
+          'Camera capture (AC 13.1): camera capture is not natively invoked — the file input does not ' +
+          'carry a capture attribute, so the OS file picker opens instead of the camera directly.\n\n' +
+          'Observation storage format (AC 13.2): observation value is stored as ' +
+          '"<patientUuid>/<filename>" after successful upload to the Bahmni visitDocument API.\n\n' +
           'Accessibility (WCAG 2.1 AA): File input activated via keyboard (SC 2.1.1); ' +
           'visible focus ring on the upload trigger (SC 2.4.7); ' +
           'upload status announced via aria-live region (SC 4.1.3); ' +
@@ -34,21 +41,12 @@ export default {
   },
 };
 
-export const Default = {
-  render: () => (
-    <Image
-      {...defaultProps}
-    />
-  ),
-};
+export const Default = {};
 
 export const Disabled = {
-  render: () => (
-    <Image
-      {...defaultProps}
-      enabled={false}
-    />
-  ),
+  args: {
+    enabled: false,
+  },
 };
 
 export const WithUploadedFile = {
@@ -62,20 +60,14 @@ export const WithUploadedFile = {
       },
     },
   },
-  render: () => (
-    <Image
-      {...defaultProps}
-      value="patient-uuid-12345/chest-xray-2024.jpg"
-    />
-  ),
+  args: {
+    value: 'patient-uuid-12345/chest-xray-2024.jpg',
+  },
 };
 
 export const WithValidationError = {
-  render: () => (
-    <Image
-      {...defaultProps}
-      validate={true}
-      validations={['mandatory']}
-    />
-  ),
+  args: {
+    validate: true,
+    validations: ['mandatory'],
+  },
 };
