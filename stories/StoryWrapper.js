@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import ReactJsonSyntaxHighlighter from 'react-json-syntax-highlighter';
 import JSONTree from 'react-json-tree';
 
 const styles = {
@@ -37,18 +36,27 @@ const theme = {
   base0F: '#cc6633',
 };
 
+const headerStyle = {
+  padding: '8px 0 12px',
+  marginBottom: '12px',
+  borderBottom: '1px solid #e0e0e0',
+  fontFamily: 'IBM Plex Sans, sans-serif',
+  fontSize: '1rem',
+  fontWeight: 600,
+  color: '#161616',
+};
+
 export default class StoryWrapper extends PureComponent {
 
   render() {
+    const { title, children, json } = this.props;
     return (<div style={styles.wrap}>
                 <div style={styles.box}>
-                    { this.props.children }
+                    {title && <div style={headerStyle}>{title}</div>}
+                    { children }
                 </div>
                 <div style={styles.box}>
-                    <JSONTree data={this.props.json } theme = { theme } />
-                </div>
-                <div style={styles.box}>
-                    <ReactJsonSyntaxHighlighter obj={this.props.json} />
+                    <JSONTree data={json} theme={theme} />
                 </div>
             </div>);
   }
@@ -57,4 +65,5 @@ export default class StoryWrapper extends PureComponent {
 
 StoryWrapper.propTypes = {
   json: PropTypes.object.isRequired,
+  title: PropTypes.string,
 };
