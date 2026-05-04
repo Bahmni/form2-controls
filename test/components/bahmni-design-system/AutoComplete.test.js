@@ -905,12 +905,7 @@ describe('Carbon AutoComplete', () => {
       );
 
       expect(container.querySelector('.form-builder-error')).toBeTruthy();
-      expect(mockOnValueChange).toHaveBeenCalledWith(
-        undefined,
-        expect.arrayContaining([
-          expect.objectContaining({ message: constants.validations.mandatory }),
-        ])
-      );
+      expect(mockOnValueChange).not.toHaveBeenCalled();
     });
 
     it('should have obs-control-select-wrapper as the outer div class', () => {
