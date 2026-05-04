@@ -53,12 +53,14 @@ export const NumericBox = ({
     setHasErrors(false);
     setHasWarnings(false);
 
-    onChange({
-      value,
-      errors: _getErrors(value),
-      triggerControlEvent: false,
-      calledOnMount: true,
-    });
+    if (typeof value !== 'undefined' || validateForm) {
+      onChange({
+        value,
+        errors: [],
+        triggerControlEvent: false,
+        calledOnMount: true,
+      });
+    }
 
     setIsInitialized(true);
   }, []);

@@ -42,6 +42,10 @@ export class DropDown extends Component {
       }
     }
 
+    if (this.isValueChanged) {
+      const errors = this._getErrors(this.props.value);
+      this.props.onValueChange(this.props.value, errors);
+    }
   }
 
   _hasErrors(errors) {

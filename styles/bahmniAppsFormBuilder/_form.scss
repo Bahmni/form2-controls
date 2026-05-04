@@ -116,6 +116,10 @@ $lightestGray: #eee;
               height: 100% !important;
             }
 
+            // Hide Carbon's inline error/warning text — validation messages are
+            // rendered via the custom .form-builder-error/.form-builder-warning
+            // styles on the input. Scoped to .obs-numeric-text-wrap so it only
+            // affects NumericBox, not other Carbon components on the form.
             .cds--form-requirement {
               display: none;
             }
