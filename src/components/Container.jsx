@@ -179,7 +179,10 @@ export class Container extends addMoreDecorator(Component) {
   render() {
     const { metadata: { controls,
       name: formName, version: formVersion }, validate, translations, patient, readonly } = this.props;
-    const formTranslations = { ...translations.labels, ...translations.concepts };
+    const formTranslations = Object.fromEntries(
+      Object.entries({ ...translations.labels, ...translations.concepts })
+        .filter(([key, value]) => value !== key)
+    );
     const patientUuid = patient ? patient.uuid : undefined;
     const childProps = {
       collapse: this.state.collapse,

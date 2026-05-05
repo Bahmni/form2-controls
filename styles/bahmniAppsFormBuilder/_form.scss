@@ -13,6 +13,7 @@ $lightestGray: #eee;
     padding-top: 5px;
     box-sizing: border-box;
     clear: both;
+    overflow-wrap: break-word;
 
     .form-builder-column {
       min-height: 50px;
@@ -113,6 +114,14 @@ $lightestGray: #eee;
             .cds--number__controls,
             .cds--number__control-btn {
               height: 100% !important;
+            }
+
+            // Hide Carbon's inline error/warning text — validation messages are
+            // rendered via the custom .form-builder-error/.form-builder-warning
+            // styles on the input. Scoped to .obs-numeric-text-wrap so it only
+            // affects NumericBox, not other Carbon components on the form.
+            .cds--form-requirement {
+              display: none;
             }
 
             .obs-numeric-range {

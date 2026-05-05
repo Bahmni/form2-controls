@@ -151,9 +151,6 @@ export const AutoComplete = forwardRef(function AutoComplete({
     const newHasErrors = hasErrors(errors);
     setValue(propValue);
     setHasError(newHasErrors);
-    if (onValueChange && (newHasErrors || validateChanged)) {
-      onValueChange(propValue, errors);
-    }
   }, [propValue, validate, validations, onValueChange]);
 
   // Update options when searchable=false and options change
@@ -231,7 +228,6 @@ export const AutoComplete = forwardRef(function AutoComplete({
           id={conceptUuid}
           disabled={!enabled}
           invalid={hasError}
-          invalidText={hasError ? (getErrors(validations, propValue)?.[0]?.message || 'Invalid value') : ''}
           items={safeOptions}
           itemToString={(item) => (item ? item[labelKey] || '' : '')}
           selectedItem={value || null}
@@ -253,7 +249,6 @@ export const AutoComplete = forwardRef(function AutoComplete({
         id={conceptUuid}
         disabled={!enabled}
         invalid={hasError}
-        invalidText={hasError ? (getErrors(validations, propValue)?.[0]?.message || 'Invalid value') : ''}
         items={safeOptions}
         itemToString={(item) => (item ? item[labelKey] || '' : '')}
         selectedItem={value || null}

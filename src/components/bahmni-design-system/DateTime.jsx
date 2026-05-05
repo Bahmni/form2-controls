@@ -34,6 +34,7 @@ export class DateTime extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const valueChanged = this.props.value !== nextProps.value;
     if (this.props.enabled !== nextProps.enabled ||
+        this.props.validate !== nextProps.validate ||
         valueChanged ||
         !isEqual(this.state, nextState)) {
       return true;
@@ -59,10 +60,6 @@ export class DateTime extends Component {
       }
     }
 
-    const errors = this._getAllErrors(dateValue, timeValue);
-    if (this._hasErrors(errors)) {
-      this.props.onChange({ value: this.props.value, errors });
-    }
   }
 
   _parseValue(value) {

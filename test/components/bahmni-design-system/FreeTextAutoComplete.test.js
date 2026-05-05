@@ -154,4 +154,62 @@ describe('Carbon FreeTextAutoComplete', () => {
 
     expect(container.querySelector('#free-text-autocomplete')).toBeInTheDocument();
   });
+
+  it('should show invalid state when validate changes to true with mandatory field and no value', () => {
+    const validations = [constants.validations.mandatory];
+    const { rerender } = render(
+      <FreeTextAutoComplete
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        options={options}
+        validate={false}
+        validateForm={false}
+        validations={validations}
+      />
+    );
+
+    mockOnChange.mockClear();
+
+    rerender(
+      <FreeTextAutoComplete
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        options={options}
+        validate={true}
+        validateForm={false}
+        validations={validations}
+      />
+    );
+
+    expect(document.querySelector('[data-invalid]')).toBeTruthy();
+  });
+
+  it('should not call onChange when validate changes to true', () => {
+    const validations = [constants.validations.mandatory];
+    const { rerender } = render(
+      <FreeTextAutoComplete
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        options={options}
+        validate={false}
+        validateForm={false}
+        validations={validations}
+      />
+    );
+
+    mockOnChange.mockClear();
+
+    rerender(
+      <FreeTextAutoComplete
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        options={options}
+        validate={true}
+        validateForm={false}
+        validations={validations}
+      />
+    );
+
+    expect(mockOnChange).not.toHaveBeenCalled();
+  });
 });

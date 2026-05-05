@@ -388,4 +388,36 @@ describe('Carbon DropDown', () => {
       expect(screen.queryByText('Option B')).not.toBeInTheDocument();
     });
   });
+
+  describe('Validate prop change', () => {
+    const baseProps = {
+      formFieldPath: 'test1.1/1-0',
+      onValueChange: jest.fn(),
+      options,
+      validate: false,
+      validateForm: false,
+      validations: [constants.validations.mandatory],
+    };
+
+    it('should show invalid state when validate changes to true with mandatory field and no value', () => {
+      const { rerender } = render(<DropDown {...baseProps} />);
+
+      baseProps.onValueChange.mockClear();
+
+      rerender(<DropDown {...baseProps} validate={true} />);
+
+      expect(document.querySelector('[data-invalid]')).toBeTruthy();
+    });
+
+    it('should not call onValueChange when validate changes to true', () => {
+      const mockOnValueChange = jest.fn();
+      const { rerender } = render(<DropDown {...baseProps} onValueChange={mockOnValueChange} />);
+
+      mockOnValueChange.mockClear();
+
+      rerender(<DropDown {...baseProps} onValueChange={mockOnValueChange} validate={true} />);
+
+      expect(mockOnValueChange).not.toHaveBeenCalled();
+    });
+  });
 });
