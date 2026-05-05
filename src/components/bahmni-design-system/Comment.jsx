@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { TextArea } from '@bahmni/design-system';
+import { TextArea, SelectableTag } from '@bahmni/design-system';
 import { Util } from 'src/helpers/Util';
 
 export class Comment extends Component {
@@ -44,24 +44,14 @@ export class Comment extends Component {
     if (isComplexMediaConcept) {
       return '';
     }
-    const { showCommentSection, comment } = this.state;
-    const hasNote = comment.trim().length > 0;
+    const { showCommentSection } = this.state;
     return (
-      <button
-        className={[
-          'form-builder-comment-toggle',
-          'form-builder-comment-button-toggle',
-          showCommentSection ? 'active' : '',
-          hasNote ? 'has-notes' : '',
-        ].filter(Boolean).join(' ')}
-        onClick={() => this.setState({ showCommentSection: !showCommentSection })}
-      >
-        <i className="fa fa-file-o">
-          <i className="fa fa-plus-circle" />
-          <i className="fa fa-minus-circle" />
-        </i>
-        <i className="fa fa-file-text-o" />
-      </button>
+      <SelectableTag
+        size="lg"
+        text="Note"
+        selected={showCommentSection}
+        onChange={() => this.setState({ showCommentSection: !showCommentSection })}
+      />
     );
   }
 
