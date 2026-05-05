@@ -5,7 +5,7 @@ import { SelectableTag } from '@bahmni/design-system';
 import { Label } from 'components/Label.jsx';
 import ComponentStore from 'src/helpers/componentStore';
 import find from 'lodash/find';
-import { Comment } from 'components/Comment.jsx';
+import { Comment } from 'components/bahmni-design-system/Comment.jsx';
 import { getValidations } from 'src/helpers/controlsHelper';
 import { UnSupportedComponent } from 'components/UnSupportedComponent.jsx';
 import constants from 'src/constants';

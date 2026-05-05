@@ -3780,7 +3780,7 @@
             "value": "Chief Complaint"
           },
           "properties": {
-            "mandatory": false,
+            "mandatory": true,
             "notes": false,
             "addMore": false,
             "hideLabel": false,
@@ -7688,7 +7688,7 @@
         "value": "History of present illness"
       },
       "properties": {
-        "mandatory": false,
+        "mandatory": true,
         "notes": false,
         "addMore": false,
         "hideLabel": false,
@@ -8630,7 +8630,7 @@
         "value": "Diagnosis (AutoComplete)"
       },
       "properties": {
-        "mandatory": false,
+        "mandatory": true,
         "notes": false,
         "addMore": false,
         "hideLabel": false,
