@@ -1,7 +1,6 @@
 import React from 'react';
 import StoryWrapper from './StoryWrapper';
 import { Container } from 'src/components/Container.jsx';
-import '../styles/styles.scss';
 
 const form = {
   id: 1,

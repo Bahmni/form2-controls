@@ -1,5 +1,6 @@
 import React from 'react';
 import { IntlProvider } from 'react-intl';
+import '../styles/styles.scss';
 
 export default {
   decorators: [

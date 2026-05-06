@@ -2,7 +2,6 @@ import React from 'react';
 import { ObsGroupControlWithIntl as ObsGroupControl } from 'src/components/ObsGroupControl.jsx';
 import { ObsGroupMapper } from 'src/mapper/ObsGroupMapper';
 import { Obs } from 'src/helpers/Obs';
-import '../styles/styles.scss';
 import { NumericBox } from 'src/components/NumericBox.jsx';
 import { BooleanControl } from 'src/components/BooleanControl.jsx';
 import { Button } from 'src/components/Button.jsx';

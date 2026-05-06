@@ -1,5 +1,4 @@
 import React from "react";
-import "../styles/styles.scss";
 import { NumericBox } from "src/components/NumericBox.jsx";
 import { BooleanControl } from "src/components/BooleanControl.jsx";
 import { Button } from "src/components/Button.jsx";
