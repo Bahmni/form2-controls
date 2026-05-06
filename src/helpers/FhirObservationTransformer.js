@@ -232,13 +232,11 @@ export function getFhirObservations(observations, options) {
     }
 
     if (obs.groupMembers && obs.groupMembers.length > 0) {
-     
       const hasMemberRefs = [];
 
       for (const member of obs.groupMembers) {
         // Process one member at a time to avoid flattening the hierarchy
         const memberResults = getFhirObservations([member], options);
-        // Add all results (includes descendants)
         results.push(...memberResults);
         // Last item is always the member's own observation (group parents are pushed last)
         const memberObservation = memberResults.at(-1);
