@@ -232,16 +232,27 @@ export function getFhirObservations(observations, options) {
     }
 
     if (obs.groupMembers && obs.groupMembers.length > 0) {
-      // Recursively process group members
-      const memberResults = getFhirObservations(obs.groupMembers, options);
-      results.push(...memberResults);
+     
+      const hasMemberRefs = [];
 
-      // Create parent observation with hasMember references
+      for (const member of obs.groupMembers) {
+        // Process one member at a time to avoid flattening the hierarchy
+        const memberResults = getFhirObservations([member], options);
+        // Add all results (includes descendants)
+        results.push(...memberResults);
+        // Last item is always the member's own observation (group parents are pushed last)
+        const memberObservation = memberResults.at(-1);
+        if (memberObservation) {
+          hasMemberRefs.push({
+            reference: memberObservation.fullUrl,
+            type: 'Observation',
+          });
+        }
+      }
+
+      // Create parent observation with hasMember references to direct children only
       const parentObservation = createObservationResource(obs, options);
-      parentObservation.hasMember = memberResults.map((member) => ({
-        reference: member.fullUrl,
-        type: 'Observation',
-      }));
+      parentObservation.hasMember = hasMemberRefs;
 
       const parentUuid = generateUUID();
       const parentFullUrl = `urn:uuid:${parentUuid}`;

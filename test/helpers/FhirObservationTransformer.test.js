@@ -400,18 +400,20 @@ describe('FhirObservationTransformer', () => {
       // Should have 3 observations: 1 leaf + 1 inner parent + 1 outer parent
       expect(result).toHaveLength(3);
 
-      // Find outer parent (should have hasMember pointing to both inner parent and leaf)
-      // because the recursive call processes all nested members first
-      const outerParent = result.find(
-        (r) => r.resource.code.coding[0].code === 'outer-group-uuid'
-      );
-      expect(outerParent.resource.hasMember).toHaveLength(2);
-
       // Find inner parent (should have hasMember pointing to leaf)
       const innerParent = result.find(
         (r) => r.resource.code.coding[0].code === 'inner-group-uuid'
       );
       expect(innerParent.resource.hasMember).toHaveLength(1);
+
+      // Find outer parent (should have hasMember pointing only to direct child: inner parent)
+      const outerParent = result.find(
+        (r) => r.resource.code.coding[0].code === 'outer-group-uuid'
+      );
+      expect(outerParent.resource.hasMember).toHaveLength(1);
+      expect(outerParent.resource.hasMember[0].reference).toBe(
+        innerParent.fullUrl
+      );
     });
 
     it('should skip voided group members', () => {
