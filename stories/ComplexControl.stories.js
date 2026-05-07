@@ -138,6 +138,11 @@ export default {
           '2. At render time, `ComplexControl` calls `componentStore.getRegisteredComponent(conceptHandler)`.\n' +
           '3. If a matching component is found, it is instantiated with all of `ComplexControl`\'s props.\n' +
           '4. If no component is registered for that key, `ComplexControl` renders `null`.\n\n' +
+          '**Data model**: A `datatype: "Complex"` observation in OpenMRS stores its value as a ' +
+          'reference to binary data rather than a primitive. The `complexData` field on the ' +
+          'observation record points to a file managed by the OpenMRS complex obs handler for ' +
+          'that concept. The registered conceptHandler component is responsible for encoding ' +
+          'and decoding this binary value.\n\n' +
           '**Real-world example**: An ECG module registers itself as ' +
           '`componentStore.registerComponent("ecg", EcgWidget)` and the form metadata uses ' +
           '`conceptHandler: "ecg"` to embed it.\n\n' +
@@ -151,33 +156,42 @@ export default {
 };
 
 export const DefaultConceptHandlerLookup = {
-  render: () => (
+  args: {
+    conceptHandler: 'weightHandler',
+  },
+  render: (args) => (
     <StoryWrapper json={weightMetadata}>
       <ComplexControl
         {...commonProps}
-        conceptHandler="weightHandler"
         formFieldPath="form/10-0"
         properties={{ mandatory: false }}
+        {...args}
       />
     </StoryWrapper>
   ),
 };
 
 export const WithNestedChildControls = {
-  render: () => (
+  args: {
+    conceptHandler: 'vitalsHandler',
+    addMore: true,
+  },
+  render: (args) => (
     <StoryWrapper json={vitalsMetadata}>
       <ComplexControl
         {...commonProps}
-        addMore={true}
-        conceptHandler="vitalsHandler"
         formFieldPath="form/11-0"
         properties={{ mandatory: false, addMore: true }}
+        {...args}
       />
     </StoryWrapper>
   ),
 };
 
 export const EcgConceptHandlerExample = {
+  args: {
+    conceptHandler: 'vitalsHandler',
+  },
   parameters: {
     docs: {
       description: {
@@ -188,13 +202,13 @@ export const EcgConceptHandlerExample = {
       },
     },
   },
-  render: () => (
+  render: (args) => (
     <StoryWrapper json={ecgMetadata}>
       <ComplexControl
         {...commonProps}
-        conceptHandler="vitalsHandler"
         formFieldPath="form/20-0"
         properties={{ mandatory: false, notes: true }}
+        {...args}
       />
     </StoryWrapper>
   ),

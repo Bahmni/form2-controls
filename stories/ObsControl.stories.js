@@ -92,6 +92,8 @@ const addMoreControl = {
 const commonProps = {
   onValueChanged: () => {},
   showNotification: () => {},
+  onControlAdd: () => {},
+  onControlRemove: () => {},
   validate: false,
   validateForm: false,
   formFieldPath: 'test/1-0',
@@ -137,10 +139,11 @@ export default {
 };
 
 export const NumericObsControl = {
-  render: () => (
+  render: (args) => (
     <StoryWrapper json={form.controls[0]}>
       <ObsControl
         {...commonProps}
+        {...args}
         formUuid={'fbc5d897-64e4-4cc1-90a3-47fde7a98026'}
         metadata={form.controls[0]}
         value={emptyValue}
@@ -150,10 +153,11 @@ export const NumericObsControl = {
 };
 
 export const TextBoxObsControl = {
-  render: () => (
+  render: (args) => (
     <StoryWrapper json={form.controls[1]}>
       <ObsControl
         {...commonProps}
+        {...args}
         formUuid={'fbc5d897-64e4-4cc1-90a3-47fde7a98026'}
         metadata={form.controls[1]}
         value={emptyValue}
@@ -163,10 +167,11 @@ export const TextBoxObsControl = {
 };
 
 export const TextBoxObsControlWithAddMoreEnabled = {
-  render: () => (
+  render: (args) => (
     <StoryWrapper json={addMoreControl}>
       <ObsControl
         {...commonProps}
+        {...args}
         formUuid={'fbc5d897-64e4-4cc1-90a3-47fde7a98026'}
         metadata={addMoreControl}
         value={emptyValue}
@@ -176,10 +181,11 @@ export const TextBoxObsControlWithAddMoreEnabled = {
 };
 
 export const BooleanObsControl = {
-  render: () => (
+  render: (args) => (
     <StoryWrapper json={form.controls[2]}>
       <ObsControl
         {...commonProps}
+        {...args}
         formUuid={'fbc5d897-64e4-4cc1-90a3-47fde7a98026'}
         metadata={form.controls[2]}
         value={emptyValue}
@@ -189,10 +195,11 @@ export const BooleanObsControl = {
 };
 
 export const CodedObsControl = {
-  render: () => (
+  render: (args) => (
     <StoryWrapper json={form.controls[3]}>
       <ObsControl
         {...commonProps}
+        {...args}
         metadata={form.controls[3]}
         value={emptyValue}
       />
@@ -201,10 +208,11 @@ export const CodedObsControl = {
 };
 
 export const DateObsControl = {
-  render: () => (
+  render: (args) => (
     <StoryWrapper json={form.controls[4]}>
       <ObsControl
         {...commonProps}
+        {...args}
         metadata={form.controls[4]}
         value={{ value: '1999-03-03', comment: undefined, interpretation: undefined }}
       />
@@ -213,10 +221,11 @@ export const DateObsControl = {
 };
 
 export const DateTimeObsControl = {
-  render: () => (
+  render: (args) => (
     <StoryWrapper json={form.controls[5]}>
       <ObsControl
         {...commonProps}
+        {...args}
         metadata={form.controls[5]}
         value={{ value: '2016-12-31 14:21', comment: undefined, interpretation: undefined }}
       />
@@ -225,10 +234,11 @@ export const DateTimeObsControl = {
 };
 
 export const CodedObsControlDropDown = {
-  render: () => (
+  render: (args) => (
     <StoryWrapper json={form.controls[6]}>
       <ObsControl
         {...commonProps}
+        {...args}
         metadata={form.controls[6]}
         value={emptyValue}
       />

@@ -141,7 +141,7 @@ const tableWithDataObservations = [
     uuid: 'obs-systolic-uuid',
     value: 120,
     formNamespace: 'bahmni',
-    formFieldPath: 'vitals-table-form-uuid-001/6-0',
+    formFieldPath: 'Vitals Table.1/6-0',
     concept: { name: 'Systolic', uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75', datatype: 'Numeric' },
   },
   {
@@ -149,7 +149,7 @@ const tableWithDataObservations = [
     uuid: 'obs-diastolic-uuid',
     value: 80,
     formNamespace: 'bahmni',
-    formFieldPath: 'vitals-table-form-uuid-001/7-0',
+    formFieldPath: 'Vitals Table.1/7-0',
     concept: { name: 'Diastolic', uuid: 'c379aa1d-3f10-11e4-adec-0800271c1b75', datatype: 'Numeric' },
   },
 ];
@@ -231,7 +231,7 @@ const tableInFormContext = {
 
 export default {
   title: 'Complex Controls/Table',
-  component: Table,
+  component: Container,
   argTypes: {
     collapse: { control: 'boolean', description: 'Render the table in its collapsed state' },
     validate: { control: 'boolean', description: 'Trigger field-level validation' },
@@ -267,51 +267,54 @@ export default {
 };
 
 export const BasicTableWithHeaders = {
-  render: () => (
+  render: (args) => (
     <StoryWrapper json={basicTableForm}>
       <Container
         collapse={false}
+        validate={false}
+        validateForm={false}
         metadata={basicTableForm}
         observations={[]}
         patient={{}}
         translate={false}
         translations={{ labels: {}, concepts: {} }}
-        validate={false}
-        validateForm={false}
+        {...args}
       />
     </StoryWrapper>
   ),
 };
 
 export const TableWithDataBinding = {
-  render: () => (
+  render: (args) => (
     <StoryWrapper json={tableWithDataForm}>
       <Container
         collapse={false}
+        validate={false}
+        validateForm={false}
         metadata={tableWithDataForm}
         observations={tableWithDataObservations}
         patient={{}}
         translate={false}
         translations={{ labels: {}, concepts: {} }}
-        validate={false}
-        validateForm={false}
+        {...args}
       />
     </StoryWrapper>
   ),
 };
 
 export const TableInFormMetadataContext = {
-  render: () => (
+  render: (args) => (
     <StoryWrapper json={tableInFormContext}>
       <Container
         collapse={false}
+        validate={false}
+        validateForm={false}
         metadata={tableInFormContext}
         observations={[]}
         patient={{}}
         translate={false}
         translations={{ labels: {}, concepts: {} }}
-        validate={false}
-        validateForm={false}
+        {...args}
       />
     </StoryWrapper>
   ),

@@ -116,7 +116,7 @@ const vitalsMetadata = {
   ],
 };
 
-// Form-level metadata for the real form usage story (uses Container pattern)
+// Form-level metadata for the real form usage story
 const formWithObsGroup = {
   id: 2,
   name: 'Vitals Form',
@@ -173,7 +173,7 @@ export default {
 };
 
 export const DefaultGroupWithChildObservations = {
-  render: () => {
+  render: (args) => {
     const pulseObs = new Obs({
       concept: pulseMetadata.controls[0].concept,
       formFieldPath: 'f.1/6-0',
@@ -193,8 +193,9 @@ export const DefaultGroupWithChildObservations = {
       <StoryWrapper json={pulseMetadata}>
         <ObsGroupControl
           {...commonGroupProps}
+          {...args}
           metadata={pulseMetadata}
-          obs={pulseDataObs}
+          value={pulseDataObs}
         />
       </StoryWrapper>
     );
@@ -202,7 +203,10 @@ export const DefaultGroupWithChildObservations = {
 };
 
 export const CollapsedGroup = {
-  render: () => {
+  args: {
+    collapse: true,
+  },
+  render: (args) => {
     const pulseObs = new Obs({
       concept: pulseMetadata.controls[0].concept,
       formFieldPath: 'f.1/6-0',
@@ -217,9 +221,9 @@ export const CollapsedGroup = {
       <StoryWrapper json={pulseMetadata}>
         <ObsGroupControl
           {...commonGroupProps}
-          collapse={true}
+          {...args}
           metadata={pulseMetadata}
-          obs={pulseDataObs}
+          value={pulseDataObs}
         />
       </StoryWrapper>
     );
@@ -237,7 +241,7 @@ export const AddMoreGroup = {
       },
     },
   },
-  render: () => {
+  render: (args) => {
     const pulseObs = new Obs({
       concept: pulseMetadata.controls[0].concept,
       formFieldPath: 'f.1/6-0',
@@ -252,8 +256,9 @@ export const AddMoreGroup = {
       <StoryWrapper json={pulseMetadata}>
         <ObsGroupControl
           {...commonGroupProps}
+          {...args}
           metadata={pulseMetadata}
-          obs={pulseDataObs}
+          value={pulseDataObs}
           showAddMore={true}
           onControlAdd={() => {}}
           onControlRemove={() => {}}
@@ -264,7 +269,7 @@ export const AddMoreGroup = {
 };
 
 export const RealFormUsageVitalsGroup = {
-  render: () => {
+  render: (args) => {
     const systolicObs = new Obs({
       concept: vitalsMetadata.controls[0].concept,
       formFieldPath: 'VitalsForm.1/31-0',
@@ -289,9 +294,10 @@ export const RealFormUsageVitalsGroup = {
       <StoryWrapper json={formWithObsGroup}>
         <ObsGroupControl
           {...commonGroupProps}
+          {...args}
           formName="VitalsForm"
           metadata={vitalsMetadata}
-          obs={vitalsGroupObs}
+          value={vitalsGroupObs}
         />
       </StoryWrapper>
     );
