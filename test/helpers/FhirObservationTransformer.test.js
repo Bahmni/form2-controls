@@ -400,18 +400,20 @@ describe('FhirObservationTransformer', () => {
       // Should have 3 observations: 1 leaf + 1 inner parent + 1 outer parent
       expect(result).toHaveLength(3);
 
-      // Find outer parent (should have hasMember pointing to both inner parent and leaf)
-      // because the recursive call processes all nested members first
-      const outerParent = result.find(
-        (r) => r.resource.code.coding[0].code === 'outer-group-uuid'
-      );
-      expect(outerParent.resource.hasMember).toHaveLength(2);
-
       // Find inner parent (should have hasMember pointing to leaf)
       const innerParent = result.find(
         (r) => r.resource.code.coding[0].code === 'inner-group-uuid'
       );
       expect(innerParent.resource.hasMember).toHaveLength(1);
+
+      // Find outer parent (should have hasMember pointing only to direct child: inner parent)
+      const outerParent = result.find(
+        (r) => r.resource.code.coding[0].code === 'outer-group-uuid'
+      );
+      expect(outerParent.resource.hasMember).toHaveLength(1);
+      expect(outerParent.resource.hasMember[0].reference).toBe(
+        innerParent.fullUrl
+      );
     });
 
     it('should skip voided group members', () => {
@@ -440,6 +442,100 @@ describe('FhirObservationTransformer', () => {
 
       const parentObs = result.find((r) => r.resource.hasMember);
       expect(parentObs.resource.hasMember).toHaveLength(1);
+    });
+
+    it('should handle 3-level deep nested group members', () => {
+      const observations = [
+        {
+          concept: { uuid: 'outer-uuid' },
+          groupMembers: [
+            {
+              concept: { uuid: 'middle-uuid' },
+              groupMembers: [
+                {
+                  concept: { uuid: 'inner-uuid' },
+                  groupMembers: [
+                    {
+                      concept: { uuid: 'leaf-uuid' },
+                      value: 'deep value',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ];
+
+      const result = getFhirObservations(observations, defaultOptions);
+
+      // Should have 4 observations: leaf + inner + middle + outer
+      expect(result).toHaveLength(4);
+
+      const outerObs = result.find((r) => r.resource.code.coding[0].code === 'outer-uuid');
+      const middleObs = result.find((r) => r.resource.code.coding[0].code === 'middle-uuid');
+      const innerObs = result.find((r) => r.resource.code.coding[0].code === 'inner-uuid');
+
+      // Each parent references only its direct child
+      expect(outerObs.resource.hasMember).toHaveLength(1);
+      expect(outerObs.resource.hasMember[0].reference).toBe(middleObs.fullUrl);
+
+      expect(middleObs.resource.hasMember).toHaveLength(1);
+      expect(middleObs.resource.hasMember[0].reference).toBe(innerObs.fullUrl);
+
+      expect(innerObs.resource.hasMember).toHaveLength(1);
+    });
+
+    it('should handle sibling groups and leaves under same parent', () => {
+      const observations = [
+        {
+          concept: { uuid: 'parent-uuid' },
+          groupMembers: [
+            {
+              concept: { uuid: 'inner-group-uuid' },
+              groupMembers: [
+                { concept: { uuid: 'leaf-in-group-uuid' }, value: 'value1' },
+              ],
+            },
+            { concept: { uuid: 'leaf1-uuid' }, value: 'value2' },
+            { concept: { uuid: 'leaf2-uuid' }, value: 'value3' },
+          ],
+        },
+      ];
+
+      const result = getFhirObservations(observations, defaultOptions);
+
+      // 1 leaf-in-group + 1 inner-group + 2 leaves + 1 parent = 5
+      expect(result).toHaveLength(5);
+
+      const parent = result.find((r) => r.resource.code.coding[0].code === 'parent-uuid');
+      const innerGroup = result.find((r) => r.resource.code.coding[0].code === 'inner-group-uuid');
+
+      // Parent references all 3 direct children (inner-group + leaf1 + leaf2)
+      expect(parent.resource.hasMember).toHaveLength(3);
+      expect(parent.resource.hasMember[0].reference).toBe(innerGroup.fullUrl);
+    });
+
+    it('should skip voided outer group entirely', () => {
+      const observations = [
+        {
+          concept: { uuid: 'voided-group-uuid' },
+          voided: true,
+          groupMembers: [
+            { concept: { uuid: 'child-uuid' }, value: 'active' },
+          ],
+        },
+        {
+          concept: { uuid: 'active-obs-uuid' },
+          value: 'active',
+        },
+      ];
+
+      const result = getFhirObservations(observations, defaultOptions);
+
+      // Only the active obs should be in results — voided group + its children skipped
+      expect(result).toHaveLength(1);
+      expect(result[0].resource.code.coding[0].code).toBe('active-obs-uuid');
     });
   });
 
