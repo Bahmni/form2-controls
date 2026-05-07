@@ -57,8 +57,28 @@ MockVitalsWidget.propTypes = {
   conceptHandler: PropTypes.string.isRequired,
 };
 
+const MockEcgWidget = ({ conceptHandler }) => (
+  <div style={{ border: '2px solid #e67e22', padding: '12px', borderRadius: '4px' }}>
+    <strong>ECG Recording Widget — conceptHandler: &quot;{conceptHandler}&quot;</strong>
+    <div style={{ marginTop: '8px', background: '#111', padding: '8px', borderRadius: '3px' }}>
+      <span style={{ color: '#0f0', fontFamily: 'monospace', fontSize: '0.8em' }}>
+        ♥ ── ECG waveform data stored as complexData binary reference ──
+      </span>
+    </div>
+    <p style={{ color: '#777', fontSize: '0.85em', marginTop: '6px' }}>
+      In production, this widget encodes the waveform as a binary file and submits it
+      via the OpenMRS complex obs handler registered for the ECG concept.
+    </p>
+  </div>
+);
+
+MockEcgWidget.propTypes = {
+  conceptHandler: PropTypes.string.isRequired,
+};
+
 componentStore.registerComponent('weightHandler', MockWeightWidget);
 componentStore.registerComponent('vitalsHandler', MockVitalsWidget);
+componentStore.registerComponent('ecgHandler', MockEcgWidget);
 
 // Metadata shapes used for the JSON visualisation panel
 const weightMetadata = {
@@ -90,7 +110,7 @@ const vitalsMetadata = {
 // Real-world example matching standard_config: an ECG complex control
 const ecgMetadata = {
   type: 'complex',
-  conceptHandler: 'vitalsHandler',
+  conceptHandler: 'ecgHandler',
   id: '20',
   label: { type: 'label', value: 'ECG Recording' },
   properties: {
@@ -190,15 +210,17 @@ export const WithNestedChildControls = {
 
 export const EcgConceptHandlerExample = {
   args: {
-    conceptHandler: 'vitalsHandler',
+    conceptHandler: 'ecgHandler',
   },
   parameters: {
     docs: {
       description: {
         story:
-          'Simulated ECG recording control. In production an ECG module would register itself ' +
-          'as `componentStore.registerComponent("ecg", EcgWidget)` — here the same `vitalsHandler` ' +
-          'mock is reused to illustrate the dispatch mechanism with a notes-enabled metadata shape.',
+          'Real-world ECG recording control using a dedicated `ecgHandler` mock registered in ' +
+          '`componentStore`. In production, an ECG module calls ' +
+          '`componentStore.registerComponent("ecgHandler", EcgWidget)` and the form metadata ' +
+          'uses `conceptHandler: "ecgHandler"` to embed it. The widget is responsible for ' +
+          'encoding the waveform as binary data and submitting it via the OpenMRS complex obs handler.',
       },
     },
   },

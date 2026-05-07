@@ -1,6 +1,7 @@
 import React from 'react';
 import { ObsControlWithIntl as ObsControl } from 'src/components/ObsControl.jsx';
 import StoryWrapper from './StoryWrapper';
+import '../styles/styles.scss';
 
 const form = {
   controls: [

@@ -195,7 +195,13 @@ export default {
           'native grouping landmark recognised by all screen readers. The collapse toggle is on ' +
           'the `<legend>` element so it is naturally focusable and operable via keyboard. ' +
           'Disabled sections add the `disabled` CSS class and all child inputs honour the ' +
-          '`enabled` prop to prevent data entry.',
+          '`enabled` prop to prevent data entry.\n\n' +
+          '**Composition chain**: The full atomic-to-container hierarchy is: ' +
+          '`Container` → resolves `type: "section"` via `componentStore` → renders `Section` → ' +
+          'each child `type: "obsControl"` is resolved to `ObsControl` → `ObsControl` resolves ' +
+          'the concept datatype to an atomic widget (`NumericBox`, `TextBox`, `BooleanControl`, etc.). ' +
+          'Each layer passes `formFieldPath`, `value`, and `onValueChanged` down so state flows ' +
+          'back up to the root `Container` and its `ControlRecordTree`.',
       },
     },
   },
