@@ -239,7 +239,7 @@ export function getFhirObservations(observations, options) {
         const memberResults = getFhirObservations([member], options);
         results.push(...memberResults);
         // Last item is always the member's own observation (group parents are pushed last)
-        const memberObservation = memberResults.at(-1);
+        const memberObservation = memberResults[memberResults.length - 1];
         if (memberObservation) {
           hasMemberRefs.push({
             reference: memberObservation.fullUrl,
