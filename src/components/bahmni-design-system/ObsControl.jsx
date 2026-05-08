@@ -190,13 +190,15 @@ export class ObsControl extends addMoreDecorator(Component) {
     const isAbnormalObs = (value.interpretation === 'ABNORMAL');
     if (isAbnormal) {
       return (
-        <SelectableTag
-          size="lg"
-          text="Abnormal"
-          selected={isAbnormalObs}
-          disabled={!value.value}
-          onChange={this.setAbnormal}
-        />
+        <div className="abnormal-button-wrap">
+          <SelectableTag
+            size="lg"
+            text="Abnormal"
+            selected={isAbnormalObs}
+            disabled={!value.value}
+            onChange={this.setAbnormal}
+          />
+        </div>
       );
     }
     return null;
