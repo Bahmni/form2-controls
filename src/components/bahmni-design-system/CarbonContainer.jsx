@@ -16,7 +16,7 @@ import { Provider } from 'components/bahmni-design-system/Provider';
 import { ObsControlWithIntl } from 'components/bahmni-design-system/ObsControl';
 import { RadioButton } from 'components/bahmni-design-system/RadioButton';
 import { TableWithIntl } from 'components/bahmni-design-system/Table';
-import { BooleanControl } from 'components/bahmni-design-system/BooleanControl';
+import { BooleanControlWithIntl } from 'components/bahmni-design-system/BooleanControl';
 
 const carbonComponents = {
   text: TextBox,
@@ -34,7 +34,7 @@ const carbonComponents = {
   obscontrol: ObsControlWithIntl,
   radio: RadioButton,
   table: TableWithIntl,
-  boolean: BooleanControl,
+  boolean: BooleanControlWithIntl,
 };
 
 /**

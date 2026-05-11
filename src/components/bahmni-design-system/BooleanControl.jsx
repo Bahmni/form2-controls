@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 import { SelectableTag } from '@bahmni/design-system';
 import { Validator } from 'src/helpers/Validator';
 import isEmpty from 'lodash/isEmpty';
@@ -22,9 +23,8 @@ export class BooleanControl extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    this.isValueChanged = this.props.value !== nextProps.value;
     return (
-      this.isValueChanged ||
+      this.props.value !== nextProps.value ||
       this.state.hasErrors !== nextState.hasErrors ||
       this.props.enabled !== nextProps.enabled ||
       this.props.validate !== nextProps.validate
@@ -32,22 +32,25 @@ export class BooleanControl extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.validate !== prevProps.validate || this.isValueChanged) {
+    const isValueChanged = prevProps.value !== this.props.value;
+    if (this.props.validate !== prevProps.validate || isValueChanged) {
       const errors = this._getErrors(this.props.value);
       const hasErrors = this._hasErrors(errors);
       if (this.state.hasErrors !== hasErrors) {
         this.setState({ hasErrors });
       }
     }
-    if (this.isValueChanged) {
+    if (isValueChanged && !this._userInitiated) {
       this.props.onChange({ value: this.props.value, errors: this._getErrors(this.props.value) });
     }
+    this._userInitiated = false;
   }
 
   changeValue(option) {
     const value = this.props.value === option.value ? undefined : option.value;
     const errors = this._getErrors(value);
     this.setState({ hasErrors: this._hasErrors(errors) });
+    this._userInitiated = true;
     this.props.onChange({ value, errors });
   }
 
@@ -113,3 +116,5 @@ BooleanControl.propTypes = {
 BooleanControl.defaultProps = {
   enabled: true,
 };
+
+export const BooleanControlWithIntl = injectIntl(BooleanControl, { forwardRef: true });

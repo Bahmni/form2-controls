@@ -16,6 +16,13 @@ export class Comment extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.comment !== this.props.comment) {
+      const hasNote = this.props.comment && this.props.comment.length > 0;
+      this.setState({ hasNote, comment: this.props.comment || '' });
+    }
+  }
+
   handleChange(e) {
     const raw = e.target.value;
     this.setState({ comment: raw, hasNote: raw.trim().length > 0 });
@@ -48,6 +55,8 @@ export class Comment extends Component {
     }
     return (
       <button
+        aria-label="Toggle note"
+        aria-expanded={this.state.showCommentSection}
         className={classNames('form-builder-comment-toggle', 'form-builder-comment-button-toggle',
           { active: this.state.showCommentSection === true,
             'has-notes': this.state.hasNote === true })}

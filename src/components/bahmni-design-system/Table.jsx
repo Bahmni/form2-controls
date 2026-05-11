@@ -31,31 +31,32 @@ export class Table extends Component {
     const records = this.props.children.toArray();
 
     return (
-      <IntlProvider {...this.props.intl}>
-        <div>
-          <strong className="table-header test-table-label">
-            {this.props.intl.formatMessage({
-              defaultMessage: label.value,
-              id: label.translationKey || 'defaultId',
-            })}
-          </strong>
-          <CarbonTable className="carbon-form-table">
-            <TableHead>
-              <TableRow>
-                {columnHeaders.map(h => (
-                  <TableHeader key={h.id}>
-                    {this.props.intl.formatMessage({
-                      defaultMessage: h.value,
-                      id: h.translationKey || 'defaultId',
-                    })}
-                  </TableHeader>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
+      <div>
+        <strong className="table-header test-table-label">
+          {this.props.intl.formatMessage({
+            defaultMessage: label.value,
+            id: label.translationKey || `table-label-${this.props.metadata.id}`,
+          })}
+        </strong>
+        <CarbonTable className="carbon-form-table">
+          <TableHead>
+            <TableRow>
+              {columnHeaders.map(h => (
+                <TableHeader key={h.id}>
+                  {this.props.intl.formatMessage({
+                    defaultMessage: h.value,
+                    id: h.translationKey || `table-header-${h.id}`,
+                  })}
+                </TableHeader>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <IntlProvider {...this.props.intl}>
               {groupedRowControls.map((rowControls, rowIndex) => {
                 const colMap = {};
                 getGroupedControls(rowControls, 'column').forEach(colControls => {
+                  if (!colControls || colControls.length === 0) return;
                   const colIdx = colControls[0].properties.location.column;
                   colMap[colIdx] = getControls(colControls, records, childProps);
                 });
@@ -64,7 +65,7 @@ export class Table extends Component {
                 );
                 if (!hasVisible) return null;
                 return (
-                  <TableRow key={rowIndex}>
+                  <TableRow key={rowControls[0]?.properties?.location?.row ?? rowIndex}>
                     {columnHeaders.map((_, colIndex) => (
                       <TableCell key={colIndex}>
                         <div className="form-builder-row">
@@ -79,10 +80,10 @@ export class Table extends Component {
                   </TableRow>
                 );
               })}
-            </TableBody>
-          </CarbonTable>
-        </div>
-      </IntlProvider>
+            </IntlProvider>
+          </TableBody>
+        </CarbonTable>
+      </div>
     );
   }
 }
@@ -120,7 +121,7 @@ Table.propTypes = {
 };
 
 Table.defaultProps = {
-  children: List.of([]),
+  children: List(),
   enabled: true,
 };
 
