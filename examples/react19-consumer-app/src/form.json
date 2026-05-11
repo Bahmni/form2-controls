@@ -7241,10 +7241,7 @@
           "hiNormal": null,
           "lowNormal": null,
           "hiAbsolute": null,
-          "lowAbsolute": null,
-          "events": {
-            "onValueChange": "function(form) {\n  if (form.getFromParent('Chief Complaint Coded').getValue() === 'Other generic') {\n    form.getFromParent('Chief complaint (text)').setHidden(false);\n  } else {\n    form.getFromParent('Chief complaint (text)').hideAndClear();\n  }\n}"
-          }
+          "lowAbsolute": null
         },
         {
           "type": "obsControl",
@@ -8501,9 +8498,30 @@
         "conceptClass": "Question",
         "conceptHandler": null,
         "answers": [
-          { "uuid": "ans-smoking-1", "name": { "display": "Never Smoked", "name": "Never Smoked", "locale": "en" } },
-          { "uuid": "ans-smoking-2", "name": { "display": "Former Smoker", "name": "Former Smoker", "locale": "en" } },
-          { "uuid": "ans-smoking-3", "name": { "display": "Current Smoker", "name": "Current Smoker", "locale": "en" } }
+          {
+            "uuid": "ans-smoking-1",
+            "name": {
+              "display": "Never Smoked",
+              "name": "Never Smoked",
+              "locale": "en"
+            }
+          },
+          {
+            "uuid": "ans-smoking-2",
+            "name": {
+              "display": "Former Smoker",
+              "name": "Former Smoker",
+              "locale": "en"
+            }
+          },
+          {
+            "uuid": "ans-smoking-3",
+            "name": {
+              "display": "Current Smoker",
+              "name": "Current Smoker",
+              "locale": "en"
+            }
+          }
         ],
         "properties": { "allowDecimal": null }
       }
@@ -8529,9 +8547,68 @@
         "conceptClass": "Question",
         "conceptHandler": null,
         "answers": [
-          { "uuid": "ans-pain-1", "name": { "display": "Mild", "name": "Mild", "locale": "en" } },
-          { "uuid": "ans-pain-2", "name": { "display": "Moderate", "name": "Moderate", "locale": "en" } },
-          { "uuid": "ans-pain-3", "name": { "display": "Severe", "name": "Severe", "locale": "en" } }
+          {
+            "uuid": "ans-pain-1",
+            "name": { "display": "Mild", "name": "Mild", "locale": "en" }
+          },
+          {
+            "uuid": "ans-pain-2",
+            "name": {
+              "display": "Moderate",
+              "name": "Moderate",
+              "locale": "en"
+            }
+          },
+          {
+            "uuid": "ans-pain-3",
+            "name": { "display": "Severe", "name": "Severe", "locale": "en" }
+          }
+        ],
+        "properties": { "allowDecimal": null }
+      }
+    },
+    {
+      "type": "obsControl",
+      "label": {
+        "translationKey": "SYMPTOMS_MULTISELECT_BUTTON",
+        "type": "label",
+        "value": "Symptoms (Multiselect Buttons)",
+        "id": "9004"
+      },
+      "properties": {
+        "mandatory": false,
+        "notes": false,
+        "multiSelect": true,
+        "location": { "column": 0, "row": 12 }
+      },
+      "id": "9004",
+      "concept": {
+        "name": "Symptoms",
+        "uuid": "c2a43174-c9db-4e54-8516-17372c83537d",
+        "datatype": "Coded",
+        "conceptClass": "Question",
+        "conceptHandler": null,
+        "answers": [
+          {
+            "uuid": "ans-sym-1",
+            "name": { "display": "Fever", "name": "Fever", "locale": "en" }
+          },
+          {
+            "uuid": "ans-sym-2",
+            "name": { "display": "Cough", "name": "Cough", "locale": "en" }
+          },
+          {
+            "uuid": "ans-sym-3",
+            "name": { "display": "Fatigue", "name": "Fatigue", "locale": "en" }
+          },
+          {
+            "uuid": "ans-sym-4",
+            "name": {
+              "display": "Headache",
+              "name": "Headache",
+              "locale": "en"
+            }
+          }
         ],
         "properties": { "allowDecimal": null }
       }
@@ -8547,7 +8624,7 @@
       "properties": {
         "mandatory": false,
         "notes": false,
-        "location": { "column": 0, "row": 12 }
+        "location": { "column": 0, "row": 13 }
       },
       "id": "9003",
       "concept": {
@@ -8557,16 +8634,273 @@
         "conceptClass": "Question",
         "conceptHandler": null,
         "answers": [
-          { "uuid": "ans-cc-1", "name": { "display": "Headache", "name": "Headache", "locale": "en" } },
-          { "uuid": "ans-cc-2", "name": { "display": "Chest Pain", "name": "Chest Pain", "locale": "en" } },
-          { "uuid": "ans-cc-3", "name": { "display": "Shortness of Breath", "name": "Shortness of Breath", "locale": "en" } },
-          { "uuid": "ans-cc-4", "name": { "display": "Abdominal Pain", "name": "Abdominal Pain", "locale": "en" } },
-          { "uuid": "ans-cc-5", "name": { "display": "Fever", "name": "Fever", "locale": "en" } }
+          {
+            "uuid": "ans-cc-1",
+            "name": {
+              "display": "Headache",
+              "name": "Headache",
+              "locale": "en"
+            }
+          },
+          {
+            "uuid": "ans-cc-2",
+            "name": {
+              "display": "Chest Pain",
+              "name": "Chest Pain",
+              "locale": "en"
+            }
+          },
+          {
+            "uuid": "ans-cc-3",
+            "name": {
+              "display": "Shortness of Breath",
+              "name": "Shortness of Breath",
+              "locale": "en"
+            }
+          },
+          {
+            "uuid": "ans-cc-4",
+            "name": {
+              "display": "Abdominal Pain",
+              "name": "Abdominal Pain",
+              "locale": "en"
+            }
+          },
+          {
+            "uuid": "ans-cc-5",
+            "name": { "display": "Fever", "name": "Fever", "locale": "en" }
+          }
         ],
         "properties": { "allowDecimal": null }
       }
     },
-{
+    {
+      "type": "table",
+      "id": "symptom_severity_table_9005",
+      "label": {
+        "translationKey": "SYMPTOM_SEVERITY_TABLE_LABEL",
+        "type": "label",
+        "value": "Symptom Severity Observation"
+      },
+      "properties": {
+        "location": {
+          "column": 0,
+          "row": 14
+        }
+      },
+      "columnHeaders": [
+        {
+          "id": "col-header-1",
+          "translationKey": "COL_SYMPTOM",
+          "type": "label",
+          "value": "Symptom"
+        },
+        {
+          "id": "col-header-2",
+          "translationKey": "COL_SEVERITY",
+          "type": "label",
+          "value": "Severity Level"
+        },
+        {
+          "id": "col-header-3",
+          "translationKey": "COL_NOTES",
+          "type": "label",
+          "value": "Notes"
+        }
+      ],
+      "controls": [
+        {
+          "type": "obsControl",
+          "id": "table-row1-col1",
+          "label": { "type": "label", "value": "Symptom" },
+          "properties": {
+            "mandatory": false,
+            "addMore": false,
+            "hideLabel": false,
+            "location": { "row": 0, "column": 0 }
+          },
+          "concept": {
+            "name": "Symptom Row 1",
+            "uuid": "c2a43174-c9db-4e54-8516-17372c83537d",
+            "datatype": "Coded",
+            "conceptClass": "Question",
+            "answers": [
+              { "uuid": "ans-sym-1", "name": { "display": "Fever", "name": "Fever", "locale": "en" } },
+              { "uuid": "ans-sym-2", "name": { "display": "Cough", "name": "Cough", "locale": "en" } },
+              { "uuid": "ans-sym-3", "name": { "display": "Fatigue", "name": "Fatigue", "locale": "en" } },
+              { "uuid": "ans-sym-4", "name": { "display": "Headache", "name": "Headache", "locale": "en" } }
+            ]
+          }
+        },
+        {
+          "type": "obsControl",
+          "id": "table-row1-col2",
+          "label": { "type": "label", "value": "Severity Level" },
+          "properties": {
+            "mandatory": false,
+            "addMore": false,
+            "hideLabel": false,
+            "location": { "row": 0, "column": 1 }
+          },
+          "concept": {
+            "name": "Severity Row 1",
+            "uuid": "c2a43174-c9db-4e54-8516-17372c83537b",
+            "datatype": "Coded",
+            "conceptClass": "Question",
+            "answers": [
+              { "uuid": "ans-pain-1", "name": { "display": "Mild", "name": "Mild", "locale": "en" } },
+              { "uuid": "ans-pain-2", "name": { "display": "Moderate", "name": "Moderate", "locale": "en" } },
+              { "uuid": "ans-pain-3", "name": { "display": "Severe", "name": "Severe", "locale": "en" } }
+            ]
+          }
+        },
+        {
+          "type": "obsControl",
+          "id": "table-row1-col3",
+          "label": { "type": "label", "value": "Notes" },
+          "properties": {
+            "mandatory": false,
+            "addMore": false,
+            "hideLabel": false,
+            "location": { "row": 0, "column": 2 }
+          },
+          "concept": {
+            "name": "Notes Row 1",
+            "uuid": "c2a43174-c9db-4e54-8516-17372c83537e",
+            "datatype": "Text",
+            "conceptClass": "Question",
+            "answers": []
+          }
+        },
+        {
+          "type": "obsControl",
+          "id": "table-row2-col1",
+          "label": { "type": "label", "value": "Symptom" },
+          "properties": {
+            "mandatory": false,
+            "addMore": false,
+            "hideLabel": false,
+            "location": { "row": 1, "column": 0 }
+          },
+          "concept": {
+            "name": "Symptom Row 2",
+            "uuid": "c2a43174-c9db-4e54-8516-17372c83538a",
+            "datatype": "Coded",
+            "conceptClass": "Question",
+            "answers": [
+              { "uuid": "ans-sym-1", "name": { "display": "Fever", "name": "Fever", "locale": "en" } },
+              { "uuid": "ans-sym-2", "name": { "display": "Cough", "name": "Cough", "locale": "en" } },
+              { "uuid": "ans-sym-3", "name": { "display": "Fatigue", "name": "Fatigue", "locale": "en" } },
+              { "uuid": "ans-sym-4", "name": { "display": "Headache", "name": "Headache", "locale": "en" } }
+            ]
+          }
+        },
+        {
+          "type": "obsControl",
+          "id": "table-row2-col2",
+          "label": { "type": "label", "value": "Severity Level" },
+          "properties": {
+            "mandatory": false,
+            "addMore": false,
+            "hideLabel": false,
+            "location": { "row": 1, "column": 1 }
+          },
+          "concept": {
+            "name": "Severity Row 2",
+            "uuid": "c2a43174-c9db-4e54-8516-17372c83538b",
+            "datatype": "Coded",
+            "conceptClass": "Question",
+            "answers": [
+              { "uuid": "ans-pain-1", "name": { "display": "Mild", "name": "Mild", "locale": "en" } },
+              { "uuid": "ans-pain-2", "name": { "display": "Moderate", "name": "Moderate", "locale": "en" } },
+              { "uuid": "ans-pain-3", "name": { "display": "Severe", "name": "Severe", "locale": "en" } }
+            ]
+          }
+        },
+        {
+          "type": "obsControl",
+          "id": "table-row2-col3",
+          "label": { "type": "label", "value": "Notes" },
+          "properties": {
+            "mandatory": false,
+            "addMore": false,
+            "hideLabel": false,
+            "location": { "row": 1, "column": 2 }
+          },
+          "concept": {
+            "name": "Notes Row 2",
+            "uuid": "c2a43174-c9db-4e54-8516-17372c83538c",
+            "datatype": "Text",
+            "conceptClass": "Question",
+            "answers": []
+          }
+        },
+        {
+          "type": "obsControl",
+          "id": "table-row3-col1",
+          "label": { "type": "label", "value": "Symptom" },
+          "properties": {
+            "mandatory": false,
+            "addMore": false,
+            "hideLabel": false,
+            "location": { "row": 2, "column": 0 }
+          },
+          "concept": {
+            "name": "Symptom Row 3",
+            "uuid": "c2a43174-c9db-4e54-8516-17372c83539a",
+            "datatype": "Coded",
+            "conceptClass": "Question",
+            "answers": [
+              { "uuid": "ans-sym-1", "name": { "display": "Fever", "name": "Fever", "locale": "en" } },
+              { "uuid": "ans-sym-2", "name": { "display": "Cough", "name": "Cough", "locale": "en" } },
+              { "uuid": "ans-sym-3", "name": { "display": "Fatigue", "name": "Fatigue", "locale": "en" } },
+              { "uuid": "ans-sym-4", "name": { "display": "Headache", "name": "Headache", "locale": "en" } }
+            ]
+          }
+        },
+        {
+          "type": "obsControl",
+          "id": "table-row3-col2",
+          "label": { "type": "label", "value": "Severity Level" },
+          "properties": {
+            "mandatory": false,
+            "addMore": false,
+            "hideLabel": false,
+            "location": { "row": 2, "column": 1 }
+          },
+          "concept": {
+            "name": "Severity Row 3",
+            "uuid": "c2a43174-c9db-4e54-8516-17372c83539b",
+            "datatype": "Coded",
+            "conceptClass": "Question",
+            "answers": [
+              { "uuid": "ans-pain-1", "name": { "display": "Mild", "name": "Mild", "locale": "en" } },
+              { "uuid": "ans-pain-2", "name": { "display": "Moderate", "name": "Moderate", "locale": "en" } },
+              { "uuid": "ans-pain-3", "name": { "display": "Severe", "name": "Severe", "locale": "en" } }
+            ]
+          }
+        },
+        {
+          "type": "obsControl",
+          "id": "table-row3-col3",
+          "label": { "type": "label", "value": "Notes" },
+          "properties": {
+            "mandatory": false,
+            "addMore": false,
+            "hideLabel": false,
+            "location": { "row": 2, "column": 2 }
+          },
+          "concept": {
+            "name": "Notes Row 3",
+            "uuid": "c2a43174-c9db-4e54-8516-17372c83539c",
+            "datatype": "Text",
+            "conceptClass": "Question",
+            "answers": []
+          }
+        }
+      ]
+    },
+    {
       "type": "section",
       "label": {
         "type": "label",
@@ -9200,12 +9534,48 @@
       "lowNormal": null,
       "hiAbsolute": null,
       "lowAbsolute": null
+    },
+    {
+      "type": "obsControl",
+      "label": {
+        "translationKey": "FEVER_PRESENT_104",
+        "id": "104",
+        "units": "",
+        "type": "label",
+        "value": "Fever Present"
+      },
+      "properties": {
+        "mandatory": false,
+        "notes": false,
+        "addMore": false,
+        "hideLabel": false,
+        "controlEvent": false,
+        "location": {
+          "column": 0,
+          "row": 0
+        }
+      },
+      "id": "104",
+      "concept": {
+        "name": "Fever Present",
+        "uuid": "9bb0795c-4ff0-0305-1990-000000000104",
+        "datatype": "Boolean",
+        "conceptClass": "Question",
+        "conceptHandler": null,
+        "answers": [],
+        "properties": { "allowDecimal": null }
+      },
+      "options": [
+        { "translationKey": "BOOLEAN_YES", "name": "Yes", "value": true },
+        { "translationKey": "BOOLEAN_NO", "name": "No", "value": false }
+      ],
+      "units": null,
+      "hiNormal": null,
+      "lowNormal": null,
+      "hiAbsolute": null,
+      "lowAbsolute": null
     }
   ],
-  "events": {
-    "onFormSave": "function(form) {\n  let addmoreCount = 0;\n  while (form.get('Chief Complaint Coded', addmoreCount).currentRecord) {\n    if (form.get('Chief Complaint Coded', addmoreCount).getValue()) {\n      if (!(form.get('Sign/symptom duration', addmoreCount).getValue() &amp;amp;amp;amp;&amp;amp;amp;amp; form.get('Chief Complaint Duration', addmoreCount).getValue())) {\n        throw {\n          message: 'Please enter data in Chief complaint data'\n        };\n      } else if (form.get('Chief Complaint Coded', addmoreCount).getValue() === 'Other generic') {\n        if (!form.get('Chief complaint (text)', addmoreCount).getValue()) {\n          throw {\n            message: 'Please enter Chief complaint (text)'\n          };\n        }\n      } else if ((form.get('Sign/symptom duration', addmoreCount).getValue() || form.get('Chief Complaint Duration', addmoreCount).getValue())) {\n        throw {\n          message: 'Please enter Chief complaint'\n        };\n      }\n      addmoreCount++;\n    }\n  }\n}",
-    "onFormInit": "function(form) {\n  if (form.get('Chief Complaint Coded').getValue() !== 'Other generic') {\n    form.get('Chief complaint (text)').setHidden(true);\n  } else {\n    form.get('Chief complaint (text)').setHidden(false);\n  }\n}"
-  },
   "translationsUrl": "/openmrs/ws/rest/v1/bahmniie/form/translations",
   "referenceVersion": "8",
   "referenceFormUuid": "2cacba73-d138-4323-95b7-86a94233fa19"
