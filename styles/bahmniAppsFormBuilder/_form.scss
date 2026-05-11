@@ -810,3 +810,72 @@ input.computed-value {
   border: 0 !important;
   pointer-events: none;
 }
+
+.carbon-image-upload,
+.carbon-video-upload {
+  .upload-area {
+    border: 1px solid carbon-theme.$border-subtle-01;
+    background: carbon-theme.$layer-01;
+    padding: $spacing-05 $spacing-07;
+    border-radius: 4px;
+    margin-bottom: $spacing-05;
+    width: 70%;
+
+    .upload-icon {
+      font-size: 24px;
+      color: carbon-theme.$text-secondary;
+      display: block;
+      margin-bottom: $spacing-03;
+    }
+
+    .upload-label {
+      font-weight: 600;
+      font-size: 14px;
+      color: carbon-theme.$text-primary;
+      margin-bottom: $spacing-02;
+    }
+
+    .upload-description {
+      font-size: 12px;
+      color: carbon-theme.$text-secondary;
+      margin-bottom: $spacing-05;
+    }
+  }
+
+  .files-list {
+    margin-top: $spacing-05;
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: $spacing-04 $spacing-05;
+      background: #f4f4f4;
+      margin-bottom: 1px;
+
+      .file-name {
+        font-size: 14px;
+        color: carbon-theme.$text-primary;
+        flex: 1;
+        word-break: break-word;
+      }
+    }
+
+    .delete-button-inline,
+    .restore-button-inline {
+      margin-left: $spacing-02;
+    }
+  }
+
+  &.carbon-error .upload-area {
+    border-color: carbon-theme.$support-error;
+
+    .upload-label {
+      color: carbon-theme.$support-error;
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+}

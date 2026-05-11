@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 import { Container } from 'components/Container.jsx';
+import { ComplexControl } from 'components/ComplexControl';
 import ComponentStore from 'src/helpers/componentStore';
 import { TextBox } from 'components/bahmni-design-system/TextBox';
 import { ObsGroupControl } from 'components/bahmni-design-system/ObsGroupControl';
@@ -15,6 +16,8 @@ import { Location } from 'components/bahmni-design-system/Location';
 import { Provider } from 'components/bahmni-design-system/Provider';
 import { ObsControlWithIntl } from 'components/bahmni-design-system/ObsControl';
 import { RadioButton } from 'components/bahmni-design-system/RadioButton';
+import { Image } from 'components/bahmni-design-system/Image';
+import { Video } from 'components/bahmni-design-system/Video';
 
 const carbonComponents = {
   text: TextBox,
@@ -31,6 +34,9 @@ const carbonComponents = {
   providerobshandler: Provider,
   obscontrol: ObsControlWithIntl,
   radio: RadioButton,
+  imageurlhandler: Image,
+  videourlhandler: Video,
+  complex: ComplexControl,
 };
 
 /**
