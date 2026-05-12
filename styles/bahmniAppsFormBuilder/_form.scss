@@ -707,11 +707,11 @@ $lightestGray: #eee;
     }
 
     .delete-button {
-      color: #f40428;
+      color: carbon-theme.$support-error;
     }
 
     .restore-button {
-      color: #88af28;
+      color: carbon-theme.$support-success;
       width: 100%;
       left: 0;
       height: 100%;
@@ -814,10 +814,6 @@ input.computed-value {
 .carbon-image-upload,
 .carbon-video-upload {
   .upload-area {
-    border: 1px solid carbon-theme.$border-subtle-01;
-    background: carbon-theme.$layer-01;
-    padding: $spacing-05 $spacing-07;
-    border-radius: 4px;
     margin-bottom: $spacing-05;
     width: 70%;
 
@@ -865,13 +861,39 @@ input.computed-value {
     .restore-button-inline {
       margin-left: $spacing-02;
     }
+
+    .delete-icon-inline,
+    .restore-icon-inline {
+      cursor: pointer;
+      color: carbon-theme.$text-secondary;
+      margin-left: $spacing-02;
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 2px;
+      transition: all 0.2s ease;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: inherit;
+
+      &:hover {
+        color: carbon-theme.$text-error;
+        background-color: rgba(255, 0, 0, 0.08);
+      }
+
+      &:focus {
+        outline: 2px solid carbon-theme.$focus;
+        outline-offset: 2px;
+      }
+    }
   }
 
   &.carbon-error .upload-area {
-    border-color: carbon-theme.$support-error;
+    border: 1px solid carbon-theme.$support-error;
 
     .upload-label {
-      color: carbon-theme.$support-error;
+      color: carbon-theme.$text-error;
     }
   }
 

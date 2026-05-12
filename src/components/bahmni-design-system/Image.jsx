@@ -1,7 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FileUploaderButton } from '@carbon/react';
-import { Button, Icon, Loading } from '@bahmni/design-system';
+import { FileUploaderButton, FileUploaderItem } from '@carbon/react';
+import { Renew } from '@carbon/icons-react';
+import { Button, Loading } from '@bahmni/design-system';
 import classNames from 'classnames';
 import Constants from 'src/constants';
 import isEmpty from 'lodash/isEmpty';
@@ -173,19 +174,13 @@ export class Image extends Component {
 
         {this.props.value && (
           <div className="files-list">
-            <div className="file-item">
-              <span className="file-name">{fileName}</span>
-              <Button
-                kind="danger--ghost"
-                hasIconOnly
-                size="sm"
-                onClick={this.handleDelete}
-                iconDescription="Delete file"
-                className="delete-button-inline"
-              >
-                <Icon name="fa-trash" />
-              </Button>
-            </div>
+            <FileUploaderItem
+              uuid={fileName}
+              name={fileName}
+              status="edit"
+              onDelete={() => this.handleDelete()}
+              iconDescription="Delete file"
+            />
             {isVoided && (
               <Button
                 kind="ghost"
@@ -194,9 +189,8 @@ export class Image extends Component {
                 onClick={this.handleRestore}
                 iconDescription="Restore image"
                 className="restore-button-inline"
-              >
-                <Icon name="fa-undo" />
-              </Button>
+                renderIcon={Renew}
+              />
             )}
           </div>
         )}
