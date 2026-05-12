@@ -2,6 +2,7 @@ import React from 'react';
 import { ObsControlWithIntl as ObsControl } from 'src/components/ObsControl.jsx';
 import StoryWrapper from './StoryWrapper';
 import '../styles/styles.scss';
+import { systolicConcept } from './mockData';
 
 const form = {
   controls: [
@@ -10,7 +11,7 @@ const form = {
       label: { id: 'systolic', type: 'label', value: 'Systolic' },
       properties: { mandatory: true, allowDecimal: false, addMore: true, location: { column: 0, row: 0 } },
       id: '1',
-      concept: { name: 'Systolic', uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75', datatype: 'Numeric' },
+      concept: systolicConcept,
     },
     {
       type: 'obsControl',

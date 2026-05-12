@@ -1,6 +1,7 @@
 import React from 'react';
 import StoryWrapper from './StoryWrapper';
 import { Container } from 'src/components/Container.jsx';
+import { systolicConcept } from './mockData';
 
 const form = {
   id: 1,
@@ -25,11 +26,7 @@ const form = {
         },
       },
       id: '1',
-      concept: {
-        name: 'Systolic',
-        uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75',
-        datatype: 'Numeric',
-      },
+      concept: systolicConcept,
     },
     {
       type: 'obsControl',
