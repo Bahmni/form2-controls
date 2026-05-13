@@ -253,4 +253,22 @@ describe('Carbon Image', () => {
       expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, true);
     });
   });
+
+  it('should show Loading indicator while uploading', async () => {
+    const { container } = renderImage();
+
+    const fileInput = container.querySelector('input[type="file"]');
+    const file = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    expect(container.querySelector('.cds--loading')).toBeInTheDocument();
+  });
+
+  it('should display upload label and description text', () => {
+    renderImage();
+
+    expect(screen.getByText('Upload files')).toBeInTheDocument();
+    expect(screen.getByText(/Max file size/)).toBeInTheDocument();
+  });
 });

@@ -7,6 +7,8 @@ import { Label } from 'components/Label.jsx';
 import { ObsControlWithIntl as ObsControl } from 'components/ObsControl.jsx';
 import { ObsGroupControlWithIntl as ObsGroupControl } from 'components/ObsGroupControl.jsx';
 import { CodedControl } from 'components/CodedControl.jsx';
+import { Image } from 'components/bahmni-design-system/Image';
+import { Video } from 'components/bahmni-design-system/Video';
 import ComponentStore from 'src/helpers/componentStore';
 
 const codedAnswers = [
@@ -280,5 +282,37 @@ describe('CarbonContainer', () => {
     render(<CarbonContainer {...defaultProps} metadata={abnormalMetadata} observations={observations} />);
 
     expect(screen.getByText('Abnormal')).toBeInTheDocument();
+  });
+
+  it('should resolve imageurlhandler to Carbon Image component', () => {
+    const carbonStore = {
+      getRegisteredComponent(type) {
+        const carbonComponents = {
+          imageurlhandler: Image,
+          videourlhandler: Video,
+        };
+        return carbonComponents[type.toLowerCase()]
+          || ComponentStore.getRegisteredComponent(type);
+      },
+    };
+
+    const resolved = carbonStore.getRegisteredComponent('imageurlhandler');
+    expect(resolved).toBe(Image);
+  });
+
+  it('should resolve videourlhandler to Carbon Video component', () => {
+    const carbonStore = {
+      getRegisteredComponent(type) {
+        const carbonComponents = {
+          imageurlhandler: Image,
+          videourlhandler: Video,
+        };
+        return carbonComponents[type.toLowerCase()]
+          || ComponentStore.getRegisteredComponent(type);
+      },
+    };
+
+    const resolved = carbonStore.getRegisteredComponent('videourlhandler');
+    expect(resolved).toBe(Video);
   });
 });

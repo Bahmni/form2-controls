@@ -253,4 +253,23 @@ describe('Carbon Video', () => {
       expect(mockOnControlAdd).toHaveBeenCalledWith(formFieldPath, true);
     });
   });
+
+  it('should show Loading indicator while uploading', async () => {
+    const { container } = renderVideo();
+
+    const fileInput = container.querySelector('input[type="file"]');
+    const file = new File(['content'], 'test.mp4', { type: 'video/mp4' });
+
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    expect(container.querySelector('.cds--loading')).toBeInTheDocument();
+  });
+
+  it('should display upload label and description text', () => {
+    const { container } = renderVideo();
+
+    const uploadLabel = container.querySelector('.upload-label');
+    expect(uploadLabel).toHaveTextContent('Upload video');
+    expect(screen.getByText(/Supported video formats/)).toBeInTheDocument();
+  });
 });
