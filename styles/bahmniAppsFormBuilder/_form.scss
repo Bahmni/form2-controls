@@ -83,6 +83,112 @@ $lightestGray: #eee;
         .obs-control-field {
           flex: 9;
           padding-inline-end: $spacing-07;
+          // !important ensures display:flex applies even inside accordion/section
+          // contexts where another rule might have equal or higher specificity.
+          display: flex !important;
+          align-items: center;
+          gap: $spacing-03;
+          flex-wrap: wrap;
+
+          // Cancel the outer float:left on form-builder-clone so the AddMore
+          // buttons stay in normal flex flow after the input and Abnormal tag.
+          // NOTE: .complex-component .form-builder-clone { display:none } is only
+          // 2 classes deep and loses to this 6-class-deep compiled selector — we
+          // explicitly re-hide it below with !important for complex fields.
+          .form-builder-clone {
+            float: none;
+            display: inline-flex;
+            align-items: center;
+            gap: $spacing-03;  // 8px — matches Figma gap between + and × buttons
+          }
+
+
+          // "Add note" wrapper: !important forces margin-left:auto to beat the
+          // legacy rule at .form-builder-comment-wrap { clear:both; overflow:hidden }
+          // which has equal or higher specificity in certain nesting contexts.
+          .form-builder-comment-wrap {
+            margin-left: auto !important;
+            flex-shrink: 0;
+
+            // The legacy .form-builder-comment-toggle rule sets position:absolute +
+            // right:0 + top:0, which anchors the button to .form-field-wrap
+            // (position:relative) — completely removing it from flex flow and making
+            // .form-builder-comment-wrap an invisible 0-height wrapper.
+            // Reset to static so the button stays inside the wrapper and renders
+            // inline at the right edge of the flex row.
+            .form-builder-comment-toggle {
+              position: static !important;
+            }
+          }
+
+          // The note textarea sections (DS and legacy) are rendered as siblings of
+          // .form-builder-comment-wrap at this level (React Fragment in Comment.jsx).
+          // flex:0 0 100% wraps them to a new full-width row so the textarea spans
+          // end-to-end while the "Add note" link stays on the input row above.
+          > .carbon-obs-comment-section-wrap,
+          > .obs-comment-section-wrap {
+            flex: 0 0 100%;
+            margin-top: $spacing-03;
+
+            textarea {
+              width: 100%;
+              float: none;
+            }
+          }
+
+          // DS "Add note" link — no position:absolute (class ds-obs-add-note-link
+          // has no legacy position baggage). Parent margin-left:auto handles placement.
+          .ds-obs-add-note-link {
+            white-space: nowrap;
+
+            // Carbon Link uses border-bottom for its underline effect. On mouse-click
+            // the browser also applies a focus ring (outline/box-shadow), which
+            // combined with text-decoration:underline creates a visible double-underline.
+            // Suppress the focus ring only for pointer (mouse) interactions;
+            // keyboard users retain the focus indicator via :focus-visible.
+            &:focus:not(:focus-visible) {
+              outline: none;
+              box-shadow: none;
+            }
+          }
+
+          // Carbon wraps DatePicker, ComboBox, Dropdown etc. in .cds--form-item which
+          // has flex:1 by default. As a direct child of .obs-control-field it consumes
+          // ALL available width, pushing the AddMore "+" button off the row.
+          // width:fit-content breaks the inner width:100% circular dependency (combo-box
+          // etc.) and lets the wrapper size to its content. max-width caps very wide inputs.
+          > .cds--form-item {
+            flex: 0 0 auto;
+            width: fit-content;
+            max-width: 300px;
+            align-self: center;
+
+            // Carbon's DatePickerInput renders a <label> above the input inside the
+            // container. The concept label is already in .label-wrap, so this duplicate
+            // label adds extra height that pushes the date input below vertical center.
+            // Hide it here so .cds--date-picker-container height = input height only.
+            .cds--label {
+              display: none;
+            }
+          }
+
+          // Carbon DatePicker: keep the inner picker and its container compact too.
+          .cds--date-picker.cds--date-picker--single,
+          .cds--date-picker.cds--date-picker--single > .cds--date-picker-container {
+            width: fit-content !important;
+            flex: 0 0 auto !important;
+          }
+
+          // Carbon ComboBox / Dropdown / ListBox: these default to width:100% which
+          // causes the AddMore +/× buttons to wrap to the next row for dropdown fields.
+          // Constrain to a max-width so they don't fill the entire flex row.
+          .cds--combo-box,
+          .cds--dropdown,
+          .cds--list-box:not(.cds--multi-select) {
+            flex: 0 0 auto;
+            width: auto;
+            max-width: 300px;
+          }
 
           .obs-comment-section-wrap textarea {
             width: 70%;
@@ -478,19 +584,25 @@ $lightestGray: #eee;
           z-index: 1;
         }
 
-        >.cds--accordion {
+        // Use descendant selector (not >) because the accordion is wrapped in
+        // .obs-group-add-more-wrapper, making it a grandchild not a direct child.
+        .cds--accordion {
           isolation: isolate;
 
           .cds--accordion__heading {
             background-color: carbon-theme.$layer-01;
           }
 
+          // Carbon's accordion--start adds margin-inline-start (32px) and
+          // padding-inline-end (245px) to .cds--accordion__content, which
+          // reduces the available width for obs fields and breaks Add note alignment.
+          // !important is required to beat Carbon's specificity.
           &.cds--accordion--start .cds--accordion__content {
-            margin-inline-start: 0;
+            margin-inline-start: 0 !important;
           }
 
           .cds--accordion__content {
-            padding-inline: 0;
+            padding-inline: 0 !important;
           }
         }
 
@@ -681,6 +793,9 @@ $lightestGray: #eee;
 }
 
 .complex-component {
+  // The AddMore "+" button should remain visible for image/video upload fields.
+  // The legacy display:none is intentionally NOT restored — the obs-control-field
+  // rule's higher specificity already makes it show, which is the desired behaviour.
   .form-builder-clone {
     display: none;
   }

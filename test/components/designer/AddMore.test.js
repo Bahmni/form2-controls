@@ -1,14 +1,14 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { AddMoreDesigner } from 'src/components/designer/AddMore.jsx';
 
 describe('AddMore', () => {
   it('should render AddMore designer component', () => {
-    const { container } = render(<AddMoreDesigner />);
+    render(<AddMoreDesigner />);
 
-    const buttons = container.querySelectorAll('button');
+    const buttons = screen.getAllByRole('button');
     expect(buttons).toHaveLength(2);
-    expect(buttons[0].querySelector('.fa-plus')).toBeInTheDocument();
-    expect(buttons[1].querySelector('.fa-remove')).toBeInTheDocument();
+    expect(screen.getByLabelText('Add')).toBeInTheDocument();
+    expect(screen.getByLabelText('Remove')).toBeInTheDocument();
   });
 });

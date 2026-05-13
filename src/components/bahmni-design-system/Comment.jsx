@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { TextArea } from '@bahmni/design-system';
+import { TextArea, Link } from '@bahmni/design-system';
 import { Util } from 'src/helpers/Util';
 
 export class Comment extends Component {
@@ -54,20 +54,19 @@ export class Comment extends Component {
       return '';
     }
     return (
-      <button
-        aria-label="Toggle note"
+      <Link
+        href="#"
         aria-expanded={this.state.showCommentSection}
-        className={classNames('form-builder-comment-toggle', 'form-builder-comment-button-toggle',
+        className={classNames('ds-obs-add-note-link',
           { active: this.state.showCommentSection === true,
             'has-notes': this.state.hasNote === true })}
-        onClick={() => this.setState({ showCommentSection: !this.state.showCommentSection })}
+        onClick={(e) => {
+          e.preventDefault();
+          this.setState({ showCommentSection: !this.state.showCommentSection });
+        }}
       >
-        <i className="fa fa-file-o">
-          <i className="fa fa-plus-circle" />
-          <i className="fa fa-minus-circle" />
-        </i>
-        <i className="fa fa-file-text-o" />
-      </button>
+        Add note
+      </Link>
     );
   }
 
@@ -75,10 +74,12 @@ export class Comment extends Component {
     const { conceptHandler, datatype } = this.props;
     const isComplexMediaConcept = Util.isComplexMediaConcept({ conceptHandler, datatype });
     return (
-      <div className="form-builder-comment-wrap">
-        {this.showCommentButton(isComplexMediaConcept)}
+      <>
+        <div className="form-builder-comment-wrap">
+          {this.showCommentButton(isComplexMediaConcept)}
+        </div>
         {this.showCommentSection(isComplexMediaConcept)}
-      </div>
+      </>
     );
   }
 }

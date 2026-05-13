@@ -15,62 +15,45 @@ describe('AddMore', () => {
   it('should render both add and remove buttons with proper callbacks', () => {
     render(<AddMore canAdd canRemove onAdd={mockOnAdd} onRemove={mockOnRemove} />);
 
-    const buttons = screen.getAllByRole('button');
-    const addButton = buttons.find(btn => btn.classList.contains('form-builder-add-more'));
-    const removeButton = buttons.find(btn => btn.classList.contains('form-builder-remove'));
-
-    expect(addButton).toBeInTheDocument();
-    expect(removeButton).toBeInTheDocument();
-    expect(addButton.querySelector('.fa-plus')).toBeInTheDocument();
-    expect(removeButton.querySelector('.fa-remove')).toBeInTheDocument();
+    expect(screen.getByLabelText('Add')).toBeInTheDocument();
+    expect(screen.getByLabelText('Remove')).toBeInTheDocument();
   });
 
   it('should not render add button when canAdd is false', () => {
     render(<AddMore canAdd={false} canRemove onAdd={mockOnAdd} onRemove={mockOnRemove} />);
 
-    expect(document.querySelector('.form-builder-add-more')).not.toBeInTheDocument();
-    expect(document.querySelector('.form-builder-remove')).toBeInTheDocument();
-    expect(document.querySelector('.fa-remove')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Add')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Remove')).toBeInTheDocument();
   });
 
   it('should not render remove button when canRemove is false', () => {
     render(<AddMore canAdd canRemove={false} onAdd={mockOnAdd} onRemove={mockOnRemove} />);
 
-    expect(document.querySelector('.form-builder-add-more')).toBeInTheDocument();
-    expect(document.querySelector('.form-builder-remove')).not.toBeInTheDocument();
-    expect(document.querySelector('.fa-plus')).toBeInTheDocument();
+    expect(screen.getByLabelText('Add')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Remove')).not.toBeInTheDocument();
   });
 
   it('should call correct callbacks on button clicks', async () => {
     render(<AddMore canAdd canRemove onAdd={mockOnAdd} onRemove={mockOnRemove} />);
 
-    const addButton = document.querySelector('.form-builder-add-more');
-    const removeButton = document.querySelector('.form-builder-remove');
-
-    await userEvent.click(addButton);
+    await userEvent.click(screen.getByLabelText('Add'));
     expect(mockOnAdd).toHaveBeenCalledTimes(1);
 
-    await userEvent.click(removeButton);
+    await userEvent.click(screen.getByLabelText('Remove'));
     expect(mockOnRemove).toHaveBeenCalledTimes(1);
   });
 
   it('should enable plus & remove buttons when enabled is true', () => {
     render(<AddMore canAdd canRemove onAdd={mockOnAdd} onRemove={mockOnRemove} />);
 
-    const addButton = document.querySelector('.form-builder-add-more');
-    const removeButton = document.querySelector('.form-builder-remove');
-
-    expect(addButton).not.toBeDisabled();
-    expect(removeButton).not.toBeDisabled();
+    expect(screen.getByLabelText('Add')).not.toBeDisabled();
+    expect(screen.getByLabelText('Remove')).not.toBeDisabled();
   });
 
   it('should disable plus & remove buttons when enabled is false', () => {
     render(<AddMore canAdd canRemove enabled={false} onAdd={mockOnAdd} onRemove={mockOnRemove} />);
 
-    const addButton = document.querySelector('.form-builder-add-more');
-    const removeButton = document.querySelector('.form-builder-remove');
-
-    expect(addButton).toBeDisabled();
-    expect(removeButton).toBeDisabled();
+    expect(screen.getByLabelText('Add')).toBeDisabled();
+    expect(screen.getByLabelText('Remove')).toBeDisabled();
   });
 });
