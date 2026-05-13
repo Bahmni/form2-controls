@@ -73,6 +73,29 @@ describe('Carbon Comment', () => {
     expect(screen.getByRole('textbox')).toHaveValue('Some Comment');
   });
 
+  it('should toggle aria-expanded on add note link when clicked', () => {
+    render(<Comment onCommentChange={mockOnCommentChange} />);
+
+    const link = screen.getByRole('link', { name: /add note/i });
+    expect(link).toHaveAttribute('aria-expanded', 'false');
+
+    fireEvent.click(link);
+    expect(link).toHaveAttribute('aria-expanded', 'true');
+
+    fireEvent.click(link);
+    expect(link).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('should auto-expand comment section when comment prop arrives after initial render', () => {
+    const { rerender } = render(<Comment onCommentChange={mockOnCommentChange} />);
+
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+
+    rerender(<Comment comment="Async note" onCommentChange={mockOnCommentChange} />);
+
+    expect(screen.getByRole('textbox')).toHaveValue('Async note');
+  });
+
   it('should not render add note link when the control is of complex media type', () => {
     Util.isComplexMediaConcept.mockReturnValue(true);
 

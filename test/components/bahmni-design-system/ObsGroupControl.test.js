@@ -191,5 +191,39 @@ describe('Carbon ObsGroupControl', () => {
 
       expect(screen.queryByLabelText('Remove')).not.toBeInTheDocument();
     });
+
+    it('should call onControlAdd when Add more button is clicked', () => {
+      const onControlAdd = jest.fn();
+      renderWithIntl(
+        <ObsGroupControlWithIntl
+          {...defaultProps}
+          metadata={metadataWithAddMore}
+          showAddMore
+          onControlAdd={onControlAdd}
+          formFieldPath="TestForm.1/1-0"
+        />
+      );
+
+      fireEvent.click(screen.getByText('Add more'));
+
+      expect(onControlAdd).toHaveBeenCalled();
+    });
+
+    it('should call onControlRemove when Remove button is clicked', () => {
+      const onControlRemove = jest.fn();
+      renderWithIntl(
+        <ObsGroupControlWithIntl
+          {...defaultProps}
+          metadata={metadataWithAddMore}
+          showRemove
+          onControlRemove={onControlRemove}
+          formFieldPath="TestForm.1/1-0"
+        />
+      );
+
+      fireEvent.click(screen.getByLabelText('Remove'));
+
+      expect(onControlRemove).toHaveBeenCalled();
+    });
   });
 });

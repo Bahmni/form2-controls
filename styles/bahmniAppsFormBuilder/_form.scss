@@ -979,3 +979,24 @@ input.computed-value {
     }
   }
 }
+// ObsGroupControl (DS): add-more wrapper and button layout
+// Styles moved here from ObsGroupControl.scss to follow the codebase pattern
+// where all form control styles live in this file (not imported per-component).
+.obs-group-add-more-wrapper {
+  position: relative;
+}
+
+.obs-group-remove-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.obs-group-add-btn {
+  margin-top: 0.5rem;
+  // Prevent full-width stretch in flex containers.
+  align-self: flex-start;
+  // Reduce Carbon button density to tighten the text-to-icon gap.
+  --cds-layout-density-padding-inline-local: 0.5rem;
+}
