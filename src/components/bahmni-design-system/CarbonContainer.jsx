@@ -18,6 +18,8 @@ import { ObsControlWithIntl } from 'components/bahmni-design-system/ObsControl';
 import { RadioButton } from 'components/bahmni-design-system/RadioButton';
 import { Image } from 'components/bahmni-design-system/Image';
 import { Video } from 'components/bahmni-design-system/Video';
+import { TableWithIntl } from 'components/bahmni-design-system/Table';
+import { BooleanControlWithIntl } from 'components/bahmni-design-system/BooleanControl';
 
 const carbonComponents = {
   text: TextBox,
@@ -36,6 +38,8 @@ const carbonComponents = {
   radio: RadioButton,
   imageurlhandler: Image,
   videourlhandler: Video,
+  table: TableWithIntl,
+  boolean: BooleanControlWithIntl,
   complex: ComplexControl,
 };
 

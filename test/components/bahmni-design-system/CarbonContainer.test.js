@@ -210,11 +210,52 @@ describe('CarbonContainer', () => {
     expect(document.querySelector('.cds--accordion__item')).not.toHaveClass('cds--accordion__item--active');
   });
 
+  it('should render Carbon DataTable for table type', () => {
+    const tableMetadata = {
+      controls: [{
+        type: 'table',
+        id: '1',
+        label: { type: 'label', value: 'Vitals Table' },
+        columnHeaders: [
+          { type: 'label', value: 'Symptom', id: '1' },
+          { type: 'label', value: 'Severity', id: '2' },
+        ],
+        controls: [],
+        properties: { location: { column: 0, row: 0 } },
+      }],
+      id: 8, name: 'TableForm', uuid: 'form-uuid-8', version: '1', defaultLocale: 'en',
+    };
+
+    render(<CarbonContainer {...defaultProps} metadata={tableMetadata} />);
+
+    expect(document.querySelector('.cds--data-table')).toBeInTheDocument();
+  });
+
   it('should forward ref to the underlying Container', () => {
     const ref = React.createRef();
     render(<CarbonContainer ref={ref} {...defaultProps} metadata={textMetadata} />);
     expect(ref.current).toBeTruthy();
     expect(typeof ref.current.getValue).toBe('function');
+  });
+
+  it('should render Carbon SelectableTags for Boolean concept', () => {
+    const booleanMetadata = {
+      controls: [{
+        concept: { answers: [{ name: 'Yes', value: true }, { name: 'No', value: false }],
+          datatype: 'Boolean', description: [], name: 'Is Smoker',
+          properties: { allowDecimal: null }, uuid: 'boolean-uuid' },
+        id: '1', label: { type: 'label', value: 'Is Smoker' },
+        properties: { addMore: false, hideLabel: false, location: { column: 0, row: 0 },
+          mandatory: false, notes: false },
+        type: 'obsControl', hiAbsolute: null, hiNormal: null, lowAbsolute: null, lowNormal: null,
+      }],
+      id: 9, name: 'BooleanForm', uuid: 'form-uuid-9', version: '1', defaultLocale: 'en',
+    };
+
+    render(<CarbonContainer {...defaultProps} metadata={booleanMetadata} />);
+
+    expect(screen.getByText('Yes')).toBeInTheDocument();
+    expect(screen.getByText('No')).toBeInTheDocument();
   });
 
   it('should render the Carbon ObsControl (with SelectableTag abnormal button) for obsControl type', () => {

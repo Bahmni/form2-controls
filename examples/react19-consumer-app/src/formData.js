@@ -374,6 +374,11 @@ export const patientData = {
  * Internationalization translations
  */
 export const translationData = {
-  labels: {},
+  labels: {
+    SYMPTOM_SEVERITY_TABLE_LABEL: 'Symptom Severity Observation',
+    COL_SYMPTOM: 'Symptom',
+    COL_SEVERITY: 'Severity Level',
+    COL_NOTES: 'Notes'
+  },
   concepts: {}
 };

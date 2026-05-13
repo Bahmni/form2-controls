@@ -82,6 +82,7 @@ $lightestGray: #eee;
 
         .obs-control-field {
           flex: 9;
+          padding-inline-end: $spacing-07;
 
           .carbon-obs-comment-section-wrap textarea {
             width: 70%;
@@ -92,9 +93,18 @@ $lightestGray: #eee;
             width: 70%;
           }
 
+          .obs-comment-section-wrap .cds--form-item {
+            width: 100%;
+          }
+
+          .carbon-obs-comment-section-wrap {
+            width: 100%;
+            margin-top: $spacing-03;
+          }
+
           .obs-numeric-text-wrap {
             width: fit-content;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: $spacing-03;
 
@@ -135,10 +145,6 @@ $lightestGray: #eee;
 
           .form-control-buttons {
             max-width: 83%;
-          }
-
-          .cds--list-box {
-            max-width: calc(100% - $spacing-07);
           }
 
           .form-builder-radio-wrapper {
@@ -380,6 +386,11 @@ $lightestGray: #eee;
         }
       }
 
+      .abnormal-button-wrap {
+        display: inline-block;
+        margin-left: $spacing-03;
+      }
+
       .abnormal-button {
         margin-right: 10px;
         margin-top: 5px;
@@ -586,6 +597,8 @@ $lightestGray: #eee;
 
 .table-header {
   color: $gray600;
+  display: block;
+  margin-bottom: $spacing-03;
 }
 
 .active-group-controls {
@@ -813,7 +826,7 @@ input.computed-value {
 
 .carbon-image-upload,
 .carbon-video-upload {
-  flex: 0 0 100%; // stay full-width when obs-control-field becomes flex (BAH-4692)
+  flex: 0 0 100%;
 
   p.upload-label {
     font-weight: 600;
@@ -865,5 +878,54 @@ input.computed-value {
 
   .hidden {
     display: none;
+  }
+}
+
+.carbon-form-table {
+  table-layout: fixed;
+  border: 1px solid carbon-theme.$border-subtle-01;
+
+  thead th {
+    background-color: carbon-theme.$layer-01;
+    border-inline-end: 1px solid carbon-theme.$border-subtle-01;
+
+    &:last-child {
+      border-inline-end: none;
+    }
+
+    &:hover {
+      background-color: carbon-theme.$layer-01;
+    }
+  }
+
+  tbody {
+    tr {
+      background-color: carbon-theme.$background;
+
+      &:hover td {
+        background-color: carbon-theme.$background;
+      }
+    }
+
+    td {
+      background-color: carbon-theme.$background;
+      vertical-align: top;
+      padding: $spacing-03;
+      border-inline-end: 1px solid carbon-theme.$border-subtle-01;
+
+      &:last-child {
+        border-inline-end: none;
+      }
+
+      .form-builder-column-wrapper {
+        min-height: 0;
+        padding-top: 0;
+      }
+
+      .form-builder-column {
+        min-height: 0;
+        padding: 0;
+      }
+    }
   }
 }

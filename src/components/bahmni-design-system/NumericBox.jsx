@@ -148,21 +148,19 @@ export const NumericBox = ({
 
   return (
     <div className="obs-numeric-text-wrap">
-      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--cds-spacing-03)' }}>
-        <NumberInput
-          allowEmpty
-          value={getNumericValue()}
-          onChange={handleChange}
-          invalid={hasErrors}
-          warn={hasWarnings}
-          disabled={!enabled}
-          step={1}
-          {...props}
-        />
-        {formatRange() && (
-          <span className="obs-numeric-range">{formatRange()}</span>
-        )}
-      </div>
+      <NumberInput
+        allowEmpty
+        value={getNumericValue()}
+        onChange={handleChange}
+        invalid={hasErrors}
+        warn={hasWarnings}
+        disabled={!enabled}
+        step={1}
+        {...props}
+      />
+      {formatRange() && (
+        <span className="obs-numeric-range">{formatRange()}</span>
+      )}
     </div>
   );
 };
