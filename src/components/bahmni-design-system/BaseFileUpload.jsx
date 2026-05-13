@@ -22,10 +22,11 @@ export class BaseFileUpload extends Component {
     }
   }
 
+  // Abstract base class — extend in Image/Video; not registered in carbonComponents directly
+
   shouldComponentUpdate(nextProps, nextState) {
-    this.isValueChanged = this.props.value !== nextProps.value;
     if (this.props.enabled !== nextProps.enabled ||
-      this.isValueChanged ||
+      this.props.value !== nextProps.value ||
       this.state.hasErrors !== nextState.hasErrors || this.state.loading !== nextState.loading) {
       return true;
     }
@@ -42,11 +43,11 @@ export class BaseFileUpload extends Component {
           this.setState({ hasErrors });
         }
       }
-    }
 
-    const errors = this._getErrors(this.props.value);
-    if (this._hasErrors(errors)) {
-      this.props.onChange({ value: this.props.value, errors });
+      const errors = this._getErrors(this.props.value);
+      if (this._hasErrors(errors)) {
+        this.props.onChange({ value: this.props.value, errors });
+      }
     }
   }
 
@@ -56,8 +57,8 @@ export class BaseFileUpload extends Component {
     }
     const validations = this.props.validations;
     let controlDetails;
-    if (value && value.indexOf('voided') > 0) {
-      controlDetails = { validations, undefined };
+    if (value && value.includes('voided')) {
+      controlDetails = { validations, value: undefined };
     } else {
       controlDetails = { validations, value };
     }
@@ -134,7 +135,7 @@ export class BaseFileUpload extends Component {
   }
 
   handleDelete() {
-    if (!this.props.value.includes('voided')) {
+    if (this.props.value && !this.props.value.includes('voided')) {
       this.update(`${this.props.value}voided`);
     }
   }

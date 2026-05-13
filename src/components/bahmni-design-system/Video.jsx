@@ -2,18 +2,19 @@ import { FileUploaderButton, FileUploaderItem } from '@carbon/react';
 import { Renew } from '@carbon/icons-react';
 import { Button, Loading } from '@bahmni/design-system';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import { BaseFileUpload } from './BaseFileUpload';
 
 export class Video extends BaseFileUpload {
 
   displayVideo() {
     const loading = this.state.loading === true;
-    const isVoided = this.props.value && this.props.value.indexOf('voided') > 0;
+    const isVoided = this.props.value && this.props.value.includes('voided');
     const fileName = this.getFileName(this.props.value);
 
     return (
       <div className={classNames('carbon-video-upload', { 'carbon-error': this.state.hasErrors })}>
-        <Loading active={loading} small withOverlay />
+        <Loading active={loading} small />
         <p className="upload-label">Upload video</p>
         <p className="upload-description">Supported video formats: .mp4, .avi and more.</p>
         <FileUploaderButton
@@ -29,7 +30,7 @@ export class Video extends BaseFileUpload {
               uuid={fileName}
               name={fileName}
               status="edit"
-              onDelete={() => this.handleDelete()}
+              onDelete={this.handleDelete}
               iconDescription="Delete video"
             />
             {isVoided && (
@@ -53,3 +54,6 @@ export class Video extends BaseFileUpload {
     return this.displayVideo();
   }
 }
+
+Video.propTypes = BaseFileUpload.propTypes;
+Video.defaultProps = BaseFileUpload.defaultProps;

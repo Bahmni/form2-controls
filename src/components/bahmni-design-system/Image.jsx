@@ -2,18 +2,19 @@ import { FileUploaderButton, FileUploaderItem } from '@carbon/react';
 import { Renew } from '@carbon/icons-react';
 import { Button, Loading } from '@bahmni/design-system';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import { BaseFileUpload } from './BaseFileUpload';
 
 export class Image extends BaseFileUpload {
 
   displayImage() {
     const loading = this.state.loading === true;
-    const isVoided = this.props.value && this.props.value.indexOf('voided') > 0;
+    const isVoided = this.props.value && this.props.value.includes('voided');
     const fileName = this.getFileName(this.props.value);
 
     return (
       <div className={classNames('carbon-image-upload', { 'carbon-error': this.state.hasErrors })}>
-        <Loading active={loading} small withOverlay />
+        <Loading active={loading} small />
         <p className="upload-label">Upload files</p>
         <p className="upload-description">Max file size is 500kb. Supported file types are .jpg and .png.</p>
         <FileUploaderButton
@@ -29,7 +30,7 @@ export class Image extends BaseFileUpload {
               uuid={fileName}
               name={fileName}
               status="edit"
-              onDelete={() => this.handleDelete()}
+              onDelete={this.handleDelete}
               iconDescription="Delete file"
             />
             {isVoided && (
@@ -53,3 +54,6 @@ export class Image extends BaseFileUpload {
     return this.displayImage();
   }
 }
+
+Image.propTypes = BaseFileUpload.propTypes;
+Image.defaultProps = BaseFileUpload.defaultProps;
