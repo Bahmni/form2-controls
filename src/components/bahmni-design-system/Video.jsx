@@ -146,22 +146,17 @@ export class Video extends Component {
     return (
       <div className={classNames('carbon-video-upload', { 'carbon-error': this.state.hasErrors })}>
         <Loading active={loading} small withOverlay />
-        <div className="upload-area">
-          <div className="upload-header">
-            <div className="upload-label">Upload video</div>
-            <div className="upload-description">Supported video formats: .mp4, .avi, .mov and more.</div>
-          </div>
-          <FileUploaderButton
-            accept={['.mkv', '.flv', '.ogg', 'video/*', 'audio/3gpp']}
-            labelText="Upload video"
-            onChange={this.handleChange}
-            disabled={!this.props.enabled}
-            disableLabelChanges
-          />
-        </div>
-
+        <p className="upload-label">Upload video</p>
+        <p className="upload-description">Supported video formats: .mp4, .avi and more.</p>
+        <FileUploaderButton
+          accept={['.mkv', '.flv', '.ogg', 'video/*', 'audio/3gpp']}
+          labelText="Upload video"
+          onChange={this.handleChange}
+          disabled={!this.props.enabled}
+          disableLabelChanges
+        />
         {this.props.value && (
-          <div className="files-list">
+          <div className="file-row">
             <FileUploaderItem
               uuid={fileName}
               name={fileName}

@@ -158,22 +158,17 @@ export class Image extends Component {
     return (
       <div className={classNames('carbon-image-upload', { 'carbon-error': this.state.hasErrors })}>
         <Loading active={loading} small withOverlay />
-        <div className="upload-area">
-          <div className="upload-header">
-            <div className="upload-label">Upload files</div>
-            <div className="upload-description">Max file size is 500kb. Supported file types are .jpg and .png.</div>
-          </div>
-          <FileUploaderButton
-            accept={['application/pdf', 'image/*']}
-            labelText="Upload file"
-            onChange={this.handleChange}
-            disabled={!this.props.enabled}
-            disableLabelChanges
-          />
-        </div>
-
+        <p className="upload-label">Upload files</p>
+        <p className="upload-description">Max file size is 500kb. Supported file types are .jpg and .png.</p>
+        <FileUploaderButton
+          accept={['application/pdf', 'image/*']}
+          labelText="Upload file"
+          onChange={this.handleChange}
+          disabled={!this.props.enabled}
+          disableLabelChanges
+        />
         {this.props.value && (
-          <div className="files-list">
+          <div className="file-row">
             <FileUploaderItem
               uuid={fileName}
               name={fileName}
