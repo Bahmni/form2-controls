@@ -11,4 +11,12 @@
 
 .obs-group-add-btn {
   margin-top: 0.5rem;
+  // Prevent full-width stretch in flex containers.
+  align-self: flex-start;
+  // Carbon button padding and icon gap are both driven by
+  // --cds-layout-density-padding-inline-local (default ~1rem).
+  // gap = 2 * density, padding-inline-end = density*3 + 1rem.
+  // Halving the density reduces the text-to-icon gap from ~32px to ~16px
+  // and tightens the overall button width proportionally.
+  --cds-layout-density-padding-inline-local: 0.5rem;
 }

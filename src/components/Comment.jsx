@@ -8,9 +8,10 @@ export class Comment extends Component {
 
   constructor(props) {
     super(props);
+    const hasNote = !!(props.comment && props.comment.length > 0);
     this.state = {
-      showCommentSection: false,
-      hasNote: props.comment && props.comment.length > 0,
+      showCommentSection: hasNote, // auto-expand when existing note is loaded
+      hasNote,
     };
   }
 

@@ -8,9 +8,10 @@ export class Comment extends Component {
 
   constructor(props) {
     super(props);
+    const hasNote = !!(props.comment && props.comment.length > 0);
     this.state = {
-      showCommentSection: false,
-      hasNote: props.comment && props.comment.length > 0,
+      showCommentSection: hasNote, // auto-expand when existing note is loaded
+      hasNote,
       comment: props.comment || '',
     };
     this.handleChange = this.handleChange.bind(this);
@@ -18,8 +19,13 @@ export class Comment extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.comment !== this.props.comment) {
-      const hasNote = this.props.comment && this.props.comment.length > 0;
-      this.setState({ hasNote, comment: this.props.comment || '' });
+      const hasNote = !!(this.props.comment && this.props.comment.length > 0);
+      this.setState({
+        hasNote,
+        comment: this.props.comment || '',
+        // Auto-expand if a persisted note arrives (e.g. form re-opened with saved data)
+        ...(hasNote && !this.state.showCommentSection ? { showCommentSection: true } : {}),
+      });
     }
   }
 
