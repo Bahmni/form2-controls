@@ -84,22 +84,21 @@ $lightestGray: #eee;
           flex: 9;
           padding-inline-end: $spacing-07;
 
-          .carbon-obs-comment-section-wrap textarea {
-            width: 70%;
-            float: left;
-          }
-
-          .carbon-obs-comment-section-wrap .cds--form-item {
-            width: 70%;
-          }
-
-          .obs-comment-section-wrap .cds--form-item {
-            width: 100%;
-          }
-
           .carbon-obs-comment-section-wrap {
+            flex: 0 0 100%;
             width: 100%;
             margin-top: $spacing-03;
+
+            .cds--text-area,
+            .cds--text-area__wrapper,
+            .cds--form-item {
+              width: 100% !important;
+              max-width: 100% !important;
+            }
+
+            textarea {
+              width: 100%;
+            }
           }
 
           .obs-numeric-text-wrap {
@@ -215,20 +214,6 @@ $lightestGray: #eee;
         .form-builder-comment-wrap {
           clear: both;
           overflow: hidden;
-
-          .carbon-obs-comment-section-wrap {
-            display: flex;
-
-            .text-area-wrap {
-              flex: 9;
-              margin-right: 15px;
-
-              textarea {
-                width: 100%;
-                margin-top: 5px;
-              }
-            }
-          }
         }
 
         .form-builder-comment-toggle {
