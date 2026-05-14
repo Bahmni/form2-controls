@@ -8,8 +8,6 @@ import addMoreDecorator from 'components/AddMoreDecorator';
 import { getGroupedControls, displayRowControls } from 'src/helpers/controlsParser';
 import { Accordion, AccordionItem, IconButton, Button, Close } from '@bahmni/design-system';
 import { Add } from '@carbon/icons-react';
-// Styles live in styles/bahmniAppsFormBuilder/_form.scss — consistent with the
-// rest of the codebase; never import component-level SCSS (breaks Jest mocking).
 
 export class ObsGroupControl extends addMoreDecorator(Component) {
 

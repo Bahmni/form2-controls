@@ -90,16 +90,11 @@ $lightestGray: #eee;
           gap: $spacing-03;
           flex-wrap: wrap;
 
-          // Cancel the outer float:left on form-builder-clone so the AddMore
-          // buttons stay in normal flex flow after the input and Abnormal tag.
-          // NOTE: .complex-component .form-builder-clone { display:none } is only
-          // 2 classes deep and loses to this 6-class-deep compiled selector — we
-          // explicitly re-hide it below with !important for complex fields.
           .form-builder-clone {
             float: none;
             display: inline-flex;
             align-items: center;
-            gap: $spacing-03;  // 8px — matches Figma gap between + and × buttons
+            gap: $spacing-03;
           }
 
 
@@ -136,8 +131,6 @@ $lightestGray: #eee;
             }
           }
 
-          // DS "Add note" link — no position:absolute (class ds-obs-add-note-link
-          // has no legacy position baggage). Parent margin-left:auto handles placement.
           .ds-obs-add-note-link {
             white-space: nowrap;
 
@@ -982,9 +975,6 @@ input.computed-value {
     }
   }
 }
-// ObsGroupControl (DS): add-more wrapper and button layout
-// Styles moved here from ObsGroupControl.scss to follow the codebase pattern
-// where all form control styles live in this file (not imported per-component).
 .obs-group-add-more-wrapper {
   position: relative;
 }
@@ -993,7 +983,7 @@ input.computed-value {
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 2; // above accordion heading
+  z-index: 2;
 }
 
 // When the remove button is present, shrink the accordion heading's right
@@ -1006,8 +996,6 @@ input.computed-value {
 
 .obs-group-add-btn {
   margin-top: 0.5rem;
-  // Prevent full-width stretch in flex containers.
   align-self: flex-start;
-  // Reduce Carbon button density to tighten the text-to-icon gap.
   --cds-layout-density-padding-inline-local: 0.5rem;
 }

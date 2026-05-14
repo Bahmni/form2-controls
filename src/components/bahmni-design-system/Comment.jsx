@@ -10,7 +10,7 @@ export class Comment extends Component {
     super(props);
     const hasNote = !!(props.comment && props.comment.length > 0);
     this.state = {
-      showCommentSection: hasNote, // auto-expand when existing note is loaded
+      showCommentSection: hasNote,
       hasNote,
       comment: props.comment || '',
     };
@@ -23,7 +23,6 @@ export class Comment extends Component {
       this.setState({
         hasNote,
         comment: this.props.comment || '',
-        // Auto-expand if a persisted note arrives (e.g. form re-opened with saved data)
         ...(hasNote && !this.state.showCommentSection ? { showCommentSection: true } : {}),
       });
     }
@@ -69,8 +68,6 @@ export class Comment extends Component {
             'has-notes': this.state.hasNote === true })}
         onClick={(e) => {
           e.preventDefault();
-          // Use functional setState so toggling always derives from the latest
-          // queued state, not the potentially-stale this.state snapshot.
           this.setState(prev => ({ showCommentSection: !prev.showCommentSection }));
         }}
       >
