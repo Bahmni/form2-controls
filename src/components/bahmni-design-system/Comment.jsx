@@ -62,13 +62,16 @@ export class Comment extends Component {
     return (
       <Link
         href="#"
+        role="button"
         aria-expanded={this.state.showCommentSection}
         className={classNames('ds-obs-add-note-link',
           { active: this.state.showCommentSection === true,
             'has-notes': this.state.hasNote === true })}
         onClick={(e) => {
           e.preventDefault();
-          this.setState({ showCommentSection: !this.state.showCommentSection });
+          // Use functional setState so toggling always derives from the latest
+          // queued state, not the potentially-stale this.state snapshot.
+          this.setState(prev => ({ showCommentSection: !prev.showCommentSection }));
         }}
       >
         Add note

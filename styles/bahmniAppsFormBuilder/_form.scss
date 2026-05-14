@@ -584,9 +584,12 @@ $lightestGray: #eee;
           z-index: 1;
         }
 
-        // Use descendant selector (not >) because the accordion is wrapped in
-        // .obs-group-add-more-wrapper, making it a grandchild not a direct child.
-        .cds--accordion {
+        // Use the exact DOM chain with child combinators (>) so nested obs-groups
+        // don't inherit these rules from an ancestor fieldset.
+        // Structure: .form-builder-fieldset > .obs-group-add-more-wrapper > .cds--accordion
+        // A descendant selector would also match inner accordions when groups are nested,
+        // incorrectly applying margin/padding resets to the inner group's accordion.
+        > .obs-group-add-more-wrapper > .cds--accordion {
           isolation: isolate;
 
           .cds--accordion__heading {
@@ -990,7 +993,15 @@ input.computed-value {
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 1;
+  z-index: 2; // above accordion heading
+}
+
+// When the remove button is present, shrink the accordion heading's right
+// click area so it doesn't extend into the Remove button's zone.
+// Without this, clicking the right edge of the heading hits Remove instead
+// of toggling the accordion.
+.obs-group-add-more-wrapper:has(.obs-group-remove-btn) .cds--accordion__heading {
+  padding-inline-end: 2.5rem;
 }
 
 .obs-group-add-btn {
