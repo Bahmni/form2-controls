@@ -21,36 +21,37 @@ describe('Carbon Comment', () => {
     jest.clearAllMocks();
   });
 
-  it('should render add comment button', () => {
+  it('should render add note link', () => {
     render(<Comment onCommentChange={mockOnCommentChange} />);
 
-    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /add note/i })).toBeInTheDocument();
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
-  it('should render the comment section on click of button', () => {
+  it('should render the comment section on click of add note link', () => {
     render(<Comment onCommentChange={mockOnCommentChange} />);
 
-    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByRole('button', { name: /add note/i }));
 
-    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /add note/i })).toBeInTheDocument();
     expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
-  it('should hide the comment section on click of button if it is shown', () => {
+  it('should hide the comment section on second click of add note link', () => {
     render(<Comment onCommentChange={mockOnCommentChange} />);
 
-    fireEvent.click(screen.getByRole('button'));
+    const link = screen.getByRole('button', { name: /add note/i });
+    fireEvent.click(link);
     expect(screen.getByRole('textbox')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(link);
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
   it('should set comment', () => {
     render(<Comment onCommentChange={mockOnCommentChange} />);
 
-    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByRole('button', { name: /add note/i }));
     fireEvent.change(screen.getByRole('textbox'), { target: { value: 'New Comment' } });
 
     expect(mockOnCommentChange).toHaveBeenCalledWith('New Comment');
@@ -59,7 +60,7 @@ describe('Carbon Comment', () => {
   it('should call onCommentChange with undefined if filled with empty spaces', () => {
     render(<Comment onCommentChange={mockOnCommentChange} />);
 
-    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByRole('button', { name: /add note/i }));
     fireEvent.change(screen.getByRole('textbox'), { target: { value: '   ' } });
 
     expect(mockOnCommentChange).toHaveBeenCalledWith(undefined);
@@ -68,12 +69,34 @@ describe('Carbon Comment', () => {
   it('should render comment section with default value', () => {
     render(<Comment comment="Some Comment" onCommentChange={mockOnCommentChange} />);
 
-    fireEvent.click(screen.getByRole('button'));
-
+    // Textarea is auto-expanded when an existing comment is provided — no click needed.
     expect(screen.getByRole('textbox')).toHaveValue('Some Comment');
   });
 
-  it('should not render comment button when the control is of complex media type', () => {
+  it('should toggle aria-expanded on add note link when clicked', () => {
+    render(<Comment onCommentChange={mockOnCommentChange} />);
+
+    const link = screen.getByRole('button', { name: /add note/i });
+    expect(link).toHaveAttribute('aria-expanded', 'false');
+
+    fireEvent.click(link);
+    expect(link).toHaveAttribute('aria-expanded', 'true');
+
+    fireEvent.click(link);
+    expect(link).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('should auto-expand comment section when comment prop arrives after initial render', () => {
+    const { rerender } = render(<Comment onCommentChange={mockOnCommentChange} />);
+
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+
+    rerender(<Comment comment="Async note" onCommentChange={mockOnCommentChange} />);
+
+    expect(screen.getByRole('textbox')).toHaveValue('Async note');
+  });
+
+  it('should not render add note link when the control is of complex media type', () => {
     Util.isComplexMediaConcept.mockReturnValue(true);
 
     render(
@@ -84,10 +107,10 @@ describe('Carbon Comment', () => {
       />
     );
 
-    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /add note/i })).not.toBeInTheDocument();
   });
 
-  it('should render comment button when the control is of complex but not media type', () => {
+  it('should render add note link when the control is of complex but not media type', () => {
     Util.isComplexMediaConcept.mockReturnValue(false);
 
     render(
@@ -98,7 +121,7 @@ describe('Carbon Comment', () => {
       />
     );
 
-    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /add note/i })).toBeInTheDocument();
   });
 
   it('should render comment section when the complex media type control has value', () => {

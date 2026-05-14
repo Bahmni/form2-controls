@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { IconButton, Close } from '@bahmni/design-system';
+import { Add } from '@carbon/icons-react';
 
 export class AddMore extends Component {
 
   showAdd() {
     if (this.props.canAdd) {
       return (
-          <button className="form-builder-add-more"
-            disabled={ !this.props.enabled }
-            onClick={ this.props.onAdd }
-          >
-            <i className="fa fa-plus"></i>
-          </button>
+        <IconButton
+          label="Add"
+          kind="tertiary"
+          size="sm"
+          disabled={!this.props.enabled}
+          onClick={this.props.onAdd}
+        >
+          <Add />
+        </IconButton>
       );
     }
     return null;
@@ -20,12 +25,15 @@ export class AddMore extends Component {
   showDelete() {
     if (this.props.canRemove) {
       return (
-          <button className="form-builder-remove"
-            disabled={ !this.props.enabled }
-            onClick={ this.props.onRemove }
-          >
-            <i className="fa fa-remove"></i>
-          </button>
+        <IconButton
+          label="Remove"
+          kind="tertiary"
+          size="sm"
+          disabled={!this.props.enabled}
+          onClick={this.props.onRemove}
+        >
+          <Close />
+        </IconButton>
       );
     }
     return null;
@@ -34,8 +42,8 @@ export class AddMore extends Component {
   render() {
     return (
       <div className="form-builder-clone">
-          { this.showAdd() }
-          { this.showDelete() }
+        {this.showAdd()}
+        {this.showDelete()}
       </div>
     );
   }

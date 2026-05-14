@@ -129,4 +129,101 @@ describe('Carbon ObsGroupControl', () => {
     ComponentStore.deRegisterComponent('obsControl');
     ComponentStore.deRegisterComponent('numeric');
   });
+
+  describe('addMore layout', () => {
+    const metadataWithAddMore = {
+      ...metadata,
+      properties: { ...metadata.properties, addMore: true },
+    };
+
+    it('should render Remove button when showRemove is true and addMore is enabled', () => {
+      renderWithIntl(
+        <ObsGroupControlWithIntl
+          {...defaultProps}
+          metadata={metadataWithAddMore}
+          showRemove
+          onControlRemove={jest.fn()}
+          formFieldPath="TestForm.1/1-0"
+        />
+      );
+
+      expect(screen.getByLabelText('Remove')).toBeInTheDocument();
+    });
+
+    it('should render Add more button when showAddMore is true and addMore is enabled', () => {
+      renderWithIntl(
+        <ObsGroupControlWithIntl
+          {...defaultProps}
+          metadata={metadataWithAddMore}
+          showAddMore
+          onControlAdd={jest.fn()}
+          formFieldPath="TestForm.1/1-0"
+        />
+      );
+
+      expect(screen.getByText('Add more')).toBeInTheDocument();
+    });
+
+    it('should not render Add more button when showAddMore is false', () => {
+      renderWithIntl(
+        <ObsGroupControlWithIntl
+          {...defaultProps}
+          metadata={metadataWithAddMore}
+          showAddMore={false}
+          onControlAdd={jest.fn()}
+          formFieldPath="TestForm.1/1-0"
+        />
+      );
+
+      expect(screen.queryByText('Add more')).not.toBeInTheDocument();
+    });
+
+    it('should not render Remove button when addMore is not enabled', () => {
+      renderWithIntl(
+        <ObsGroupControlWithIntl
+          {...defaultProps}
+          metadata={metadata}
+          showRemove
+          onControlRemove={jest.fn()}
+          formFieldPath="TestForm.1/1-0"
+        />
+      );
+
+      expect(screen.queryByLabelText('Remove')).not.toBeInTheDocument();
+    });
+
+    it('should call onControlAdd when Add more button is clicked', () => {
+      const onControlAdd = jest.fn();
+      renderWithIntl(
+        <ObsGroupControlWithIntl
+          {...defaultProps}
+          metadata={metadataWithAddMore}
+          showAddMore
+          onControlAdd={onControlAdd}
+          formFieldPath="TestForm.1/1-0"
+        />
+      );
+
+      fireEvent.click(screen.getByText('Add more'));
+
+      expect(onControlAdd).toHaveBeenCalled();
+    });
+
+    it('should call onControlRemove when Remove button is clicked', () => {
+      const onControlRemove = jest.fn();
+      renderWithIntl(
+        <ObsGroupControlWithIntl
+          {...defaultProps}
+          metadata={metadataWithAddMore}
+          showRemove
+          onControlRemove={onControlRemove}
+          formFieldPath="TestForm.1/1-0"
+        />
+      );
+
+      fireEvent.click(screen.getByLabelText('Remove'));
+
+      expect(onControlRemove).toHaveBeenCalled();
+    });
+  });
 });

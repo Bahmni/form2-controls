@@ -83,6 +83,78 @@ $lightestGray: #eee;
         .obs-control-field {
           flex: 9;
           padding-inline-end: $spacing-07;
+          display: flex !important;
+          align-items: center;
+          gap: $spacing-03;
+          flex-wrap: wrap;
+
+          .form-builder-clone {
+            float: none;
+            display: inline-flex;
+            align-items: center;
+            gap: $spacing-03;
+          }
+
+
+          .form-builder-comment-wrap {
+            margin-left: auto !important; // beats legacy { clear:both; overflow:hidden } rule
+            flex-shrink: 0;
+
+            // Legacy rule sets position:absolute, removing the button from flex flow.
+            .form-builder-comment-toggle {
+              position: static !important;
+            }
+          }
+
+          // Textarea siblings (Fragment pattern) wrap to a full-width row below the input.
+          > .carbon-obs-comment-section-wrap,
+          > .obs-comment-section-wrap {
+            flex: 0 0 100%;
+            margin-top: $spacing-03;
+
+            textarea {
+              width: 100%;
+              float: none;
+            }
+          }
+
+          .ds-obs-add-note-link {
+            white-space: nowrap;
+
+            // Suppress mouse-click focus ring to prevent double-underline; keyboard focus kept.
+            &:focus:not(:focus-visible) {
+              outline: none;
+              box-shadow: none;
+            }
+          }
+
+          // Carbon's .cds--form-item has flex:1 by default, consuming all row width.
+          > .cds--form-item {
+            flex: 0 0 auto;
+            width: fit-content;
+            max-width: 300px;
+            align-self: center;
+
+            // Hide duplicate label — concept label is already in .label-wrap.
+            .cds--label {
+              display: none;
+            }
+          }
+
+          .cds--date-picker.cds--date-picker--single,
+          .cds--date-picker.cds--date-picker--single > .cds--date-picker-container {
+            width: fit-content !important;
+            flex: 0 0 auto !important;
+          }
+
+          // width:100% by default — constrain so AddMore button stays on same row.
+          .cds--combo-box,
+          .cds--dropdown,
+          .cds--list-box:not(.cds--multi-select) {
+            flex: 0 0 auto;
+            width: auto;
+            max-width: 300px;
+          }
 
           .obs-comment-section-wrap textarea {
             width: 70%;
@@ -104,28 +176,19 @@ $lightestGray: #eee;
             align-items: center;
             gap: $spacing-03;
 
-            // Beat the generic .form-field-wrap input rule that sets width/margin/padding
-            // on all descendant inputs — those overrides squash Carbon NumberInput internals
-            // and hide the step-buttons divider (cds--number__rule-divider).
+            // Override generic input rule that squashes Carbon NumberInput internals.
             .cds--number input[type="number"] {
               width: auto !important;
               margin: 0 !important;
               padding-block: 0 !important;
             }
 
-            // cds--number__controls uses position:absolute + height:100% but the
-            // parent wrapper's flex context (distorted by the input overrides above)
-            // can prevent full stretch. Assert 100% on both the panel and buttons
-            // so they fill the full 48px (size="lg") container height.
             .cds--number__controls,
             .cds--number__control-btn {
               height: 100% !important;
             }
 
-            // Hide Carbon's inline error/warning text — validation messages are
-            // rendered via the custom .form-builder-error/.form-builder-warning
-            // styles on the input. Scoped to .obs-numeric-text-wrap so it only
-            // affects NumericBox, not other Carbon components on the form.
+            // Validation messages rendered via custom .form-builder-error styles.
             .cds--form-requirement {
               display: none;
             }
@@ -478,19 +541,21 @@ $lightestGray: #eee;
           z-index: 1;
         }
 
-        >.cds--accordion {
+        // Exact chain prevents nested obs-group accordions from inheriting these resets.
+        > .obs-group-add-more-wrapper > .cds--accordion {
           isolation: isolate;
 
           .cds--accordion__heading {
             background-color: carbon-theme.$layer-01;
           }
 
+          // Carbon's accordion--start reduces content width; !important beats Carbon specificity.
           &.cds--accordion--start .cds--accordion__content {
-            margin-inline-start: 0;
+            margin-inline-start: 0 !important;
           }
 
           .cds--accordion__content {
-            padding-inline: 0;
+            padding-inline: 0 !important;
           }
         }
 
@@ -863,4 +928,25 @@ input.computed-value {
       }
     }
   }
+}
+.obs-group-add-more-wrapper {
+  position: relative;
+}
+
+.obs-group-remove-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+}
+
+// Shrink heading click area so it doesn't overlap the Remove button.
+.obs-group-add-more-wrapper:has(.obs-group-remove-btn) .cds--accordion__heading {
+  padding-inline-end: 2.5rem;
+}
+
+.obs-group-add-btn {
+  margin-top: 0.5rem;
+  align-self: flex-start;
+  --cds-layout-density-padding-inline-local: 0.5rem;
 }

@@ -278,7 +278,7 @@ describe('Container', () => {
 
       const { container } = renderContainer({ metadata });
 
-      const addButton = container.querySelector('.form-builder-add-more');
+      const addButton = screen.getByLabelText('Add');
       expect(addButton).toBeInTheDocument();
       fireEvent.click(addButton);
 
