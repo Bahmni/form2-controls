@@ -2,6 +2,7 @@ import React from 'react';
 import { ObsControlWithIntl as ObsControl } from 'src/components/ObsControl.jsx';
 import StoryWrapper from './StoryWrapper';
 import '../styles/styles.scss';
+import { SYSTOLIC_UUID, DIASTOLIC_UUID } from './mockData';
 
 const form = {
   controls: [
@@ -10,14 +11,14 @@ const form = {
       label: { id: 'systolic', type: 'label', value: 'Systolic' },
       properties: { mandatory: true, allowDecimal: false, addMore: true, location: { column: 0, row: 0 } },
       id: '1',
-      concept: { name: 'Systolic', uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75', datatype: 'Numeric' },
+      concept: { name: 'Systolic', uuid: SYSTOLIC_UUID, datatype: 'Numeric' },
     },
     {
       type: 'obsControl',
       label: { id: 'diastolic', type: 'label', value: 'Diastolic' },
       properties: { mandatory: true, location: { column: 0, row: 0 } },
       id: '2',
-      concept: { name: 'Diastolic', uuid: 'c379aa1d-3f10-11e4-adec-0800271c1b75', datatype: 'Text' },
+      concept: { name: 'Diastolic', uuid: DIASTOLIC_UUID, datatype: 'Text' },
     },
     {
       options: [{ name: 'Yes', value: true }, { name: 'No', value: false }],
@@ -53,14 +54,14 @@ const form = {
       label: { id: 'systolic', type: 'label', value: 'Systolic' },
       properties: { mandatory: true, allowDecimal: false, location: { column: 0, row: 0 } },
       id: '6',
-      concept: { name: 'Systolic', uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75', datatype: 'Date' },
+      concept: { name: 'Systolic', uuid: SYSTOLIC_UUID, datatype: 'Date' },
     },
     {
       type: 'obsControl',
       label: { id: 'systolic', type: 'label', value: 'Systolic' },
       properties: { mandatory: true, allowDecimal: false, location: { column: 0, row: 0 } },
       id: '7',
-      concept: { name: 'Systolic', uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75', datatype: 'DateTime' },
+      concept: { name: 'Systolic', uuid: SYSTOLIC_UUID, datatype: 'DateTime' },
     },
     {
       type: 'obsControl',

@@ -1,21 +1,11 @@
 /* global componentStore */
 import React from 'react';
-import { NumericBox } from 'src/components/NumericBox.jsx';
-import { BooleanControl } from 'src/components/BooleanControl.jsx';
-import { Button } from 'src/components/Button.jsx';
-import { CodedControl } from 'src/components/CodedControl.jsx';
-import { AutoComplete } from 'src/components/AutoComplete.jsx';
-import { TextBox } from 'src/components/TextBox.jsx';
 import { Table } from 'src/components/Table.jsx';
 import { Container } from 'src/components/Container.jsx';
 import StoryWrapper from './StoryWrapper';
+import { registerCoreComponents, SYSTOLIC_UUID, DIASTOLIC_UUID } from './mockData';
 
-componentStore.registerComponent('numeric', NumericBox);
-componentStore.registerComponent('boolean', BooleanControl);
-componentStore.registerComponent('button', Button);
-componentStore.registerComponent('Coded', CodedControl);
-componentStore.registerComponent('autoComplete', AutoComplete);
-componentStore.registerComponent('text', TextBox);
+registerCoreComponents();
 componentStore.registerComponent('table', Table);
 
 // Basic table: Lab results with three column headers and matching row controls
@@ -104,7 +94,7 @@ const tableWithDataForm = {
           id: '6',
           concept: {
             name: 'Systolic',
-            uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75',
+            uuid: SYSTOLIC_UUID,
             datatype: 'Numeric',
           },
         },
@@ -115,7 +105,7 @@ const tableWithDataForm = {
           id: '7',
           concept: {
             name: 'Diastolic',
-            uuid: 'c379aa1d-3f10-11e4-adec-0800271c1b75',
+            uuid: DIASTOLIC_UUID,
             datatype: 'Numeric',
           },
         },
@@ -142,7 +132,7 @@ const tableWithDataObservations = [
     value: 120,
     formNamespace: 'bahmni',
     formFieldPath: 'Vitals Table.1/6-0',
-    concept: { name: 'Systolic', uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75', datatype: 'Numeric' },
+    concept: { name: 'Systolic', uuid: SYSTOLIC_UUID, datatype: 'Numeric' },
   },
   {
     observationDateTime: '2026-04-28T09:00:00.000+0000',
@@ -150,7 +140,7 @@ const tableWithDataObservations = [
     value: 80,
     formNamespace: 'bahmni',
     formFieldPath: 'Vitals Table.1/7-0',
-    concept: { name: 'Diastolic', uuid: 'c379aa1d-3f10-11e4-adec-0800271c1b75', datatype: 'Numeric' },
+    concept: { name: 'Diastolic', uuid: DIASTOLIC_UUID, datatype: 'Numeric' },
   },
 ];
 

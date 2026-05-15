@@ -1,21 +1,11 @@
 /* global componentStore */
 import React from 'react';
-import { NumericBox } from 'src/components/NumericBox.jsx';
-import { BooleanControl } from 'src/components/BooleanControl.jsx';
-import { Button } from 'src/components/Button.jsx';
 import StoryWrapper from './StoryWrapper';
-import { CodedControl } from 'src/components/CodedControl.jsx';
-import { AutoComplete } from 'src/components/AutoComplete.jsx';
-import { TextBox } from 'src/components/TextBox.jsx';
 import { Container } from 'src/components/Container.jsx';
 import { Section } from 'src/components/Section.jsx';
+import { registerCoreComponents } from './mockData';
 
-componentStore.registerComponent('numeric', NumericBox);
-componentStore.registerComponent('boolean', BooleanControl);
-componentStore.registerComponent('button', Button);
-componentStore.registerComponent('Coded', CodedControl);
-componentStore.registerComponent('autoComplete', AutoComplete);
-componentStore.registerComponent('text', TextBox);
+registerCoreComponents();
 componentStore.registerComponent('section', Section);
 
 // Section with two grouped controls (Notes + Abnormal toggle)
