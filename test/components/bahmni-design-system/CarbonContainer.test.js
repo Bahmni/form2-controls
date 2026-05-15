@@ -284,35 +284,51 @@ describe('CarbonContainer', () => {
     expect(screen.getByText('Abnormal')).toBeInTheDocument();
   });
 
-  it('should resolve imageurlhandler to Carbon Image component', () => {
-    const carbonStore = {
-      getRegisteredComponent(type) {
-        const carbonComponents = {
-          imageurlhandler: Image,
-          videourlhandler: Video,
-        };
-        return carbonComponents[type.toLowerCase()]
-          || ComponentStore.getRegisteredComponent(type);
-      },
+  it('should render Carbon Image component for imageurlhandler type', () => {
+    const imageMetadata = {
+      controls: [{
+        concept: { datatype: 'Complex', name: 'Patient Image',
+          conceptHandler: 'ImageUrlHandler', uuid: 'image-uuid' },
+        id: '1', label: { type: 'label', value: 'Patient Image' },
+        properties: { location: { column: 0, row: 0 } },
+        type: 'imageurlhandler',
+      }],
+      id: 11, name: 'ImageForm', uuid: 'form-uuid-11', version: '1', defaultLocale: 'en',
     };
 
-    const resolved = carbonStore.getRegisteredComponent('imageurlhandler');
-    expect(resolved).toBe(Image);
+    const observations = [{
+      concept: { uuid: 'image-uuid' },
+      formFieldPath: 'ImageForm.1/1-0',
+      value: undefined,
+      voided: false,
+    }];
+
+    render(<CarbonContainer {...defaultProps} metadata={imageMetadata} observations={observations} />);
+    expect(document.querySelector('.upload-label')).toHaveTextContent('Upload files');
+    expect(document.querySelector('.carbon-image-upload')).toBeInTheDocument();
   });
 
-  it('should resolve videourlhandler to Carbon Video component', () => {
-    const carbonStore = {
-      getRegisteredComponent(type) {
-        const carbonComponents = {
-          imageurlhandler: Image,
-          videourlhandler: Video,
-        };
-        return carbonComponents[type.toLowerCase()]
-          || ComponentStore.getRegisteredComponent(type);
-      },
+  it('should render Carbon Video component for videourlhandler type', () => {
+    const videoMetadata = {
+      controls: [{
+        concept: { datatype: 'Complex', name: 'Patient Video',
+          conceptHandler: 'VideoUrlHandler', uuid: 'video-uuid' },
+        id: '1', label: { type: 'label', value: 'Patient Video' },
+        properties: { location: { column: 0, row: 0 } },
+        type: 'videourlhandler',
+      }],
+      id: 12, name: 'VideoForm', uuid: 'form-uuid-12', version: '1', defaultLocale: 'en',
     };
 
-    const resolved = carbonStore.getRegisteredComponent('videourlhandler');
-    expect(resolved).toBe(Video);
+    const observations = [{
+      concept: { uuid: 'video-uuid' },
+      formFieldPath: 'VideoForm.1/1-0',
+      value: undefined,
+      voided: false,
+    }];
+
+    render(<CarbonContainer {...defaultProps} metadata={videoMetadata} observations={observations} />);
+    expect(document.querySelector('.upload-label')).toHaveTextContent('Upload video');
+    expect(document.querySelector('.carbon-video-upload')).toBeInTheDocument();
   });
 });

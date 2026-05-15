@@ -1,6 +1,5 @@
 import { forwardRef } from 'react';
 import { Container } from 'components/Container.jsx';
-import { ComplexControl } from 'components/ComplexControl';
 import ComponentStore from 'src/helpers/componentStore';
 import { TextBox } from 'components/bahmni-design-system/TextBox';
 import { ObsGroupControl } from 'components/bahmni-design-system/ObsGroupControl';
@@ -40,7 +39,6 @@ const carbonComponents = {
   videourlhandler: Video,
   table: TableWithIntl,
   boolean: BooleanControlWithIntl,
-  complex: ComplexControl,
 };
 
 /**

@@ -877,7 +877,8 @@ input.computed-value {
 
 .carbon-image-upload,
 .carbon-video-upload {
-  flex: 0 0 auto;
+  flex: 1;
+  min-width: 0;
 
   p.upload-label {
     font-weight: 600;
@@ -904,10 +905,11 @@ input.computed-value {
     align-items: center;
     margin-top: $spacing-03;
     margin-bottom: $spacing-05;
-    flex: 0 0 100%;
+    width: 100%;
 
     .cds--file__selected-file {
       flex: 1;
+      width: 100%;
       max-inline-size: none;
     }
 

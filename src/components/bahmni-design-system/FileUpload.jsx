@@ -6,7 +6,7 @@ import { Util } from 'src/helpers/Util';
 import { Validator } from 'src/helpers/Validator';
 import { UploadHandler } from 'src/helpers/UploadHandler';
 
-export class BaseFileUpload extends Component {
+export class FileUpload extends Component {
 
   constructor(props) {
     super(props);
@@ -17,7 +17,7 @@ export class BaseFileUpload extends Component {
   }
 
   componentDidMount() {
-    if (this.props.value && !this.props.value.includes('voided')) {
+    if (this.props.value && typeof this.props.value === 'string' && !this.props.value.includes('voided')) {
       this.addControlWithNotification(false);
     }
   }
@@ -57,7 +57,7 @@ export class BaseFileUpload extends Component {
     }
     const validations = this.props.validations;
     let controlDetails;
-    if (value && value.includes('voided')) {
+    if (value && typeof value === 'string' && value.includes('voided')) {
       controlDetails = { validations, value: undefined };
     } else {
       controlDetails = { validations, value };
@@ -89,7 +89,7 @@ export class BaseFileUpload extends Component {
   handleChange(e) {
     e.preventDefault();
     this.setState({ loading: true });
-    if (e.target.files === undefined) {
+    if (!e.target.files || e.target.files.length === 0) {
       this.update(undefined);
       e.target.value = '';
       return;
@@ -135,22 +135,28 @@ export class BaseFileUpload extends Component {
   }
 
   handleDelete() {
-    if (this.props.value && !this.props.value.includes('voided')) {
+    if (this.props.value && typeof this.props.value === 'string' && !this.props.value.includes('voided')) {
       this.update(`${this.props.value}voided`);
     }
   }
 
   handleRestore() {
-    this.update(this.props.value.replace(/voided/g, ''));
+    if (typeof this.props.value === 'string') {
+      this.update(this.props.value.replace(/voided/g, ''));
+    }
   }
 
   getFileName(value) {
-    if (!value) return '';
+    if (!value || typeof value !== 'string') return '';
     return value.replace(/voided/g, '').split('/').pop();
+  }
+
+  render() {
+    throw new Error('FileUpload is an abstract class. Use Image or Video instead.');
   }
 }
 
-BaseFileUpload.propTypes = {
+FileUpload.propTypes = {
   addMore: PropTypes.bool,
   enabled: PropTypes.bool,
   formFieldPath: PropTypes.string,
@@ -163,6 +169,6 @@ BaseFileUpload.propTypes = {
   value: PropTypes.string,
 };
 
-BaseFileUpload.defaultProps = {
+FileUpload.defaultProps = {
   enabled: true,
 };
