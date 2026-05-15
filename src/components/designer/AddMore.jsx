@@ -1,12 +1,14 @@
 import React, { PureComponent } from 'react';
+import { IconButton, Close } from '@bahmni/design-system';
+import { Add } from '@carbon/icons-react';
 
 export class AddMoreDesigner extends PureComponent {
 
   render() {
     return (
       <div className="form-builder-clone">
-        <button className="form-builder-add-more"><i className="fa fa-plus"></i></button>
-        <button className="form-builder-remove"><i className="fa fa-remove"></i></button>
+        <IconButton label="Add" kind="tertiary" size="sm"><Add /></IconButton>
+        <IconButton label="Remove" kind="tertiary" size="sm"><Close /></IconButton>
       </div>
     );
   }

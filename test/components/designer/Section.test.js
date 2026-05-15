@@ -186,10 +186,10 @@ describe('SectionDesigner', () => {
         ...metadata,
         properties: { ...metadata.properties, addMore: false },
       };
-      const { container } = renderSectionDesigner({ metadata: metadataWithAddMoreFalse });
+      renderSectionDesigner({ metadata: metadataWithAddMoreFalse });
 
-      expect(container.querySelector('.form-builder-add-more')).not.toBeInTheDocument();
-      expect(container.querySelector('.form-builder-remove')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('Add')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('Remove')).not.toBeInTheDocument();
     });
 
     it('should render add-more and remove buttons when addMore attribute is true', () => {
@@ -197,10 +197,10 @@ describe('SectionDesigner', () => {
         ...metadata,
         properties: { ...metadata.properties, addMore: true },
       };
-      const { container } = renderSectionDesigner({ metadata: metadataWithAddMoreTrue });
+      renderSectionDesigner({ metadata: metadataWithAddMoreTrue });
 
-      expect(container.querySelector('.form-builder-add-more')).toBeInTheDocument();
-      expect(container.querySelector('.form-builder-remove')).toBeInTheDocument();
+      expect(screen.getByLabelText('Add')).toBeInTheDocument();
+      expect(screen.getByLabelText('Remove')).toBeInTheDocument();
     });
   });
 });

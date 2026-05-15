@@ -70,10 +70,8 @@ describe('Comment', () => {
   it('should render comment section with default value', () => {
     render(<Comment comment="Some Comment" onCommentChange={mockOnCommentChange} />);
 
-    fireEvent.click(screen.getByRole('button'));
-    const textarea = screen.getByRole('textbox');
-
-    expect(textarea).toHaveValue('Some Comment');
+    // Textarea is auto-expanded when an existing comment is provided — no click needed.
+    expect(screen.getByRole('textbox')).toHaveValue('Some Comment');
   });
 
   it('should not render comment button when the control is of complex media type', () => {

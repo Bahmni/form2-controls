@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { TextArea } from '@bahmni/design-system';
+import { TextArea, Link } from '@bahmni/design-system';
 import { Util } from 'src/helpers/Util';
 
 export class Comment extends Component {
 
   constructor(props) {
     super(props);
+    const hasNote = !!(props.comment && props.comment.length > 0);
     this.state = {
-      showCommentSection: false,
-      hasNote: props.comment && props.comment.length > 0,
+      showCommentSection: hasNote,
+      hasNote,
       comment: props.comment || '',
     };
     this.handleChange = this.handleChange.bind(this);
@@ -18,8 +19,12 @@ export class Comment extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.comment !== this.props.comment) {
-      const hasNote = this.props.comment && this.props.comment.length > 0;
-      this.setState({ hasNote, comment: this.props.comment || '' });
+      const hasNote = !!(this.props.comment && this.props.comment.length > 0);
+      this.setState({
+        hasNote,
+        comment: this.props.comment || '',
+        ...(hasNote && !this.state.showCommentSection ? { showCommentSection: true } : {}),
+      });
     }
   }
 
@@ -54,20 +59,20 @@ export class Comment extends Component {
       return '';
     }
     return (
-      <button
-        aria-label="Toggle note"
+      <Link
+        href="#"
+        role="button"
         aria-expanded={this.state.showCommentSection}
-        className={classNames('form-builder-comment-toggle', 'form-builder-comment-button-toggle',
+        className={classNames('ds-obs-add-note-link',
           { active: this.state.showCommentSection === true,
             'has-notes': this.state.hasNote === true })}
-        onClick={() => this.setState({ showCommentSection: !this.state.showCommentSection })}
+        onClick={(e) => {
+          e.preventDefault();
+          this.setState(prev => ({ showCommentSection: !prev.showCommentSection }));
+        }}
       >
-        <i className="fa fa-file-o">
-          <i className="fa fa-plus-circle" />
-          <i className="fa fa-minus-circle" />
-        </i>
-        <i className="fa fa-file-text-o" />
-      </button>
+        Add note
+      </Link>
     );
   }
 
@@ -75,10 +80,12 @@ export class Comment extends Component {
     const { conceptHandler, datatype } = this.props;
     const isComplexMediaConcept = Util.isComplexMediaConcept({ conceptHandler, datatype });
     return (
-      <div className="form-builder-comment-wrap">
-        {this.showCommentButton(isComplexMediaConcept)}
+      <>
+        <div className="form-builder-comment-wrap">
+          {this.showCommentButton(isComplexMediaConcept)}
+        </div>
         {this.showCommentSection(isComplexMediaConcept)}
-      </div>
+      </>
     );
   }
 }

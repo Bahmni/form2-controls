@@ -228,7 +228,7 @@ describe('ObsGroupControlDesigner', () => {
 
       const addMoreContainer = screen.getByRole('group').querySelector('.form-builder-clone');
       expect(addMoreContainer).toBeInTheDocument();
-      expect(addMoreContainer.querySelector('.form-builder-add-more')).toBeInTheDocument();
+      expect(screen.getByLabelText('Add')).toBeInTheDocument();
     });
 
     it('should render fieldset with appropriate label', () => {

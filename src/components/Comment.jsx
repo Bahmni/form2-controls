@@ -8,9 +8,10 @@ export class Comment extends Component {
 
   constructor(props) {
     super(props);
+    const hasNote = !!(props.comment && props.comment.length > 0);
     this.state = {
-      showCommentSection: false,
-      hasNote: props.comment && props.comment.length > 0,
+      showCommentSection: hasNote,
+      hasNote,
     };
   }
 
@@ -63,10 +64,12 @@ export class Comment extends Component {
     const { conceptHandler, datatype } = this.props;
     const isComplexMediaConcept = Util.isComplexMediaConcept({ conceptHandler, datatype });
     return (
-      <div className="form-builder-comment-wrap">
-        {this.showCommentButton(isComplexMediaConcept)}
+      <>
+        <div className="form-builder-comment-wrap">
+          {this.showCommentButton(isComplexMediaConcept)}
+        </div>
         {this.showCommentSection(isComplexMediaConcept)}
-      </div>
+      </>
     );
   }
 }
