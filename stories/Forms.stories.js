@@ -2,6 +2,7 @@ import React from 'react';
 import StoryWrapper from './StoryWrapper';
 import { Container } from 'src/components/Container.jsx';
 import { runEventScript } from 'src/helpers/runEventScript';
+import { SYSTOLIC_UUID, DIASTOLIC_UUID } from './mockData';
 
 const form = {
   id: 1,
@@ -28,7 +29,7 @@ const form = {
       id: '1',
       concept: {
         name: 'Systolic',
-        uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75',
+        uuid: SYSTOLIC_UUID,
         datatype: 'Numeric',
       },
     },
@@ -49,7 +50,7 @@ const form = {
       id: '2',
       concept: {
         name: 'Diastolic',
-        uuid: 'c379aa1d-3f10-11e4-adec-0800271c1b75',
+        uuid: DIASTOLIC_UUID,
         datatype: 'Text',
       },
     },
@@ -113,14 +114,14 @@ const form = {
       label: { id: 'systolic', type: 'label', value: 'Systolic' },
       properties: { mandatory: true, allowDecimal: false, location: { column: 0, row: 0 } },
       id: '6',
-      concept: { name: 'Systolic', uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75', datatype: 'Date' },
+      concept: { name: 'Systolic', uuid: SYSTOLIC_UUID, datatype: 'Date' },
     },
     {
       type: 'obsControl',
       label: { id: 'systolic', type: 'label', value: 'Systolic' },
       properties: { mandatory: true, allowDecimal: false, location: { column: 0, row: 0 } },
       id: '7',
-      concept: { name: 'Systolic', uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75', datatype: 'DateTime' },
+      concept: { name: 'Systolic', uuid: SYSTOLIC_UUID, datatype: 'DateTime' },
     },
     {
       type: 'obsControl',
@@ -375,7 +376,7 @@ const lifecycleDemoForm = {
       properties: { mandatory: true, allowDecimal: false, location: { column: 0, row: 0 } },
       id: '1',
       concept: {
-        name: 'Systolic', uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75', datatype: 'Numeric',
+        name: 'Systolic', uuid: SYSTOLIC_UUID, datatype: 'Numeric',
       },
       events: {
         onValueChange: 'ZnVuY3Rpb24oZm9ybSkgeyB2YXIgdmFsID0gZm9ybS5nZXQoJ1N5c3RvbGljJykuZ2' +
@@ -388,7 +389,7 @@ const lifecycleDemoForm = {
       properties: { mandatory: false, allowDecimal: false, location: { column: 0, row: 1 } },
       id: '2',
       concept: {
-        name: 'Diastolic', uuid: 'c379aa1d-3f10-11e4-adec-0800271c1b75', datatype: 'Numeric',
+        name: 'Diastolic', uuid: DIASTOLIC_UUID, datatype: 'Numeric',
       },
     },
     {
@@ -564,7 +565,7 @@ const formForEventFlow = {
       label: { id: 'systolic', type: 'label', value: 'Systolic' },
       properties: { mandatory: false, allowDecimal: false, location: { column: 0, row: 0 } },
       id: '1',
-      concept: { name: 'Systolic', uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75', datatype: 'Numeric' },
+      concept: { name: 'Systolic', uuid: SYSTOLIC_UUID, datatype: 'Numeric' },
     },
     {
       type: 'obsControl',
