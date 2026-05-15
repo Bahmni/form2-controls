@@ -162,7 +162,7 @@ const obsList = [
 ];
 
 export default {
-  title: 'Forms/Lifecycle & Events',
+  title: 'Example Forms/Lifecycle & Events',
   parameters: {
     docs: {
       description: {

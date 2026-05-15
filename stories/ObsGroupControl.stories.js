@@ -74,6 +74,7 @@ const formWithObsGroup = {
 };
 
 const commonGroupProps = {
+  children: List(),
   errors: [],
   formName: 'f',
   formVersion: '1',

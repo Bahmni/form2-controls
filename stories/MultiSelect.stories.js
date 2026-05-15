@@ -320,7 +320,17 @@ const obsList = [
 ];
 
 export default {
-  title: 'Forms',
+  title: 'Atomic Controls/MultiSelect',
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'Demonstrates a form containing a multi-select coded observation (Tuberculosis Comorbidity). ' +
+          'Multi-select obs allow clinicians to choose multiple answers for a single concept and store ' +
+          'each answer as a separate observation record.',
+      },
+    },
+  },
 };
 
 export const MultiSelect = {
