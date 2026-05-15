@@ -151,6 +151,7 @@ export class FileUpload extends Component {
     return value.replace(/voided/g, '').split('/').pop();
   }
 
+  // eslint-disable-next-line react/require-render-return
   render() {
     throw new Error('FileUpload is an abstract class. Use Image or Video instead.');
   }
