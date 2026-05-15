@@ -93,6 +93,7 @@ $lightestGray: #eee;
             display: inline-flex;
             align-items: center;
             gap: $spacing-03;
+            align-self: flex-start;
           }
 
 
@@ -876,7 +877,7 @@ input.computed-value {
 
 .carbon-image-upload,
 .carbon-video-upload {
-  flex: 0 0 100%;
+  flex: 0 0 auto;
 
   p.upload-label {
     font-weight: 600;
@@ -903,7 +904,7 @@ input.computed-value {
     align-items: center;
     margin-top: $spacing-03;
     margin-bottom: $spacing-05;
-    width: 100%;
+    flex: 0 0 100%;
 
     .cds--file__selected-file {
       flex: 1;
