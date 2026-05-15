@@ -10,5 +10,12 @@ export default {
       </IntlProvider>
     ),
   ],
+  parameters: {
+    options: {
+      storySort: {
+        order: ['Introduction', 'Atomic Controls', 'Complex Controls', 'Orchestrator', 'Example Forms'],
+      },
+    },
+  },
 };
 

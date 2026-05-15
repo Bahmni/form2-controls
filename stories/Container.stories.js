@@ -20,9 +20,20 @@ import 'src/components/Label.jsx';
 import 'src/components/AutoComplete.jsx';
 import 'src/components/DropDown.jsx';
 
-  export default {
-  title: 'Container',
+export default {
+  title: 'Orchestrator/Container',
   component: Container,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'Container is the top-level form orchestrator. It reads a form metadata JSON, renders the ' +
+          'appropriate controls via ComponentStore, and exposes a `getValue()` ref method that returns ' +
+          'the current observations and validation errors. Use Container to embed a full Bahmni form ' +
+          'in any React host application.',
+      },
+    },
+  },
   argTypes: {
     validate: { control: 'boolean' },
     validateForm: { control: 'boolean' },

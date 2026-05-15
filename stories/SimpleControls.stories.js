@@ -3,8 +3,18 @@ import { action } from '@storybook/addon-actions';
 import { AddMore } from 'src/components/AddMore.jsx';
 
 export default {
-  title: 'Simple Controls',
+  title: 'Complex Controls/Add More Controls',
   component: AddMore,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'AddMore renders Add (+) and Remove (×) buttons that allow clinicians to record multiple ' +
+          'instances of the same control within a single encounter. It is used by AddMoreDecorator to ' +
+          'wrap any repeatable obs or obs group.',
+      },
+    },
+  },
 };
 
 export const AddMoreWithAddButton = {

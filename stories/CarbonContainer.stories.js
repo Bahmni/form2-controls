@@ -68,7 +68,17 @@ const carbonCommonProps = {
 };
 
 export default {
-  title: 'CarbonContainer',
+  title: 'Orchestrator/CarbonContainer',
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'CarbonContainer is a Carbon Design System–backed variant of Container. It renders ' +
+          'coded-concept controls (AutoComplete, DropDown, Button) using Carbon components instead ' +
+          'of the legacy Bahmni UI, providing an accessible, consistent look for newer deployments.',
+      },
+    },
+  },
 };
 
 export const CarbonCodedAutoComplete = {
