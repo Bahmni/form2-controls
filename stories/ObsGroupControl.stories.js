@@ -5,7 +5,8 @@ import { ObsGroupMapper } from 'src/mapper/ObsGroupMapper';
 import { Obs } from 'src/helpers/Obs';
 import { List } from 'immutable';
 import StoryWrapper from './StoryWrapper';
-import { registerCoreComponents, pulseDataMetadata } from './mockData';
+import { registerCoreComponents } from './componentRegistry';
+import { pulseDataMetadata, SYSTOLIC_UUID, DIASTOLIC_UUID } from './mockData';
 
 registerCoreComponents();
 
@@ -28,7 +29,7 @@ const vitalsMetadata = {
       id: '31',
       concept: {
         name: 'Systolic',
-        uuid: 'c36e9c8b-3f10-11e4-adec-0800271c1b75',
+        uuid: SYSTOLIC_UUID,
         datatype: 'Numeric',
         lowNormal: 90,
         hiNormal: 140,
@@ -41,7 +42,7 @@ const vitalsMetadata = {
       id: '32',
       concept: {
         name: 'Diastolic',
-        uuid: 'c379aa1d-3f10-11e4-adec-0800271c1b75',
+        uuid: DIASTOLIC_UUID,
         datatype: 'Numeric',
         lowNormal: 60,
         hiNormal: 90,

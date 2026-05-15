@@ -1,11 +1,11 @@
-/* global componentStore */
 import React from 'react';
 import { ObsGroupControlWithIntl as ObsGroupControl } from 'src/components/ObsGroupControl.jsx';
 import { ObsGroupMapper } from 'src/mapper/ObsGroupMapper';
 import { Obs } from 'src/helpers/Obs';
 import { List } from 'immutable';
 import StoryWrapper from './StoryWrapper';
-import { registerCoreComponents, pulseDataMetadata } from './mockData';
+import { registerCoreComponents } from './componentRegistry';
+import { pulseDataMetadata } from './mockData';
 
 registerCoreComponents();
 

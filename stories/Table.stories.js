@@ -3,7 +3,8 @@ import React from 'react';
 import { Table } from 'src/components/Table.jsx';
 import { Container } from 'src/components/Container.jsx';
 import StoryWrapper from './StoryWrapper';
-import { registerCoreComponents, SYSTOLIC_UUID, DIASTOLIC_UUID } from './mockData';
+import { registerCoreComponents } from './componentRegistry';
+import { SYSTOLIC_UUID, DIASTOLIC_UUID } from './mockData';
 
 registerCoreComponents();
 componentStore.registerComponent('table', Table);

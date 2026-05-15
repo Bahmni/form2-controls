@@ -3,7 +3,7 @@ import React from 'react';
 import StoryWrapper from './StoryWrapper';
 import { Container } from 'src/components/Container.jsx';
 import { Section } from 'src/components/Section.jsx';
-import { registerCoreComponents } from './mockData';
+import { registerCoreComponents } from './componentRegistry';
 
 registerCoreComponents();
 componentStore.registerComponent('section', Section);
