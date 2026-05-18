@@ -10,7 +10,17 @@ import { pulseDataMetadata } from './mockData';
 registerCoreComponents();
 
 export default {
-  title: 'Abnormal ObsControl',
+  title: 'Complex Controls/AbnormalObsControl',
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'AbnormalObsControl demonstrates an ObsGroup that pairs a numeric observation with a ' +
+          'Boolean "Abnormal" toggle button. The toggle is rendered inline using the Button display ' +
+          'type and lets clinicians flag an out-of-range reading without leaving the field.',
+      },
+    },
+  },
 };
 
 export const BasicView = {
