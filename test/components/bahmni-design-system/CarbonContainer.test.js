@@ -7,6 +7,8 @@ import { Label } from 'components/Label.jsx';
 import { ObsControlWithIntl as ObsControl } from 'components/ObsControl.jsx';
 import { ObsGroupControlWithIntl as ObsGroupControl } from 'components/ObsGroupControl.jsx';
 import { CodedControl } from 'components/CodedControl.jsx';
+import { Image } from 'components/bahmni-design-system/Image';
+import { Video } from 'components/bahmni-design-system/Video';
 import ComponentStore from 'src/helpers/componentStore';
 
 const codedAnswers = [
@@ -280,5 +282,53 @@ describe('CarbonContainer', () => {
     render(<CarbonContainer {...defaultProps} metadata={abnormalMetadata} observations={observations} />);
 
     expect(screen.getByText('Abnormal')).toBeInTheDocument();
+  });
+
+  it('should render Carbon Image component for imageurlhandler type', () => {
+    const imageMetadata = {
+      controls: [{
+        concept: { datatype: 'Complex', name: 'Patient Image',
+          conceptHandler: 'ImageUrlHandler', uuid: 'image-uuid' },
+        id: '1', label: { type: 'label', value: 'Patient Image' },
+        properties: { location: { column: 0, row: 0 } },
+        type: 'imageurlhandler',
+      }],
+      id: 11, name: 'ImageForm', uuid: 'form-uuid-11', version: '1', defaultLocale: 'en',
+    };
+
+    const observations = [{
+      concept: { uuid: 'image-uuid' },
+      formFieldPath: 'ImageForm.1/1-0',
+      value: undefined,
+      voided: false,
+    }];
+
+    render(<CarbonContainer {...defaultProps} metadata={imageMetadata} observations={observations} />);
+    expect(document.querySelector('.upload-label')).toHaveTextContent('Upload files');
+    expect(document.querySelector('.carbon-image-upload')).toBeInTheDocument();
+  });
+
+  it('should render Carbon Video component for videourlhandler type', () => {
+    const videoMetadata = {
+      controls: [{
+        concept: { datatype: 'Complex', name: 'Patient Video',
+          conceptHandler: 'VideoUrlHandler', uuid: 'video-uuid' },
+        id: '1', label: { type: 'label', value: 'Patient Video' },
+        properties: { location: { column: 0, row: 0 } },
+        type: 'videourlhandler',
+      }],
+      id: 12, name: 'VideoForm', uuid: 'form-uuid-12', version: '1', defaultLocale: 'en',
+    };
+
+    const observations = [{
+      concept: { uuid: 'video-uuid' },
+      formFieldPath: 'VideoForm.1/1-0',
+      value: undefined,
+      voided: false,
+    }];
+
+    render(<CarbonContainer {...defaultProps} metadata={videoMetadata} observations={observations} />);
+    expect(document.querySelector('.upload-label')).toHaveTextContent('Upload video');
+    expect(document.querySelector('.carbon-video-upload')).toBeInTheDocument();
   });
 });

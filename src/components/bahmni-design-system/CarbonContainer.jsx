@@ -15,6 +15,8 @@ import { Location } from 'components/bahmni-design-system/Location';
 import { Provider } from 'components/bahmni-design-system/Provider';
 import { ObsControlWithIntl } from 'components/bahmni-design-system/ObsControl';
 import { RadioButton } from 'components/bahmni-design-system/RadioButton';
+import { Image } from 'components/bahmni-design-system/Image';
+import { Video } from 'components/bahmni-design-system/Video';
 import { TableWithIntl } from 'components/bahmni-design-system/Table';
 import { BooleanControlWithIntl } from 'components/bahmni-design-system/BooleanControl';
 
@@ -33,6 +35,8 @@ const carbonComponents = {
   providerobshandler: Provider,
   obscontrol: ObsControlWithIntl,
   radio: RadioButton,
+  imageurlhandler: Image,
+  videourlhandler: Video,
   table: TableWithIntl,
   boolean: BooleanControlWithIntl,
 };
