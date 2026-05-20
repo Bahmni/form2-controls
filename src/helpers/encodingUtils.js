@@ -1,3 +1,27 @@
+import { decode } from 'html-entities';
+
+export function unescapeHtml(str) {
+    if (typeof str !== 'string') return str;
+    return decode(str);
+}
+
+export function deepUnescapeStrings(obj) {
+    if (typeof obj === 'string') {
+        return unescapeHtml(obj);
+    }
+    if (Array.isArray(obj)) {
+        return obj.map(deepUnescapeStrings);
+    }
+    if (typeof obj === 'object' && obj !== null) {
+        const result = {};
+        for (const key of Object.keys(obj)) {
+            result[key] = deepUnescapeStrings(obj[key]);
+        }
+        return result;
+    }
+    return obj;
+}
+
 export function utf8ToBase64(str) {
     if (str === undefined || str === null || str === '') {
         return '';
