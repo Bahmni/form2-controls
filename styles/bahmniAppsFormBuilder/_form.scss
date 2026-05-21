@@ -106,9 +106,6 @@ $lightestGray: #eee;
             right: $spacing-07;
             top: 50%;
             transform: translateY(-50%);
-            display: inline-flex;
-            align-items: center;
-            gap: $spacing-03;
             z-index: 1;
           }
 
@@ -124,9 +121,6 @@ $lightestGray: #eee;
             position: absolute;
             right: $spacing-07;
             top: $spacing-03;
-            display: inline-flex;
-            align-items: center;
-            gap: $spacing-03;
             z-index: 1;
           }
 
@@ -257,12 +251,12 @@ $lightestGray: #eee;
           .form-builder-radio-wrapper {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: $spacing-03;
 
             .cds--radio-button-group {
               display: flex;
               flex-wrap: wrap;
-              gap: 0.5rem;
+              gap: $spacing-03;
             }
           }
         }

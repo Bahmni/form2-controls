@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { SelectableTag } from '@bahmni/design-system';
+import { spacing03 } from '@carbon/layout';
 import { Validator } from 'src/helpers/Validator';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
@@ -105,7 +106,7 @@ export class Button extends Component {
       <div
         id={conceptUuid}
         className={this.state.hasErrors ? 'form-builder-error' : ''}
-        style={{ display: 'inline-flex', flexWrap: 'wrap', gap: '0.5rem' }}
+        style={{ display: 'inline-flex', flexWrap: 'wrap', gap: spacing03 }}
       >
         {options.map((option) => (
           <SelectableTag
