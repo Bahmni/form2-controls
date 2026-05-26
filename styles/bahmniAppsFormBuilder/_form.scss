@@ -87,13 +87,41 @@ $lightestGray: #eee;
           align-items: center;
           gap: $spacing-03;
           flex-wrap: wrap;
+          position: relative;
 
+          // Default: clone stays in the flex flow (for text, numeric, image, video etc.)
           .form-builder-clone {
             float: none;
             display: inline-flex;
             align-items: center;
             gap: $spacing-03;
-            align-self: flex-start;
+            align-self: center;
+          }
+
+          // Coded/select controls (react-select) fill 100% of the row via
+          // obs-control-select-wrapper, so the clone can't sit beside them in
+          // flex flow. Absolutely position it at the right edge of the field instead.
+          &:has(.obs-control-select-wrapper) .form-builder-clone {
+            position: absolute;
+            right: $spacing-07;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+          }
+
+          // TextBox (text type) renders inside obs-comment-section-wrap > cds--text-area__wrapper.
+          // Shrink the wrapper so the clone fits on the same row, pinned top-right.
+          &:has(.obs-comment-section-wrap .cds--text-area__wrapper) > .obs-comment-section-wrap {
+            flex: 1 1 auto;
+            max-width: calc(100% - #{$spacing-09});
+            margin-top: 0;
+          }
+
+          &:has(.obs-comment-section-wrap .cds--text-area__wrapper) .form-builder-clone {
+            position: absolute;
+            right: $spacing-07;
+            top: $spacing-03;
+            z-index: 1;
           }
 
 
@@ -107,11 +135,21 @@ $lightestGray: #eee;
             }
           }
 
-          // Textarea siblings (Fragment pattern) wrap to a full-width row below the input.
-          > .carbon-obs-comment-section-wrap,
-          > .obs-comment-section-wrap {
+          // Notes/comment section always wraps to a full-width row below the main control.
+          > .carbon-obs-comment-section-wrap {
             flex: 0 0 100%;
             margin-top: $spacing-03;
+
+            textarea {
+              width: 100%;
+              float: none;
+            }
+          }
+
+          // obs-comment-section-wrap wraps the TextBox (text type) as the main control.
+          // Default: full-width (overridden above when clone is present).
+          > .obs-comment-section-wrap {
+            flex: 0 0 100%;
 
             textarea {
               width: 100%;
@@ -154,7 +192,7 @@ $lightestGray: #eee;
           .cds--list-box:not(.cds--multi-select) {
             flex: 0 0 auto;
             width: auto;
-            max-width: 300px;
+            max-width: 600px;
           }
 
           .carbon-obs-comment-section-wrap {
@@ -214,6 +252,12 @@ $lightestGray: #eee;
             display: flex;
             flex-wrap: wrap;
             gap: $spacing-03;
+
+            .cds--radio-button-group {
+              display: flex;
+              flex-wrap: wrap;
+              gap: $spacing-03;
+            }
           }
         }
 
@@ -524,10 +568,13 @@ $lightestGray: #eee;
           z-index: 1;
         }
 
+        // Section-level add-more: align with the right edge of the first field
+        // and vertically centred with its row (accordion header ~48px + field offset).
         > .form-builder-clone {
           position: absolute;
-          right: 20px;
-          top: -7px;
+          right: $spacing-07;
+          top: calc(#{$spacing-09} + #{$spacing-07});
+          transform: translateY(-50%);
           z-index: 1;
         }
 
