@@ -11,13 +11,15 @@ import ObservationMapper from '../helpers/ObservationMapper';
 import NotificationContainer from '../helpers/Notification';
 import Constants from '../constants';
 import { executeEventsFromCurrentRecord } from '../helpers/ExecuteEvents';
+import { deepUnescapeStrings } from '../helpers/encodingUtils';
 
 export class Container extends addMoreDecorator(Component) {
   constructor(props) {
     super(props);
     this.childControls = {};
-    const { observations, metadata } = this.props;
-    const controlRecordTree = new ControlRecordTreeBuilder().build(metadata, observations);
+    const { observations } = this.props;
+    this.metadata = deepUnescapeStrings(this.props.metadata);
+    const controlRecordTree = new ControlRecordTreeBuilder().build(this.metadata, observations);
     this.updatedControlRecordTree = controlRecordTree;
     this.state = { errors: [], data: controlRecordTree,
       collapse: props.collapse, notification: {} };
@@ -29,7 +31,7 @@ export class Container extends addMoreDecorator(Component) {
     this.showNotification = this.showNotification.bind(this);
     this.clearNotification = this.clearNotification.bind(this);
 
-    const initScript = this.props.metadata.events && this.props.metadata.events.onFormInit;
+    const initScript = this.metadata.events && this.metadata.events.onFormInit;
     let updatedTree;
     try {
       if (initScript) {
@@ -177,12 +179,13 @@ export class Container extends addMoreDecorator(Component) {
   }
 
   render() {
-    const { metadata: { controls,
-      name: formName, version: formVersion }, validate, translations, patient, readonly } = this.props;
-    const formTranslations = Object.fromEntries(
+    const { controls, name: formName, version: formVersion } = this.metadata;
+    const { validate, translations, patient, readonly } = this.props;
+    const rawTranslations = Object.fromEntries(
       Object.entries({ ...translations.labels, ...translations.concepts })
         .filter(([key, value]) => value !== key)
     );
+    const formTranslations = deepUnescapeStrings(rawTranslations);
     const patientUuid = patient ? patient.uuid : undefined;
     const childProps = {
       collapse: this.state.collapse,
