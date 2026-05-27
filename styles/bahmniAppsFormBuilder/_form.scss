@@ -111,9 +111,11 @@ $lightestGray: #eee;
 
           // TextBox (text type) renders inside obs-comment-section-wrap > cds--text-area__wrapper.
           // Shrink the wrapper so the clone fits on the same row, pinned top-right.
+          // Clone is two sm icon buttons (2rem each) + gap (0.5rem) = ~4.5rem wide, so we
+          // need at least 5rem of clearance from the content-box right edge.
           &:has(.obs-comment-section-wrap .cds--text-area__wrapper) > .obs-comment-section-wrap {
             flex: 1 1 auto;
-            max-width: calc(100% - #{$spacing-09});
+            max-width: calc(100% - #{$spacing-11});
             margin-top: 0;
           }
 
@@ -186,13 +188,26 @@ $lightestGray: #eee;
             flex: 0 0 auto !important;
           }
 
-          // width:100% by default — constrain so AddMore button stays on same row.
+          // Constrain width so AddMore button stays on the same row.
+          // width: auto lets each control size to its intrinsic content width.
+          // max-width: $spacing-13 * 3 + $spacing-12 + $spacing-06 = 480 + 96 + 24 = 600px
           .cds--combo-box,
           .cds--dropdown,
           .cds--list-box:not(.cds--multi-select) {
             flex: 0 0 auto;
             width: auto;
-            max-width: 600px;
+            max-width: calc(#{$spacing-13} * 3 + #{$spacing-12} + #{$spacing-06});
+          }
+
+          // Dropdown menu expands to fit the longest option so text is never truncated.
+          .cds--list-box__menu {
+            min-width: max-content;
+          }
+
+          .cds--list-box__menu-item__option {
+            white-space: normal;
+            height: auto;
+            overflow-wrap: break-word;
           }
 
           .carbon-obs-comment-section-wrap {
@@ -1050,4 +1065,5 @@ input.computed-value {
   margin-top: 0.5rem;
   align-self: flex-start;
   --cds-layout-density-padding-inline-local: 0.5rem;
+  padding-inline-end: 1.75rem;
 }
