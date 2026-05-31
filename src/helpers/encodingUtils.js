@@ -2,7 +2,13 @@ import { decode } from 'html-entities';
 
 export function unescapeHtml(str) {
     if (typeof str !== 'string') return str;
-    return decode(str);
+
+    let decoded = decode(str);
+    while (decoded !== str) {
+        str = decoded;
+        decoded = decode(str);
+    }
+    return decoded;
 }
 
 export function deepUnescapeStrings(obj) {
