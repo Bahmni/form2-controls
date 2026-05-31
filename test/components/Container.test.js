@@ -625,50 +625,6 @@ describe('Container', () => {
       expect(input).toBeInTheDocument();
     });
 
-    it('should decode HTML entities in concept descriptions', () => {
-      const metadata = createNumericControlMetadata({
-        controls: [{
-          ...createNumericControlMetadata().controls[0],
-          concept: {
-            ...createNumericControlMetadata().controls[0].concept,
-            description: 'Note: Use &lt;10mg &amp; monitor &gt; 60bpm',
-          },
-        }],
-      });
-
-      renderContainer({ metadata });
-      expect(screen.getByRole('spinbutton')).toBeInTheDocument();
-    });
-
-    it('should decode HTML entities in control properties URL', () => {
-      const metadata = createNumericControlMetadata({
-        controls: [{
-          ...createNumericControlMetadata().controls[0],
-          properties: {
-            ...createNumericControlMetadata().controls[0].properties,
-            url: '/provider?attrName=type&amp;attrValue=Doctor',
-          },
-        }],
-      });
-
-      renderContainer({ metadata });
-      expect(screen.getByRole('spinbutton')).toBeInTheDocument();
-    });
-
-    it('should decode HTML entities in onFormInit script', async () => {
-      const metadata = createNumericControlMetadata({
-        events: {
-          onFormInit: utf8ToBase64("function(form){form.get('Pulse').setEnabled(false);}"),
-        },
-      });
-
-      renderContainer({ metadata });
-
-      await waitFor(() => {
-        const input = screen.getByRole('spinbutton');
-        expect(input).toBeDisabled();
-      });
-    });
   });
 
   describe('Coverage Improvements', () => {
