@@ -188,14 +188,13 @@ $lightestGray: #eee;
             flex: 0 0 auto !important;
           }
 
-          // Constrain width so AddMore button stays on the same row.
-          // width: auto lets each control size to its intrinsic content width.
           // max-width: $spacing-13 * 3 + $spacing-12 + $spacing-06 = 480 + 96 + 24 = 600px
           .cds--combo-box,
           .cds--dropdown,
           .cds--list-box:not(.cds--multi-select) {
             flex: 0 0 auto;
             width: auto;
+            min-width: $spacing-13;
             max-width: calc(#{$spacing-13} * 3 + #{$spacing-12} + #{$spacing-06});
           }
 
@@ -243,6 +242,16 @@ $lightestGray: #eee;
             .cds--number__controls,
             .cds--number__control-btn {
               height: 100% !important;
+            }
+
+            // Carbon defaults: .down-icon { order: 1 } .up-icon { order: 2 }
+            // Swap so + appears first (top) and − appears second (bottom).
+            .cds--number__control-btn.up-icon {
+              order: 1;
+            }
+
+            .cds--number__control-btn.down-icon {
+              order: 2;
             }
 
             // Validation messages rendered via custom .form-builder-error styles.
