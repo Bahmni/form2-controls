@@ -272,6 +272,15 @@ $lightestGray: #eee;
             max-width: 83%;
           }
 
+          // Show teal border on selected, remove on deselect, keep keyboard focus ring.
+          .cds--tag--selectable-selected {
+            border-color: var(--cds-focus) !important;
+          }
+
+          .cds--tag--selectable:focus:not(:focus-visible) {
+            outline: none;
+          }
+
           .form-builder-radio-wrapper {
             display: flex;
             flex-wrap: wrap;
