@@ -111,9 +111,11 @@ $lightestGray: #eee;
 
           // TextBox (text type) renders inside obs-comment-section-wrap > cds--text-area__wrapper.
           // Shrink the wrapper so the clone fits on the same row, pinned top-right.
+          // Clone is two sm icon buttons (2rem each) + gap (0.5rem) = ~4.5rem wide, so we
+          // need at least 5rem of clearance from the content-box right edge.
           &:has(.obs-comment-section-wrap .cds--text-area__wrapper) > .obs-comment-section-wrap {
             flex: 1 1 auto;
-            max-width: calc(100% - #{$spacing-09});
+            max-width: calc(100% - #{$spacing-11});
             margin-top: 0;
           }
 
@@ -186,13 +188,25 @@ $lightestGray: #eee;
             flex: 0 0 auto !important;
           }
 
-          // width:100% by default — constrain so AddMore button stays on same row.
+          // max-width: $spacing-13 * 3 + $spacing-12 + $spacing-06 = 480 + 96 + 24 = 600px
           .cds--combo-box,
           .cds--dropdown,
           .cds--list-box:not(.cds--multi-select) {
             flex: 0 0 auto;
             width: auto;
-            max-width: 600px;
+            min-width: $spacing-13;
+            max-width: calc(#{$spacing-13} * 3 + #{$spacing-12} + #{$spacing-06});
+          }
+
+          // Dropdown menu expands to fit the longest option so text is never truncated.
+          .cds--list-box__menu {
+            min-width: max-content;
+          }
+
+          .cds--list-box__menu-item__option {
+            white-space: normal;
+            height: auto;
+            overflow-wrap: break-word;
           }
 
           .carbon-obs-comment-section-wrap {
@@ -230,6 +244,16 @@ $lightestGray: #eee;
               height: 100% !important;
             }
 
+            // Carbon defaults: .down-icon { order: 1 } .up-icon { order: 2 }
+            // Swap so + appears first (top) and − appears second (bottom).
+            .cds--number__control-btn.up-icon {
+              order: 1;
+            }
+
+            .cds--number__control-btn.down-icon {
+              order: 2;
+            }
+
             // Validation messages rendered via custom .form-builder-error styles.
             .cds--form-requirement {
               display: none;
@@ -246,6 +270,15 @@ $lightestGray: #eee;
 
           .form-control-buttons {
             max-width: 83%;
+          }
+
+          // Show teal border on selected, remove on deselect, keep keyboard focus ring.
+          .cds--tag--selectable-selected {
+            border-color: var(--cds-focus) !important;
+          }
+
+          .cds--tag--selectable:focus:not(:focus-visible) {
+            outline: none;
           }
 
           .form-builder-radio-wrapper {
@@ -1050,4 +1083,5 @@ input.computed-value {
   margin-top: 0.5rem;
   align-self: flex-start;
   --cds-layout-density-padding-inline-local: 0.5rem;
+  padding-inline-end: 1.75rem;
 }
