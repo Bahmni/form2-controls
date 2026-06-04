@@ -3,6 +3,7 @@ import { ObsControlWithIntl as ObsControl } from 'src/components/ObsControl.jsx'
 import StoryWrapper from './StoryWrapper';
 import '../styles/styles.scss';
 import { SYSTOLIC_UUID, DIASTOLIC_UUID } from './mockData';
+import { description, argTypes } from './_meta/obsControlMeta';
 
 const form = {
   controls: [
@@ -106,35 +107,12 @@ const emptyValue = { value: undefined, comment: undefined, interpretation: undef
 export default {
   title: 'Complex Controls/ObsControl',
   component: ObsControl,
-  argTypes: {
-    validate: { control: 'boolean', description: 'Trigger field-level validation' },
-    validateForm: { control: 'boolean', description: 'Trigger form-level validation' },
-    onValueChanged: { action: 'onValueChanged' },
-    showNotification: { action: 'showNotification' },
-    onControlAdd: { action: 'onControlAdd' },
-    onControlRemove: { action: 'onControlRemove' },
-  },
+  tags: ['autodocs'],
+  argTypes,
   parameters: {
     docs: {
       description: {
-        component:
-          'ObsControl is the primary observation control that binds a single concept to a form field. ' +
-          'It wraps the underlying input widget (NumericBox, TextBox, BooleanControl, CodedControl, etc.) ' +
-          'based on the concept datatype resolved at render time via componentStore.\n\n' +
-          '**Concept binding**: The `metadata.concept` object identifies which OpenMRS concept is being ' +
-          'captured. The `concept.datatype` drives which widget renders (Numeric → NumericBox, ' +
-          'Text → TextBox, Boolean → BooleanControl / Button, Coded → AutoComplete or DropDown).\n\n' +
-          '**Value wrapping**: ObsControl receives and emits values as `{ value, comment, interpretation }` ' +
-          'objects. When a user changes the input the `onValueChanged(formFieldPath, value, errors)` ' +
-          'callback is fired with the updated wrapped value so the parent Container can update its ' +
-          'ControlRecordTree.\n\n' +
-          '**Add More**: When `properties.addMore` is true, the control renders Add / Remove buttons ' +
-          'via AddMoreDecorator, allowing the clinician to capture repeated observations for the same ' +
-          'concept within a single encounter.\n\n' +
-          'Accessibility (WCAG 2.1 AA): Each input is associated with a `<label>` via `htmlFor` / `id` ' +
-          'pairing. Mandatory fields include `aria-required="true"`. Validation error messages are ' +
-          'rendered adjacent to the field and referenced with `aria-describedby` so screen readers ' +
-          'announce them immediately. Keyboard navigation is fully supported for all widget types.',
+        component: description,
       },
     },
   },

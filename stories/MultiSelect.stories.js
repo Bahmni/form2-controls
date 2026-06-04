@@ -1,6 +1,7 @@
 import React from 'react';
 import StoryWrapper from './StoryWrapper';
 import { Container } from 'src/components/Container.jsx';
+import { description, argTypes } from './_meta/multiSelectMeta';
 
 const form = {
   id: 1,
@@ -321,13 +322,13 @@ const obsList = [
 
 export default {
   title: 'Atomic Controls/MultiSelect',
+  component: Container,
+  tags: ['autodocs'],
+  argTypes,
   parameters: {
     docs: {
       description: {
-        component:
-          'Demonstrates a form containing a multi-select coded observation (Tuberculosis Comorbidity). ' +
-          'Multi-select obs allow clinicians to choose multiple answers for a single concept and store ' +
-          'each answer as a separate observation record.',
+        component: description,
       },
     },
   },

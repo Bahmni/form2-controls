@@ -1,9 +1,9 @@
 /* global componentStore */
-import React from 'react';
 import StoryWrapper from './StoryWrapper';
 import { Container } from 'src/components/Container.jsx';
 import { Section } from 'src/components/Section.jsx';
 import { registerCoreComponents } from './componentRegistry';
+import { description, argTypes } from './_meta/sectionMeta';
 
 registerCoreComponents();
 componentStore.registerComponent('section', Section);
@@ -159,39 +159,12 @@ const nestedSectionsMetadata = {
 export default {
   title: 'Complex Controls/Section',
   component: Container,
-  argTypes: {
-    collapse: { control: 'boolean', description: 'Render the section in its collapsed state' },
-    validate: { control: 'boolean', description: 'Trigger field-level validation' },
-    validateForm: { control: 'boolean', description: 'Trigger form-level validation' },
-  },
+  tags: ['autodocs'],
+  argTypes,
   parameters: {
     docs: {
       description: {
-        component:
-          'Section renders a collapsible `<fieldset>` that visually and semantically groups ' +
-          'related form controls under a single heading (legend). It is used to organise ' +
-          'observations into logical panels on complex clinical forms.\n\n' +
-          '**Collapse / expand**: Clicking the legend header toggles `state.collapse`. ' +
-          'When collapsed, child controls are hidden via the `closing-group-controls` CSS class ' +
-          'without unmounting, preserving any partially entered data.\n\n' +
-          '**Nested sections**: A Section\'s `controls` array can contain other sections, ' +
-          'enabling multi-level hierarchical form layouts. Each level renders its own ' +
-          '`<fieldset>` / `<legend>` pair.\n\n' +
-          '**Rendering via Container**: Section is not rendered directly in production — the ' +
-          '`Container` component reads the form metadata tree, resolves `type: "section"` via ' +
-          '`componentStore`, and passes the appropriate child record props down. ' +
-          'These stories use `Container` to replicate that full rendering pipeline.\n\n' +
-          'Accessibility (WCAG 2.1 AA): The `<fieldset>` + `<legend>` combination provides a ' +
-          'native grouping landmark recognised by all screen readers. The collapse toggle is on ' +
-          'the `<legend>` element so it is naturally focusable and operable via keyboard. ' +
-          'Disabled sections add the `disabled` CSS class and all child inputs honour the ' +
-          '`enabled` prop to prevent data entry.\n\n' +
-          '**Composition chain**: The full atomic-to-container hierarchy is: ' +
-          '`Container` → resolves `type: "section"` via `componentStore` → renders `Section` → ' +
-          'each child `type: "obsControl"` is resolved to `ObsControl` → `ObsControl` resolves ' +
-          'the concept datatype to an atomic widget (`NumericBox`, `TextBox`, `BooleanControl`, etc.). ' +
-          'Each layer passes `formFieldPath`, `value`, and `onValueChanged` down so state flows ' +
-          'back up to the root `Container` and its `ControlRecordTree`.',
+        component: description,
       },
     },
   },
