@@ -204,6 +204,33 @@ $lightestGray: #eee;
             );
           }
 
+          // Combobox: overflow:hidden creates a block formatting context bounded
+          // by max-width, so child width:100% resolves to that fixed size.
+          // The dropdown menu is position:absolute so it still escapes the clip.
+          .obs-control-select-wrapper .cds--combo-box {
+            overflow: hidden;
+          }
+
+          // Field fills the bounded combo-box so the input has a defined container.
+          // Apply overflow hidden to enable text truncation on selected values.
+          .cds--combo-box .cds--list-box__field {
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          // Input shrinks to fill remaining space (after clear+toggle buttons),
+          // enabling text-overflow:ellipsis to truncate long selected values.
+          // Constrain input max-width to ensure ellipsis shows for long text consistently.
+          .cds--combo-box .cds--text-input {
+            flex: 1;
+            min-width: 0;
+            max-width: calc(#{$spacing-13} * 2 + #{$spacing-10});
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+          }
+
           // Dropdown menu expands to fit the longest option so text is never truncated.
           .cds--list-box__menu {
             min-width: max-content;
@@ -283,16 +310,14 @@ $lightestGray: #eee;
           }
 
           // "Add note" link: mirrors the clone fix from BAH-4603.
-          // obs-control-field has padding-inline-end: $spacing-07, so the dropdown
-          // content naturally stops before the padding zone. Positioning "Add note"
-          // at right: $spacing-07 places it in that same padding zone — no overlap,
-          // no dropdown shrink needed.
-          &:has(.obs-control-select-wrapper) .form-builder-comment-wrap,
-          &:has(.form-builder-selectable-tag-group) .form-builder-comment-wrap {
+          // Positioned absolutely on the right with consistent vertical alignment
+          // across all field types (dropdowns, multiselect buttons, numeric inputs, text, etc).
+          > .form-builder-comment-wrap {
             position: absolute;
-            right: $spacing-07;
+            right: -$spacing-07;
             top: $spacing-03;
-            z-index: 10;
+            z-index: 100;
+            pointer-events: auto;
           }
 
           // Show teal border on selected, remove on deselect, keep keyboard focus ring.
@@ -324,7 +349,7 @@ $lightestGray: #eee;
           margin: initial;
         }
 
-        input {
+        input:not(.cds--text-input) {
           width: 12.5em;
           color: $bahmniTextColor;
           padding: 2px 10px;
