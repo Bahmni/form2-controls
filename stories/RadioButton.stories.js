@@ -21,6 +21,7 @@ const frequencyOptions = [
 
 export default {
   title: 'Atomic Controls/RadioButton',
+  tags: ['autodocs'],
   component: RadioButton,
   args: {
     validate: false,
@@ -34,17 +35,27 @@ export default {
   },
   parameters: {
     docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+        title: 'Table of Contents',
+      },
       description: {
-        component:
-          'Radio button group for single-select coded observations. ' +
-          'Each option maps to a stored value in the observation record. ' +
-          'Clicking an option sets the observation value to that option\'s value field.\n\n' +
-          'Accessibility (WCAG 2.1 AA): Radio inputs are keyboard navigable with arrow keys (SC 2.1.1); ' +
-          'checked state announced by screen readers via native input type (SC 4.1.2); ' +
-          'visible focus ring on each radio option (SC 2.4.7); ' +
-          'selected state not conveyed by colour alone (SC 1.4.1); ' +
-          'group should be wrapped in <fieldset>/<legend> for accessible group labelling (SC 1.3.1). ' +
-          'Note: the component does not expose an enabled prop — use a <fieldset disabled> wrapper.',
+        component: `
+## Overview
+
+Radio button group for single-select coded observations. Each option maps to a stored value; clicking an option sets the observation to that option's \`value\` field.
+
+**Value stored:** the selected option's \`value\` field.
+
+## When to use
+
+- Single-select from a small set where every option should be visible at once.
+- Use **DropDown** or **AutoComplete** instead when the option list is long.
+
+## Accessibility (WCAG 2.1 AA)
+
+Radio inputs are keyboard navigable with arrow keys (SC 2.1.1); checked state announced by screen readers via the native input type (SC 4.1.2); visible focus ring on each radio option (SC 2.4.7); selected state not conveyed by colour alone (SC 1.4.1); group should be wrapped in \`<fieldset>\`/\`<legend>\` for accessible group labelling (SC 1.3.1). Note: the component does not expose an \`enabled\` prop — use a \`<fieldset disabled>\` wrapper.
+        `,
       },
     },
   },

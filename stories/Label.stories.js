@@ -15,6 +15,7 @@ const defaultMetadata = {
 
 export default {
   title: 'Atomic Controls/Label',
+  tags: ['autodocs'],
   component: Label,
   render: (args) => <LabelWithIntl {...args} />,
   args: {
@@ -26,14 +27,27 @@ export default {
   },
   parameters: {
     docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+        title: 'Table of Contents',
+      },
       description: {
-        component:
-          'Static display label rendered alongside a form control. ' +
-          'Not an observation control — it has no value binding. ' +
-          'Supports i18n via translationKey and optional unit suffix.\n\n' +
-          'Accessibility (WCAG 2.1 AA): Rendered as a <label> element for programmatic association ' +
-          'with the adjacent form control via htmlFor/id (SC 1.3.1); ' +
-          'non-interactive — does not receive focus (SC 2.1.1); text contrast ≥ 4.5:1 (SC 1.4.3).',
+        component: `
+## Overview
+
+Static display label rendered alongside a form control. Supports i18n via \`translationKey\` and an optional unit suffix.
+
+**Value stored:** none.
+
+## When to use
+
+- Adding descriptive text or a field caption to a form.
+- **Not** an observation control — it has no value binding and stores nothing.
+
+## Accessibility (WCAG 2.1 AA)
+
+Rendered as a \`<label>\` element for programmatic association with the adjacent form control via htmlFor/id (SC 1.3.1); non-interactive — does not receive focus (SC 2.1.1); text contrast ≥ 4.5:1 (SC 1.4.3).
+        `,
       },
     },
   },

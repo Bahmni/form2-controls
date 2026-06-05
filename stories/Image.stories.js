@@ -3,6 +3,7 @@ import { Image } from 'src/components/Image.jsx';
 
 export default {
   title: 'Atomic Controls/Image',
+  tags: ['autodocs'],
   component: Image,
   args: {
     validate: false,
@@ -22,20 +23,28 @@ export default {
   },
   parameters: {
     docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+        title: 'Table of Contents',
+      },
       description: {
-        component:
-          'File upload control for image (JPG, PNG, etc.) and PDF observations. ' +
-          'Shows a cloud upload icon before a file is selected, and a preview after upload. ' +
-          'Full upload requires a Bahmni backend; these stories demonstrate the UI states only.\n\n' +
-          'Camera capture (AC 13.1): camera capture is not natively invoked — the file input does not ' +
-          'carry a capture attribute, so the OS file picker opens instead of the camera directly.\n\n' +
-          'Observation storage format (AC 13.2): observation value is stored as ' +
-          '"<patientUuid>/<filename>" after successful upload to the Bahmni visitDocument API.\n\n' +
-          'Accessibility (WCAG 2.1 AA): File input activated via keyboard (SC 2.1.1); ' +
-          'visible focus ring on the upload trigger (SC 2.4.7); ' +
-          'upload status announced via aria-live region (SC 4.1.3); ' +
-          'uploaded image includes a descriptive alt attribute (SC 1.1.1); ' +
-          'mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).',
+        component: `
+## Overview
+
+File upload control for image (JPG, PNG, etc.) and PDF observations. Shows a cloud-upload icon before a file is selected and a preview after upload. Full upload requires a Bahmni backend — these stories demonstrate the UI states only.
+
+**Value stored:** \`"<patientUuid>/<filename>"\` after a successful upload to the Bahmni visitDocument API.
+
+**Camera capture:** not natively invoked — the file input carries no \`capture\` attribute, so the OS file picker opens rather than the camera directly.
+
+## When to use
+
+- Attaching a photo or scanned document to an encounter — e.g. a wound photo or a lab-report PDF.
+
+## Accessibility (WCAG 2.1 AA)
+
+File input activated via keyboard (SC 2.1.1); visible focus ring on the upload trigger (SC 2.4.7); upload status announced via aria-live region (SC 4.1.3); uploaded image includes a descriptive alt attribute (SC 1.1.1); mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).
+        `,
       },
     },
   },
