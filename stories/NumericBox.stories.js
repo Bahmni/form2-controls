@@ -42,10 +42,6 @@ Numeric input for quantitative observations such as blood pressure, temperature,
 
 - Recording a single numeric measurement.
 - When you need normal-range display (\`lowNormal\` / \`hiNormal\`) and absolute-limit validation (\`lowAbsolute\` / \`hiAbsolute\`).
-
-## Accessibility (WCAG 2.1 AA)
-
-Keyboard navigable (SC 2.1.1); visible focus ring (SC 2.4.7); out-of-range errors announced via aria-invalid (SC 3.3.1); numeric inputmode declared for mobile keyboards (SC 1.3.5); text contrast ≥ 4.5:1 (SC 1.4.3).
         `,
       },
     },

@@ -38,10 +38,6 @@ Native date picker for date-type observations, with support for mandatory valida
 
 - Capturing a calendar date — e.g. date of onset, last menstrual period.
 - When only the date matters; use **DateTime** if a time-of-day is also required.
-
-## Accessibility (WCAG 2.1 AA)
-
-Native date input is keyboard navigable (SC 2.1.1) and announces its input type to screen readers (SC 1.3.1); visible focus ring (SC 2.4.7); validation errors surfaced via aria-invalid (SC 3.3.1); disabled state set via HTML disabled attribute (SC 4.1.2); text contrast ≥ 4.5:1 (SC 1.4.3).
         `,
       },
     },

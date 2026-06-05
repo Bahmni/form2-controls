@@ -40,10 +40,6 @@ File upload control for image (JPG, PNG, etc.) and PDF observations. Shows a clo
 ## When to use
 
 - Attaching a photo or scanned document to an encounter — e.g. a wound photo or a lab-report PDF.
-
-## Accessibility (WCAG 2.1 AA)
-
-File input activated via keyboard (SC 2.1.1); visible focus ring on the upload trigger (SC 2.4.7); upload status announced via aria-live region (SC 4.1.3); uploaded image includes a descriptive alt attribute (SC 1.1.1); mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).
         `,
       },
     },

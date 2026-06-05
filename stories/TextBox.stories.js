@@ -38,10 +38,6 @@ Multi-line text area for free-form text observations. The field auto-resizes as 
 
 - Capturing unstructured clinical narrative — chief complaint, history, notes.
 - When the answer is free prose rather than a coded or numeric value.
-
-## Accessibility (WCAG 2.1 AA)
-
-Keyboard navigable (SC 2.1.1); visible focus ring (SC 2.4.7); mandatory validation error announced via aria-invalid and adjacent error message (SC 3.3.1, 3.3.3); label programmatically associated via htmlFor/id (SC 1.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).
         `,
       },
     },

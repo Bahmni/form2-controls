@@ -51,10 +51,6 @@ Radio button group for single-select coded observations. Each option maps to a s
 
 - Single-select from a small set where every option should be visible at once.
 - Use **DropDown** or **AutoComplete** instead when the option list is long.
-
-## Accessibility (WCAG 2.1 AA)
-
-Radio inputs are keyboard navigable with arrow keys (SC 2.1.1); checked state announced by screen readers via the native input type (SC 4.1.2); visible focus ring on each radio option (SC 2.4.7); selected state not conveyed by colour alone (SC 1.4.1); group should be wrapped in \`<fieldset>\`/\`<legend>\` for accessible group labelling (SC 1.3.1). Note: the component does not expose an \`enabled\` prop — use a \`<fieldset disabled>\` wrapper.
         `,
       },
     },

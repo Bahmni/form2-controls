@@ -48,10 +48,6 @@ Yes/No toggle control for boolean observations, rendered as a button group via t
 
 - Two-state clinical questions — e.g. "Smoking history?", "Pregnant?".
 - When the answer is strictly true/false rather than a coded list.
-
-## Accessibility (WCAG 2.1 AA)
-
-Button group keyboard navigable via Tab and Enter/Space (SC 2.1.1); selected state conveyed via aria-pressed (SC 1.3.1, 4.1.2); visible focus ring on each button (SC 2.4.7); selected state not conveyed by colour alone (SC 1.4.1); text contrast ≥ 4.5:1 (SC 1.4.3).
         `,
       },
     },

@@ -38,10 +38,6 @@ Combined date and time picker for datetime observations. Both fields must be fil
 
 - Capturing an exact moment — e.g. time of admission, sample collection time.
 - When the time-of-day matters; use **Date** if only the calendar date is needed.
-
-## Accessibility (WCAG 2.1 AA)
-
-Both date and time inputs are keyboard navigable (SC 2.1.1); visible focus ring on each field (SC 2.4.7); partial-fill and mandatory errors announced via aria-invalid (SC 3.3.1); disabled state propagated via HTML disabled attribute (SC 4.1.2); text contrast ≥ 4.5:1 (SC 1.4.3).
         `,
       },
     },

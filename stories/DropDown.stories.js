@@ -47,10 +47,6 @@ Non-searchable dropdown select for coded single-select observations. Uses **Auto
 
 - Single-select from a small, finite option set (e.g. blood group).
 - **Not** for multi-select — use **CodedControl** with \`properties.multiSelect: true\`. Option groups are not supported; all options render in a flat list.
-
-## Accessibility (WCAG 2.1 AA)
-
-Combobox role with aria-expanded state (SC 1.3.1, 4.1.2); keyboard navigable with arrow keys (SC 2.1.1); visible focus ring (SC 2.4.7); mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).
         `,
       },
     },

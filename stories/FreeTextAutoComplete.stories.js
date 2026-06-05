@@ -46,10 +46,6 @@ Creatable select input that combines free-text entry with predefined suggestions
 
 - When clinicians should be able to pick a suggestion **or** enter a new value not in the list.
 - For open-ended coded fields where the option set is not exhaustive.
-
-## Accessibility (WCAG 2.1 AA)
-
-Combobox pattern with creatable listbox (SC 1.3.1, 4.1.2); keyboard navigable with arrow keys and Enter to create new options (SC 2.1.1); visible focus ring (SC 2.4.7); new option creation announced via aria-live (SC 4.1.3); text contrast ≥ 4.5:1 (SC 1.4.3). Note: a disabled state is not natively supported — wrap in \`<fieldset disabled>\` for accessible disabling.
         `,
       },
     },

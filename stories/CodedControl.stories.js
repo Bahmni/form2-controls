@@ -61,10 +61,6 @@ Coded concept selector that renders as buttons (default), a dropdown, or an auto
 ## When to use
 
 - Selecting one or more coded answers for a concept, when you want a single control that can switch presentation as the answer set grows.
-
-## Accessibility (WCAG 2.1 AA)
-
-Each display mode inherits its sub-component's accessibility; button mode uses role=button with keyboard activation via Enter/Space (SC 2.1.1); visible focus ring on each option (SC 2.4.7); selected state conveyed via aria-pressed (SC 4.1.2); mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).
         `,
       },
     },

@@ -340,10 +340,6 @@ Multi-select coded observation — clinicians choose several answers for a singl
 
 - A single concept that accepts multiple coded answers — e.g. comorbidities, presenting symptoms.
 - For single-select coded answers, use **CodedControl**, **DropDown**, or **RadioButton** instead.
-
-## Accessibility (WCAG 2.1 AA)
-
-Each option is keyboard selectable via Tab and Space (SC 2.1.1); checked state conveyed via native checkbox semantics (SC 1.3.1, 4.1.2); visible focus ring on each option (SC 2.4.7); mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).
         `,
       },
     },

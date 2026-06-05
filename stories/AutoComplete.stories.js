@@ -53,10 +53,6 @@ Searchable select control for coded observations. Supports synchronous option li
 
 - Selecting from large coded sets — medications, diagnoses — where type-to-filter helps.
 - Set \`asynchronous: true\` to fetch options on demand; \`multiSelect: true\` to allow several selections.
-
-## Accessibility (WCAG 2.1 AA)
-
-Combobox pattern with listbox popup (SC 1.3.1, 4.1.2); keyboard navigable with arrow keys and Enter to select (SC 2.1.1); visible focus ring (SC 2.4.7); suggestions announced via aria-live region (SC 4.1.3); mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).
         `,
       },
     },

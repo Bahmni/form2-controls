@@ -56,10 +56,6 @@ Location selector that fetches the location list from the OpenMRS REST API on mo
 
 - Selecting a service-delivery location or facility for an observation.
 - Set \`properties.style="autocomplete"\` to enable searchable mode.
-
-## Accessibility (WCAG 2.1 AA)
-
-Inherits AutoComplete accessibility — combobox role with arrow-key navigation (SC 2.1.1, 4.1.2); visible focus ring (SC 2.4.7); loading state announced via aria-busy (SC 4.1.3); mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).
         `,
       },
     },
