@@ -35,7 +35,7 @@ module.exports = {
   ],
   moduleFileExtensions: ['js', 'jsx', 'json'],
   transformIgnorePatterns: [
-    '/node_modules/(?!(@bahmni/design-system|@bahmni/services)/)'
+    '/node_modules/(?!(@bahmni/design-system|@bahmni/services|@carbon)/)'
   ],
   testTimeout: 10000,
   coverageThreshold: {
