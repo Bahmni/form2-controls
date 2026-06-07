@@ -130,7 +130,6 @@ export default class ControlRecordWrapper {
         return;
       }
       if (Object.hasOwn(r.control.properties, 'notes')) {
-      //if (r.control.properties.hasOwnProperty('notes')) {
         var control = Object.assign({}, r.control);
         control.properties.notes = show;
         const updatedRecord = r.set('control', control);

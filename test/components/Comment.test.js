@@ -70,7 +70,6 @@ describe('Comment', () => {
   it('should render comment section with default value', () => {
     render(<Comment comment="Some Comment" onCommentChange={mockOnCommentChange} />);
 
-    fireEvent.click(screen.getByRole('button'));
     const textarea = screen.getByRole('textbox');
 
     expect(textarea).toHaveValue('Some Comment');

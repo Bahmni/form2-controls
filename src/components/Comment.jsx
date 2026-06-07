@@ -10,7 +10,7 @@ export class Comment extends Component {
     super(props);
     const hasNote = !!(props.comment && props.comment.length > 0);
     this.state = {
-      showCommentSection: props.forceOpen || false,
+      showCommentSection: props.forceOpen || hasNote,
       hasNote,
     };
   }
