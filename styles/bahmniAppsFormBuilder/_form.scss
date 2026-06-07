@@ -190,42 +190,54 @@ $lightestGray: #eee;
             flex: 0 0 auto !important;
           }
 
-          // max-width: $spacing-13 * 3 + $spacing-12 + $spacing-06 = 480 + 96 + 24 = 600px
-
-          .obs-control-select-wrapper,
+          // Bounded width for ellipsis (responsive max-width, not fixed width)
           .cds--combo-box,
           .cds--dropdown,
-          .cds--list-box {
+          .cds--list-box:not(.cds--multi-select) {
             flex: 0 0 auto;
             width: auto;
             min-width: $spacing-13;
-            max-width: calc(
-              #{$spacing-13} * 3 + #{$spacing-12} + #{$spacing-06}
-            );
+            max-width: calc(#{$spacing-13} * 3 + #{$spacing-12} + #{$spacing-06});
           }
 
-          // Combobox: overflow:hidden creates a block formatting context bounded
-          // by max-width, so child width:100% resolves to that fixed size.
-          // The dropdown menu is position:absolute so it still escapes the clip.
-          .obs-control-select-wrapper .cds--combo-box {
-            overflow: hidden;
+          // List box field: flex wrapper for the input and buttons inside the dropdown/combobox.
+          // min-width: 0 is critical to allow the input to shrink below text width.
+          .cds--list-box__field {
+            display: flex !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
           }
 
-          // Field fills the bounded combo-box so the input has a defined container.
-          // Apply overflow hidden to enable text truncation on selected values.
-          .cds--combo-box .cds--list-box__field {
-            width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
+          // Text input: force ellipsis even in focused/active states.
+          // Carbon removes ellipsis on focus by default; we override to keep it visible.
+          // Apply to base, focus, and active states to ensure ellipsis is always shown.
+          input.cds--text-input,
+          input.cds--text-input:focus,
+          input.cds--text-input:active,
+          .cds--list-box input.cds--text-input,
+          .cds--list-box input.cds--text-input:focus,
+          .cds--list-box input.cds--text-input:active {
+            width: 100% !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
           }
 
-          // Input shrinks to fill remaining space (after clear+toggle buttons),
-          // enabling text-overflow:ellipsis to truncate long selected values.
-          // Constrain input max-width to ensure ellipsis shows for long text consistently.
-          .cds--combo-box .cds--text-input {
-            flex: 1;
-            min-width: 0;
-            max-width: calc(#{$spacing-13} * 2 + #{$spacing-10});
+          // Expanded/focus-within states: maintain ellipsis when dropdown is open or focused.
+          .cds--list-box--expanded input.cds--text-input,
+          .cds--list-box:focus-within input.cds--text-input {
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+          }
+
+          // Dropdown label: truncate with ellipsis.
+          .cds--list-box__label {
+            display: inline-block !important;
+            width: 100% !important;
+            min-width: 0 !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
             white-space: nowrap !important;
