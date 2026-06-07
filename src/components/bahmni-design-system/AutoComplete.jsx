@@ -55,6 +55,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
   const [hasError, setHasError] = useState(initialHasErrors);
 
   const containerRef = useRef(null);
+  const blurTimerRef = useRef(null);
 
   // Keep a stable ref to current props for use inside debounced function
   const propsRef = useRef({
@@ -66,6 +67,11 @@ export const AutoComplete = forwardRef(function AutoComplete({
   const prevPropValue = useRef(undefined);
   const prevValidate = useRef(validate);
   const hasMounted = useRef(false);
+
+  // Cleanup setTimeout on unmount
+  useEffect(() => () => {
+    if (blurTimerRef.current) clearTimeout(blurTimerRef.current);
+  }, []);
 
   function handleInputChange(input) {
     const {
@@ -188,7 +194,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
     }
 
     // Blur input immediately after selection to trigger ellipsis display
-    setTimeout(() => {
+    blurTimerRef.current = setTimeout(() => {
       const input = containerRef.current?.querySelector('.cds--text-input');
       if (input && document.activeElement === input) {
         input.blur();

@@ -65,15 +65,6 @@ export class FreeTextAutoComplete extends Component {
     return !!this.props.formFieldPath && this.props.formFieldPath.split('-')[1] !== '0';
   }
 
-  _applyEllipsisStyles() {
-    const input = this.containerRef.current?.querySelector('.cds--text-input');
-    if (input) {
-      input.style.overflow = 'hidden';
-      input.style.textOverflow = 'ellipsis';
-      input.style.whiteSpace = 'nowrap';
-    }
-  }
-
   handleChange({ selectedItem, inputValue }) {
     // selectedItem is null for custom-typed values; use inputValue in that case
     const value = selectedItem !== null && selectedItem !== undefined
@@ -81,10 +72,10 @@ export class FreeTextAutoComplete extends Component {
       : (inputValue || null);
     const errors = this._getErrors(value);
     this.setState({ hasErrors: this._hasErrors(errors), value }, () => {
-      this._applyEllipsisStyles();
       // Blur input immediately after selection to trigger ellipsis display
-      if (selectedItem && document.activeElement instanceof HTMLElement) {
-        document.activeElement.blur();
+      const input = this.containerRef.current?.querySelector('.cds--text-input');
+      if (input && document.activeElement === input) {
+        input.blur();
       }
     });
     this.props.onChange({ value, errors });
