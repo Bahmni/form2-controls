@@ -135,9 +135,7 @@ export class FileUpload extends Component {
   }
 
   handleDelete() {
-    if (this.props.value && typeof this.props.value === 'string' && !this.props.value.includes('voided')) {
-      this.update(`${this.props.value}voided`);
-    }
+    this.update(undefined);
   }
 
   handleRestore() {

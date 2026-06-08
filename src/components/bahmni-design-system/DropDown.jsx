@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, FilterableMultiSelect } from '@bahmni/design-system';
+import { ComboBox, FilterableMultiSelect } from '@bahmni/design-system';
 import { Validator } from 'src/helpers/Validator';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
@@ -90,13 +90,13 @@ export class DropDown extends Component {
       );
     }
     return (
-      <Dropdown
+      <ComboBox
         id={conceptUuid || 'dropdown'}
         disabled={!enabled}
         invalid={this.state.hasErrors}
         items={options}
         itemToString={(item) => item?.name || ''}
-        label=""
+        placeholder="Select"
         onChange={this.handleChange}
         selectedItem={value || null}
         titleText=""
