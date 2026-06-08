@@ -168,9 +168,9 @@ describe('CarbonContainer', () => {
     expect(document.querySelector('.cds--accordion__item')).not.toHaveClass('cds--accordion__item--active');
   });
 
-  it('should render Carbon Dropdown for Coded concept with dropDown property', () => {
+  it('should render Carbon ComboBox for Coded concept with dropDown property', () => {
     render(<CarbonContainer {...defaultProps} metadata={dropDownMetadata} />);
-    expect(document.querySelector('.cds--dropdown')).toBeInTheDocument();
+    expect(document.querySelector('.cds--combo-box')).toBeInTheDocument();
   });
 
   it('should render Carbon SelectableTags for Coded concept without dropDown or autoComplete', () => {
