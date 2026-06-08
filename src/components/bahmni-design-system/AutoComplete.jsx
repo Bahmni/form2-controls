@@ -54,6 +54,9 @@ export const AutoComplete = forwardRef(function AutoComplete({
     : false;
   const [hasError, setHasError] = useState(initialHasErrors);
 
+  const containerRef = useRef(null);
+  const blurTimerRef = useRef(null);
+
   // Keep a stable ref to current props for use inside debounced function
   const propsRef = useRef({
     url, options: propOptions, minimumInput, terminologyServiceConfig, labelKey, optionsUrl,
@@ -64,6 +67,11 @@ export const AutoComplete = forwardRef(function AutoComplete({
   const prevPropValue = useRef(undefined);
   const prevValidate = useRef(validate);
   const hasMounted = useRef(false);
+
+  // Cleanup setTimeout on unmount
+  useEffect(() => () => {
+    if (blurTimerRef.current) clearTimeout(blurTimerRef.current);
+  }, []);
 
   function handleInputChange(input) {
     const {
@@ -184,6 +192,14 @@ export const AutoComplete = forwardRef(function AutoComplete({
         onValueChange(selectedValue, errors);
       }
     }
+
+    // Blur input immediately after selection to trigger ellipsis display
+    blurTimerRef.current = setTimeout(() => {
+      const input = containerRef.current?.querySelector('.cds--text-input');
+      if (input && document.activeElement === input) {
+        input.blur();
+      }
+    }, 0);
   }
 
   async function getAsyncOptions(input) {
@@ -206,7 +222,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
   if (multiSelect) {
     const initialSelectedItems = Array.isArray(value) ? value : (value ? [value] : []);
     return (
-      <div className={className}>
+      <div className={className} ref={containerRef}>
         <FilterableMultiSelect
           key={JSON.stringify(propValue)}
           id={conceptUuid}
@@ -223,7 +239,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
 
   if (asynchronous) {
     return (
-      <div className={className}>
+      <div className={className} ref={containerRef}>
         <ComboBox
           id={conceptUuid}
           disabled={!enabled}
@@ -244,7 +260,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
   }
 
   return (
-    <div className={className}>
+    <div className={className} ref={containerRef}>
       <ComboBox
         id={conceptUuid}
         disabled={!enabled}
