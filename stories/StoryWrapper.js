@@ -49,7 +49,17 @@ const headerStyle = {
 export default class StoryWrapper extends PureComponent {
 
   render() {
-    const { title, children, json } = this.props;
+    const { title, children, json, showDebug } = this.props;
+    if (!showDebug) {
+      return (
+        <div style={styles.wrap}>
+          <div>
+            {title && <div style={headerStyle}>{title}</div>}
+            {children}
+          </div>
+        </div>
+      );
+    }
     return (<div style={styles.wrap}>
                 <div style={styles.box}>
                     {title && <div style={headerStyle}>{title}</div>}
@@ -64,6 +74,11 @@ export default class StoryWrapper extends PureComponent {
 }
 
 StoryWrapper.propTypes = {
-  json: PropTypes.object.isRequired,
+  json: PropTypes.object,
   title: PropTypes.string,
+  showDebug: PropTypes.bool,
+};
+
+StoryWrapper.defaultProps = {
+  showDebug: false,
 };

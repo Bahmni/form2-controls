@@ -6,18 +6,19 @@ import { List } from 'immutable';
 import StoryWrapper from './StoryWrapper';
 import { registerCoreComponents } from './componentRegistry';
 import { pulseDataMetadata } from './mockData';
+import { description, argTypes } from './_meta/abnormalObsControlMeta';
 
 registerCoreComponents();
 
 export default {
   title: 'Complex Controls/AbnormalObsControl',
+  component: ObsGroupControl,
+  tags: ['autodocs'],
+  argTypes,
   parameters: {
     docs: {
       description: {
-        component:
-          'AbnormalObsControl demonstrates an ObsGroup that pairs a numeric observation with a ' +
-          'Boolean "Abnormal" toggle button. The toggle is rendered inline using the Button display ' +
-          'type and lets clinicians flag an out-of-range reading without leaving the field.',
+        component: description,
       },
     },
   },
