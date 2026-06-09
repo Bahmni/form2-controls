@@ -5,7 +5,8 @@ module.exports = {
     '^src/(.*)$': '<rootDir>/src/$1',
     '^components/(.*)$': '<rootDir>/src/components/$1',
     '^helpers/(.*)$': '<rootDir>/src/helpers/$1',
-    '\\.(css|less|scss|sass)$': '<rootDir>/test/mocks/styleMock.js',
+    '@carbon/styles/css/styles\\.css$': 'identity-obj-proxy',
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': 'test-file-stub'
   },
   collectCoverageFrom: [
@@ -35,7 +36,7 @@ module.exports = {
   ],
   moduleFileExtensions: ['js', 'jsx', 'json'],
   transformIgnorePatterns: [
-    '/node_modules/(?!(@bahmni/design-system|@bahmni/services)/)'
+    '/node_modules/(?!(@bahmni/design-system|@bahmni/services|@carbon)/)'
   ],
   testTimeout: 10000,
   coverageThreshold: {

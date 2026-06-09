@@ -105,7 +105,7 @@ export class Button extends Component {
     return (
       <div
         id={conceptUuid}
-        className={this.state.hasErrors ? 'form-builder-error' : ''}
+        className={`form-builder-selectable-tag-group${this.state.hasErrors ? ' form-builder-error' : ''}`}
         style={{ display: 'inline-flex', flexWrap: 'wrap', gap: spacing03 }}
       >
         {options.map((option) => (

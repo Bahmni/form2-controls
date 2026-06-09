@@ -111,19 +111,22 @@ $lightestGray: #eee;
 
           // TextBox (text type) renders inside obs-comment-section-wrap > cds--text-area__wrapper.
           // Shrink the wrapper so the clone fits on the same row, pinned top-right.
-          &:has(.obs-comment-section-wrap .cds--text-area__wrapper) > .obs-comment-section-wrap {
+          // Clone is two sm icon buttons (2rem each) + gap (0.5rem) = ~4.5rem wide, so we
+          // need at least 5rem of clearance from the content-box right edge.
+          &:has(.obs-comment-section-wrap .cds--text-area__wrapper)
+            > .obs-comment-section-wrap {
             flex: 1 1 auto;
-            max-width: calc(100% - #{$spacing-09});
+            max-width: calc(100% - #{$spacing-11});
             margin-top: 0;
           }
 
-          &:has(.obs-comment-section-wrap .cds--text-area__wrapper) .form-builder-clone {
+          &:has(.obs-comment-section-wrap .cds--text-area__wrapper)
+            .form-builder-clone {
             position: absolute;
             right: $spacing-07;
             top: $spacing-03;
             z-index: 1;
           }
-
 
           .form-builder-comment-wrap {
             margin-left: auto !important; // beats legacy { clear:both; overflow:hidden } rule
@@ -181,18 +184,74 @@ $lightestGray: #eee;
           }
 
           .cds--date-picker.cds--date-picker--single,
-          .cds--date-picker.cds--date-picker--single > .cds--date-picker-container {
+          .cds--date-picker.cds--date-picker--single
+            > .cds--date-picker-container {
             width: fit-content !important;
             flex: 0 0 auto !important;
           }
 
-          // width:100% by default — constrain so AddMore button stays on same row.
+          // Bounded width for ellipsis (responsive max-width, not fixed width)
           .cds--combo-box,
           .cds--dropdown,
           .cds--list-box:not(.cds--multi-select) {
             flex: 0 0 auto;
             width: auto;
-            max-width: 600px;
+            min-width: $spacing-13;
+            max-width: calc(#{$spacing-13} * 3 + #{$spacing-12} + #{$spacing-06});
+          }
+
+          // List box field: flex wrapper for the input and buttons inside the dropdown/combobox.
+          // min-width: 0 is critical to allow the input to shrink below text width.
+          .cds--list-box__field {
+            display: flex !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+          }
+
+          // Text input: force ellipsis even in focused/active states.
+          // Carbon removes ellipsis on focus by default; we override to keep it visible.
+          // Apply to base, focus, and active states to ensure ellipsis is always shown.
+          input.cds--text-input,
+          input.cds--text-input:focus,
+          input.cds--text-input:active,
+          .cds--list-box input.cds--text-input,
+          .cds--list-box input.cds--text-input:focus,
+          .cds--list-box input.cds--text-input:active {
+            width: 100% !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+          }
+
+          // Expanded/focus-within states: maintain ellipsis when dropdown is open or focused.
+          .cds--list-box--expanded input.cds--text-input,
+          .cds--list-box:focus-within input.cds--text-input {
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+          }
+
+          // Dropdown label: truncate with ellipsis.
+          .cds--list-box__label {
+            display: inline-block !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+          }
+
+          // Dropdown menu expands to fit the longest option so text is never truncated.
+          .cds--list-box__menu {
+            min-width: max-content;
+          }
+
+          .cds--list-box__menu-item__option {
+            white-space: normal;
+            height: auto;
+            overflow-wrap: break-word;
           }
 
           .carbon-obs-comment-section-wrap {
@@ -219,15 +278,29 @@ $lightestGray: #eee;
             gap: $spacing-03;
 
             // Override generic input rule that squashes Carbon NumberInput internals.
+            // Use Carbon's own default width (12.5rem) to avoid squashing while also
+            // preventing long numbers from expanding the input and overlapping the ± buttons.
             .cds--number input[type="number"] {
               width: auto !important;
+              max-width: 12.5rem !important;
               margin: 0 !important;
               padding-block: 0 !important;
+              padding-inline-end: 6rem !important;
             }
 
             .cds--number__controls,
             .cds--number__control-btn {
               height: 100% !important;
+            }
+
+            // Carbon defaults: .down-icon { order: 1 } .up-icon { order: 2 }
+            // Swap so + appears first (top) and − appears second (bottom).
+            .cds--number__control-btn.up-icon {
+              order: 1;
+            }
+
+            .cds--number__control-btn.down-icon {
+              order: 2;
             }
 
             // Validation messages rendered via custom .form-builder-error styles.
@@ -246,6 +319,26 @@ $lightestGray: #eee;
 
           .form-control-buttons {
             max-width: 83%;
+          }
+
+          // "Add note" link: mirrors the clone fix from BAH-4603.
+          // Positioned absolutely on the right with consistent vertical alignment
+          // across all field types (dropdowns, multiselect buttons, numeric inputs, text, etc).
+          > .form-builder-comment-wrap {
+            position: absolute;
+            right: -$spacing-07;
+            top: $spacing-03;
+            z-index: 100;
+            pointer-events: auto;
+          }
+
+          // Show teal border on selected, remove on deselect, keep keyboard focus ring.
+          .cds--tag--selectable-selected {
+            border-color: var(--cds-focus) !important;
+          }
+
+          .cds--tag--selectable:focus:not(:focus-visible) {
+            outline: none;
           }
 
           .form-builder-radio-wrapper {
@@ -268,7 +361,7 @@ $lightestGray: #eee;
           margin: initial;
         }
 
-        input {
+        input:not(.cds--text-input) {
           width: 12.5em;
           color: $bahmniTextColor;
           padding: 2px 10px;
@@ -1042,7 +1135,8 @@ input.computed-value {
 }
 
 // Shrink heading click area so it doesn't overlap the Remove button.
-.obs-group-add-more-wrapper:has(.obs-group-remove-btn) .cds--accordion__heading {
+.obs-group-add-more-wrapper:has(.obs-group-remove-btn)
+  .cds--accordion__heading {
   padding-inline-end: 2.5rem;
 }
 
@@ -1050,4 +1144,5 @@ input.computed-value {
   margin-top: 0.5rem;
   align-self: flex-start;
   --cds-layout-density-padding-inline-local: 0.5rem;
+  padding-inline-end: 1.75rem;
 }

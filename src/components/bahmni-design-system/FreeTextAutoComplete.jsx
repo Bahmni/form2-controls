@@ -11,6 +11,7 @@ export class FreeTextAutoComplete extends Component {
     const errors = this._getErrors(props.value) || [];
     const hasErrors = this._isCreateByAddMore() ? this._hasErrors(errors) : false;
     this.state = { hasErrors, value: props.value || null };
+    this.containerRef = React.createRef();
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -70,25 +71,33 @@ export class FreeTextAutoComplete extends Component {
       ? selectedItem
       : (inputValue || null);
     const errors = this._getErrors(value);
-    this.setState({ hasErrors: this._hasErrors(errors), value });
+    this.setState({ hasErrors: this._hasErrors(errors), value }, () => {
+      // Blur input immediately after selection to trigger ellipsis display
+      const input = this.containerRef.current?.querySelector('.cds--text-input');
+      if (input && document.activeElement === input) {
+        input.blur();
+      }
+    });
     this.props.onChange({ value, errors });
   }
 
   render() {
     const { conceptUuid, enabled, options } = this.props;
     return (
-      <ComboBox
-        id={conceptUuid || 'free-text-autocomplete'}
-        allowCustomValue
-        disabled={!enabled}
-        invalid={this.state.hasErrors}
-        items={options}
-        itemToString={(item) => (typeof item === 'string' ? item
-          : item?.label || item?.name?.display || item?.name || '')}
-        onChange={this.handleChange}
-        selectedItem={this.state.value}
-        titleText=""
-      />
+      <div ref={this.containerRef}>
+        <ComboBox
+          id={conceptUuid || 'free-text-autocomplete'}
+          allowCustomValue
+          disabled={!enabled}
+          invalid={this.state.hasErrors}
+          items={options}
+          itemToString={(item) => (typeof item === 'string' ? item
+            : item?.label || item?.name?.display || item?.name || '')}
+          onChange={this.handleChange}
+          selectedItem={this.state.value}
+          titleText=""
+        />
+      </div>
     );
   }
 }

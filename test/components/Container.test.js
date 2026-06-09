@@ -599,6 +599,32 @@ describe('Container', () => {
       expect(screen.queryByText(/PULSE_LABEL/)).not.toBeInTheDocument();
       expect(screen.getByText(/Pulse/)).toBeInTheDocument();
     });
+
+    it('should render decoded HTML entities in concept labels and translations', () => {
+      const metadata = createNumericControlMetadata({
+        controls: [{
+          ...createNumericControlMetadata().controls[0],
+          label: { type: 'label', value: 'Blood Pressure &gt; 60', translationKey: 'BP_LABEL' },
+          concept: {
+            ...createNumericControlMetadata().controls[0].concept,
+            name: 'Vitals &amp; Parameters',
+          },
+        }],
+      });
+      const translations = {
+        labels: { BP_LABEL: 'Blood Pressure &gt; 60' },
+        concepts: {},
+      };
+
+      renderContainer({ metadata, translations });
+
+      // The label should display with decoded entity (> instead of &gt;)
+      expect(screen.getByText(/Blood Pressure > 60/)).toBeInTheDocument();
+      // The input should be associated with the decoded label
+      const input = screen.getByRole('spinbutton');
+      expect(input).toBeInTheDocument();
+    });
+
   });
 
   describe('Coverage Improvements', () => {
@@ -858,6 +884,66 @@ describe('Container', () => {
       expect(() => {
         containerRef.current.onEventTrigger('some-path', 'onValueChange');
       }).not.toThrow();
+    });
+
+    it('should rebuild control tree when metadata prop changes', () => {
+      const initialMetadata = createNumericControlMetadata({
+        controls: [{
+          ...createNumericControlMetadata().controls[0],
+          label: { type: 'label', value: 'Initial Pulse Label' },
+        }],
+      });
+
+      const updatedMetadata = createNumericControlMetadata({
+        controls: [{
+          ...createNumericControlMetadata().controls[0],
+          label: { type: 'label', value: 'Updated Pulse Label' },
+        }],
+      });
+
+      const containerRef = React.createRef();
+      const { rerender } = render(
+        <Container ref={containerRef} {...defaultProps} metadata={initialMetadata} />,
+      );
+
+      expect(screen.getByText(/Initial Pulse Label/)).toBeInTheDocument();
+      expect(containerRef.current).toBeTruthy();
+      const initialTreeData = containerRef.current.state.data;
+
+      rerender(
+        <Container ref={containerRef} {...defaultProps} metadata={updatedMetadata} />,
+      );
+
+      expect(screen.getByText(/Updated Pulse Label/)).toBeInTheDocument();
+      const updatedTreeData = containerRef.current.state.data;
+
+      expect(initialTreeData).not.toBe(updatedTreeData);
+    });
+
+    it('should decode HTML entities in metadata when updated', () => {
+      const initialMetadata = createNumericControlMetadata({
+        controls: [{
+          ...createNumericControlMetadata().controls[0],
+          label: { type: 'label', value: 'Pulse &gt; 60' },
+        }],
+      });
+
+      const updatedMetadata = createNumericControlMetadata({
+        controls: [{
+          ...createNumericControlMetadata().controls[0],
+          label: { type: 'label', value: 'Blood Pressure &amp; Temperature' },
+        }],
+      });
+
+      const { rerender } = renderContainer({ metadata: initialMetadata });
+
+      expect(screen.getByText(/Pulse > 60/)).toBeInTheDocument();
+
+      rerender(
+        <Container {...defaultProps} metadata={updatedMetadata} />,
+      );
+
+      expect(screen.getByText(/Blood Pressure & Temperature/)).toBeInTheDocument();
     });
   });
 });
