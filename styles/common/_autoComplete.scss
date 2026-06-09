@@ -6,6 +6,7 @@
  */
 .cds--combo-box .cds--list-box__field .cds--text-input {
   max-width: calc(100% - 4.5rem) !important;
+  min-width: 0 !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;

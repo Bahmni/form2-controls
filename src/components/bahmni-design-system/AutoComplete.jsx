@@ -217,6 +217,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
           items={safeOptions.length > 0 ? safeOptions : safePropOptions}
           itemToString={(item) => (item ? item[labelKey] || '' : '')}
           initialSelectedItems={initialSelectedItems}
+          placeholder="Select"
           onChange={({ selectedItems }) => handleChange(selectedItems)}
         />
       </div>
@@ -236,7 +237,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
           selectedItem={value || null}
           onChange={({ selectedItem }) => handleChange(selectedItem)}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => { setIsFocused(false); if (onBlur) onBlur(); }}
+          onBlur={(e) => { setIsFocused(false); if (onBlur) onBlur(e); }}
           onInputChange={(inputValue) => {
             if (typeof inputValue === 'string') {
               debouncedGetAsyncOptions.current(inputValue);
@@ -259,7 +260,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
         selectedItem={value || null}
         onChange={({ selectedItem }) => handleChange(selectedItem)}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => { setIsFocused(false); if (onBlur) onBlur(); }}
+        onBlur={(e) => { setIsFocused(false); if (onBlur) onBlur(e); }}
         onInputChange={(inputValue) => {
           if (typeof inputValue === 'string') {
             debouncedOnInputChange.current(inputValue);

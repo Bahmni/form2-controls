@@ -100,6 +100,27 @@ export class DropDown extends Component {
         onChange={this.handleChange}
         selectedItem={value || null}
         titleText=""
+        downshiftProps={{
+          stateReducer: (state, { type, changes }) => {
+            // Guard against accidental data loss: Carbon fires onChange(null) when the
+            // user types a non-matching string and blurs the field. The X-clear button
+            // calls onChange directly (bypassing Downshift), so this guard does not
+            // block intentional clears.
+            // InputBlur = '__input_blur__' in dev/test, 9 in production (Downshift internals)
+            if (
+              (type === 9 || type === '__input_blur__') &&
+              changes.selectedItem === null &&
+              state.selectedItem !== null
+            ) {
+              return {
+                ...changes,
+                selectedItem: state.selectedItem,
+                inputValue: state.selectedItem?.name || '',
+              };
+            }
+            return changes;
+          },
+        }}
       />
     );
   }

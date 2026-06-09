@@ -13,7 +13,6 @@ export class FileUpload extends Component {
     this.state = { hasErrors: false, loading: false };
     this.handleChange = this.handleChange.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.handleRestore = this.handleRestore.bind(this);
   }
 
   componentDidMount() {
@@ -136,12 +135,6 @@ export class FileUpload extends Component {
 
   handleDelete() {
     this.update(undefined);
-  }
-
-  handleRestore() {
-    if (typeof this.props.value === 'string') {
-      this.update(this.props.value.replace(/voided/g, ''));
-    }
   }
 
   getFileName(value) {

@@ -191,6 +191,28 @@ describe('Carbon DropDown', () => {
       expect(mockOnValueChange).toHaveBeenCalledWith(options[1], []);
     });
 
+    it('should not clear a selected value when user types non-matching text and blurs', () => {
+      render(
+        <DropDown
+          formFieldPath="test1.1/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+          validate={false}
+          validateForm={false}
+          validations={[]}
+          value={options[0]}
+        />
+      );
+
+      mockOnValueChange.mockClear();
+
+      const input = screen.getByRole('combobox');
+      fireEvent.change(input, { target: { value: 'xyz' } });
+      fireEvent.blur(input);
+
+      expect(mockOnValueChange).not.toHaveBeenCalledWith(null, expect.anything());
+    });
+
     it('should not crash when formFieldPath is undefined', () => {
       expect(() =>
         render(

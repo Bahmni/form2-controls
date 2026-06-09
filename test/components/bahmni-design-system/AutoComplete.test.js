@@ -1005,5 +1005,21 @@ describe('Carbon AutoComplete', () => {
 
       expect(container.querySelector('input')).toHaveAttribute('placeholder', 'Type to search');
     });
+
+    it('should revert placeholder to "Select" on blur (async mode)', () => {
+      const { container } = render(
+        <AutoComplete
+          asynchronous={true}
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+        />
+      );
+
+      const input = container.querySelector('input');
+      fireEvent.focus(input);
+      fireEvent.blur(input);
+
+      expect(input).toHaveAttribute('placeholder', 'Select');
+    });
   });
 });
