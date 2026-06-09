@@ -1,6 +1,5 @@
 import { FileUploaderButton, FileUploaderItem } from '@carbon/react';
-import { Renew } from '@carbon/icons-react';
-import { Button, Loading } from '@bahmni/design-system';
+import { Loading } from '@bahmni/design-system';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { FileUpload } from './FileUpload';
@@ -9,7 +8,6 @@ export class Image extends FileUpload {
 
   displayImage() {
     const loading = this.state.loading === true;
-    const isVoided = this.props.value && typeof this.props.value === 'string' && this.props.value.includes('voided');
     const fileName = this.getFileName(this.props.value);
 
     return (
@@ -33,17 +31,6 @@ export class Image extends FileUpload {
               onDelete={this.handleDelete}
               iconDescription="Delete file"
             />
-            {isVoided && (
-              <Button
-                kind="ghost"
-                hasIconOnly
-                size="sm"
-                onClick={this.handleRestore}
-                iconDescription="Restore image"
-                className="restore-button-inline"
-                renderIcon={Renew}
-              />
-            )}
           </div>
         )}
       </div>

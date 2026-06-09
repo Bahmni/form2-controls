@@ -13,11 +13,10 @@ export class FileUpload extends Component {
     this.state = { hasErrors: false, loading: false };
     this.handleChange = this.handleChange.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.handleRestore = this.handleRestore.bind(this);
   }
 
   componentDidMount() {
-    if (this.props.value && typeof this.props.value === 'string' && !this.props.value.includes('voided')) {
+    if (this.props.value && typeof this.props.value === 'string') {
       this.addControlWithNotification(false);
     }
   }
@@ -55,14 +54,7 @@ export class FileUpload extends Component {
     if (this._isCreateByAddMore()) {
       return [];
     }
-    const validations = this.props.validations;
-    let controlDetails;
-    if (value && typeof value === 'string' && value.includes('voided')) {
-      controlDetails = { validations, value: undefined };
-    } else {
-      controlDetails = { validations, value };
-    }
-    return Validator.getErrors(controlDetails);
+    return Validator.getErrors({ validations: this.props.validations, value });
   }
 
   _hasErrors(errors) {
@@ -135,20 +127,12 @@ export class FileUpload extends Component {
   }
 
   handleDelete() {
-    if (this.props.value && typeof this.props.value === 'string' && !this.props.value.includes('voided')) {
-      this.update(`${this.props.value}voided`);
-    }
-  }
-
-  handleRestore() {
-    if (typeof this.props.value === 'string') {
-      this.update(this.props.value.replace(/voided/g, ''));
-    }
+    this.update(undefined);
   }
 
   getFileName(value) {
     if (!value || typeof value !== 'string') return '';
-    return value.replace(/voided/g, '').split('/').pop();
+    return value.split('/').pop();
   }
 
   // eslint-disable-next-line react/require-render-return
