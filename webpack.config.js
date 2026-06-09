@@ -1,85 +1,84 @@
-'use strict';
+"use strict";
 
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const srcPath = path.join(__dirname, './src');
+const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const srcPath = path.join(__dirname, "./src");
 
 module.exports = {
-  mode: 'production',
-  devtool: 'source-map',
+  mode: "production",
+  devtool: "source-map",
   entry: {
-    helpers: ['./src/helpers/componentStore.js', './src/helpers/formRenderer.js'],
-    bundle: ['./src/index.jsx']
+    helpers: [
+      "./src/helpers/componentStore.js",
+      "./src/helpers/formRenderer.js",
+    ],
+    bundle: ["./src/index.jsx"],
   },
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: '[name].js',
-    libraryTarget: 'umd',
-    library: 'FormControls'
+    path: path.join(__dirname, "dist"),
+    filename: "[name].js",
+    libraryTarget: "umd",
+    library: "FormControls",
   },
   externals: {
     react: {
-      root: 'React',
-      commonjs2: 'react',
-      commonjs: 'react',
-      amd: 'react'
+      root: "React",
+      commonjs2: "react",
+      commonjs: "react",
+      amd: "react",
     },
-    'react-dom': {
-      root: 'ReactDOM',
-      commonjs2: 'react-dom',
-      commonjs: 'react-dom',
-      amd: 'react-dom'
-    }
+    "react-dom": {
+      root: "ReactDOM",
+      commonjs2: "react-dom",
+      commonjs: "react-dom",
+      amd: "react-dom",
+    },
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        use: ['babel-loader'],
-        include: path.join(__dirname, 'src')
+        use: ["babel-loader"],
+        include: path.join(__dirname, "src"),
       },
       {
         test: /\.css$/,
-        include: /node_modules\/(@fortawesome|@carbon)/,
+        include: /node_modules\/(@fortawesome)/,
         use: [
-          'style-loader',
+          "style-loader",
           {
-            loader: 'css-loader',
+            loader: "css-loader",
             options: {
               url: true,
-              import: true
-            }
-          }
-        ]
+              import: true,
+            },
+          },
+        ],
       },
       {
         test: /\.scss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader'
-        ]
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        type: 'asset/inline'
+        type: "asset/inline",
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/inline'
-      }
-    ]
+        type: "asset/inline",
+      },
+    ],
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '[name].css'
-    })
+      filename: "[name].css",
+    }),
   ],
   resolve: {
     alias: {
-      components: srcPath + '/components/',
-      src: srcPath
+      components: srcPath + "/components/",
+      src: srcPath,
     },
-    extensions: ['.js', '.jsx', '.json']
-  }
+    extensions: [".js", ".jsx", ".json"],
+  },
 };
