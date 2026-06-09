@@ -12,6 +12,7 @@ const medicationOptions = [
 
 export default {
   title: 'Atomic Controls/AutoComplete',
+  tags: ['autodocs'],
   component: AutoComplete,
   args: {
     options: medicationOptions,
@@ -36,16 +37,23 @@ export default {
   },
   parameters: {
     docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+        title: 'Table of Contents',
+      },
       description: {
-        component:
-          'Searchable select control for coded observations. ' +
-          'Supports synchronous option lists, client-side search filtering, ' +
-          'and asynchronous HTTP loading for large concept sets. ' +
-          'Observation value is stored as the selected option object.\n\n' +
-          'Accessibility (WCAG 2.1 AA): Combobox pattern with listbox popup (SC 1.3.1, 4.1.2); ' +
-          'keyboard navigable with arrow keys and Enter to select (SC 2.1.1); ' +
-          'visible focus ring (SC 2.4.7); suggestions announced via aria-live region (SC 4.1.3); ' +
-          'mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).',
+        component: `
+## Overview
+
+Searchable select control for coded observations. Supports synchronous option lists, client-side search filtering, and asynchronous HTTP loading for large concept sets.
+
+**Value stored:** the selected option object (or an array in multi-select mode).
+
+## When to use
+
+- Selecting from large coded sets — medications, diagnoses — where type-to-filter helps.
+- Set \`asynchronous: true\` to fetch options on demand; \`multiSelect: true\` to allow several selections.
+        `,
       },
     },
   },

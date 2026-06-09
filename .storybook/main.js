@@ -10,6 +10,11 @@ module.exports = {
     name: '@storybook/react-webpack5',
     options: {},
   },
+  // Name the autodocs page "Overview" (Carbon-style). Only Atomic Controls
+  // opt into autodocs, so this affects those pages only.
+  docs: {
+    defaultName: 'Overview',
+  },
   webpackFinal: async (config) => {
     config.module.rules.push({
       test: /\.(js|jsx)$/,

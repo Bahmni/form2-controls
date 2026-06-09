@@ -3,6 +3,7 @@ import { DateTime } from 'src/components/DateTime.jsx';
 
 export default {
   title: 'Atomic Controls/DateTime',
+  tags: ['autodocs'],
   component: DateTime,
   args: {
     validate: false,
@@ -21,17 +22,23 @@ export default {
   },
   parameters: {
     docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+        title: 'Table of Contents',
+      },
       description: {
-        component:
-          'Combined date and time picker for datetime observations. ' +
-          'Value format is "YYYY-MM-DD HH:mm". Both fields must be filled for a valid observation. ' +
-          'A partial fill (date only or time only) triggers an "Incorrect Date Time" validation error.\n\n' +
-          'Timezone handling: the value is stored in local browser time with no timezone offset. ' +
-          'Consumers are responsible for timezone interpretation; the stored string carries no TZ information.\n\n' +
-          'Accessibility (WCAG 2.1 AA): Both date and time inputs are keyboard navigable (SC 2.1.1); ' +
-          'visible focus ring on each field (SC 2.4.7); ' +
-          'partial-fill and mandatory errors announced via aria-invalid (SC 3.3.1); ' +
-          'disabled state propagated via HTML disabled attribute (SC 4.1.2); text contrast ≥ 4.5:1 (SC 1.4.3).',
+        component: `
+## Overview
+
+Combined date and time picker for datetime observations. Both fields must be filled for a valid observation — a partial fill (date only or time only) triggers an "Incorrect Date Time" validation error.
+
+**Value stored:** a string in \`YYYY-MM-DD HH:mm\` format, in local browser time with **no** timezone offset. Consumers are responsible for timezone interpretation — the stored string carries no TZ information.
+
+## When to use
+
+- Capturing an exact moment — e.g. time of admission, sample collection time.
+- When the time-of-day matters; use **Date** if only the calendar date is needed.
+        `,
       },
     },
   },

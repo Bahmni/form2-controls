@@ -3,6 +3,7 @@ import { Date } from 'src/components/Date.jsx';
 
 export default {
   title: 'Atomic Controls/Date',
+  tags: ['autodocs'],
   component: Date,
   args: {
     validate: false,
@@ -21,15 +22,23 @@ export default {
   },
   parameters: {
     docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+        title: 'Table of Contents',
+      },
       description: {
-        component:
-          'Native date picker for date-type observations. ' +
-          'Value is stored and transmitted as ISO 8601 string (YYYY-MM-DD). ' +
-          'Supports mandatory validation and enabled/disabled states.\n\n' +
-          'Accessibility (WCAG 2.1 AA): Native date input is keyboard navigable (SC 2.1.1) ' +
-          'and announces its input type to screen readers (SC 1.3.1); visible focus ring (SC 2.4.7); ' +
-          'validation errors surfaced via aria-invalid (SC 3.3.1); ' +
-          'disabled state set via HTML disabled attribute (SC 4.1.2); text contrast ≥ 4.5:1 (SC 1.4.3).',
+        component: `
+## Overview
+
+Native date picker for date-type observations, with support for mandatory validation and enabled/disabled states.
+
+**Value stored:** an ISO 8601 string (\`YYYY-MM-DD\`).
+
+## When to use
+
+- Capturing a calendar date — e.g. date of onset, last menstrual period.
+- When only the date matters; use **DateTime** if a time-of-day is also required.
+        `,
       },
     },
   },

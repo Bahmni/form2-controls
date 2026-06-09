@@ -186,7 +186,7 @@ by the form engine and shows it working on a real form.
 };
 
 // ---------------------------------------------------------------------------
-// Overview — landing page (mirrors Carbon Design System's "Overview" tab)
+// Overview — landing page (Storybook docs-style "Overview" tab)
 // ---------------------------------------------------------------------------
 
 const lifecycleRows = [

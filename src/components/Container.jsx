@@ -11,16 +11,19 @@ import ObservationMapper from '../helpers/ObservationMapper';
 import NotificationContainer from '../helpers/Notification';
 import Constants from '../constants';
 import { executeEventsFromCurrentRecord } from '../helpers/ExecuteEvents';
+import { deepUnescapeStrings } from '../helpers/encodingUtils';
 
 export class Container extends addMoreDecorator(Component) {
   constructor(props) {
     super(props);
     this.childControls = {};
-    const { observations, metadata } = this.props;
-    const controlRecordTree = new ControlRecordTreeBuilder().build(metadata, observations);
+    const { observations } = this.props;
+    this.metadata = deepUnescapeStrings(this.props.metadata);
+    const controlRecordTree = new ControlRecordTreeBuilder().build(this.metadata, observations);
     this.updatedControlRecordTree = controlRecordTree;
+    const formTranslations = this.getDecodedTranslations(props.translations);
     this.state = { errors: [], data: controlRecordTree,
-      collapse: props.collapse, notification: {} };
+      collapse: props.collapse, notification: {}, formTranslations };
     this.storeChildRef = this.storeChildRef.bind(this);
     this.onValueChanged = this.onValueChanged.bind(this);
     this.onControlAdd = this.onControlAdd.bind(this);
@@ -29,7 +32,7 @@ export class Container extends addMoreDecorator(Component) {
     this.showNotification = this.showNotification.bind(this);
     this.clearNotification = this.clearNotification.bind(this);
 
-    const initScript = this.props.metadata.events && this.props.metadata.events.onFormInit;
+    const initScript = this.metadata.events && this.metadata.events.onFormInit;
     let updatedTree;
     try {
       if (initScript) {
@@ -45,10 +48,27 @@ export class Container extends addMoreDecorator(Component) {
     }
   }
 
+  getDecodedTranslations(translations) {
+    const rawTranslations = Object.fromEntries(
+      Object.entries({ ...translations.labels, ...translations.concepts })
+        .filter(([key, value]) => value !== key)
+    );
+    return deepUnescapeStrings(rawTranslations);
+  }
+
   componentDidUpdate(prevProps) {
-    // Update collapse state when props change (moved from componentWillReceiveProps)
     if (prevProps.collapse !== this.props.collapse) {
       this.setState({ collapse: this.props.collapse });
+    }
+    if (prevProps.metadata !== this.props.metadata) {
+      this.metadata = deepUnescapeStrings(this.props.metadata);
+      const tree = new ControlRecordTreeBuilder().build(this.metadata, this.props.observations);
+      this.updatedControlRecordTree = tree;
+      this.setState({ data: tree });
+    }
+    if (prevProps.translations !== this.props.translations) {
+      const formTranslations = this.getDecodedTranslations(this.props.translations);
+      this.setState({ formTranslations });
     }
   }
 
@@ -177,12 +197,9 @@ export class Container extends addMoreDecorator(Component) {
   }
 
   render() {
-    const { metadata: { controls,
-      name: formName, version: formVersion }, validate, translations, patient, readonly } = this.props;
-    const formTranslations = Object.fromEntries(
-      Object.entries({ ...translations.labels, ...translations.concepts })
-        .filter(([key, value]) => value !== key)
-    );
+    const { controls, name: formName, version: formVersion } = this.metadata;
+    const { validate, patient, readonly } = this.props;
+    const formTranslations = this.state.formTranslations;
     const patientUuid = patient ? patient.uuid : undefined;
     const childProps = {
       collapse: this.state.collapse,
