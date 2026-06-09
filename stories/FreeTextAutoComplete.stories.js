@@ -11,6 +11,7 @@ const suggestionOptions = [
 
 export default {
   title: 'Atomic Controls/FreeTextAutoComplete',
+  tags: ['autodocs'],
   component: FreeTextAutoComplete,
   args: {
     options: [],
@@ -29,16 +30,23 @@ export default {
   },
   parameters: {
     docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+        title: 'Table of Contents',
+      },
       description: {
-        component:
-          'Creatable select input combining free-text entry with predefined suggestions. ' +
-          'Users can type any value or pick from options. ' +
-          'Supports single and multi-select modes.\n\n' +
-          'Accessibility (WCAG 2.1 AA): Combobox pattern with creatable listbox (SC 1.3.1, 4.1.2); ' +
-          'keyboard navigable with arrow keys and Enter to create new options (SC 2.1.1); ' +
-          'visible focus ring (SC 2.4.7); new option creation announced via aria-live (SC 4.1.3); ' +
-          'text contrast ≥ 4.5:1 (SC 1.4.3). Note: disabled state is not natively supported by ' +
-          'this component — use a <fieldset disabled> wrapper for accessible disabling.',
+        component: `
+## Overview
+
+Creatable select input that combines free-text entry with predefined suggestions — users can type any value or pick from the options. Supports single and multi-select modes (\`multi: true\`).
+
+**Value stored:** the typed or selected value(s).
+
+## When to use
+
+- When clinicians should be able to pick a suggestion **or** enter a new value not in the list.
+- For open-ended coded fields where the option set is not exhaustive.
+        `,
       },
     },
   },

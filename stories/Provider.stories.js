@@ -12,6 +12,7 @@ const mockProviders = [
 
 export default {
   title: 'Atomic Controls/Provider',
+  tags: ['autodocs'],
   component: Provider,
   decorators: [
     (Story) => {
@@ -38,16 +39,23 @@ export default {
   },
   parameters: {
     docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+        title: 'Table of Contents',
+      },
       description: {
-        component:
-          'Healthcare provider selector that fetches provider list from the OpenMRS REST API on mount. ' +
-          'In these stories, the HTTP call is mocked with local test data. ' +
-          'Observation value is stored as the provider id (as a string). ' +
-          'Set properties.style="autocomplete" to enable searchable mode.\n\n' +
-          'Accessibility (WCAG 2.1 AA): Inherits AutoComplete accessibility — combobox role with ' +
-          'arrow-key navigation (SC 2.1.1, 4.1.2); visible focus ring (SC 2.4.7); ' +
-          'loading state announced via aria-busy (SC 4.1.3); ' +
-          'mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).',
+        component: `
+## Overview
+
+Healthcare provider selector that fetches the provider list from the OpenMRS REST API on mount (the HTTP call is mocked with local test data in these stories).
+
+**Value stored:** the provider id (as a string).
+
+## When to use
+
+- Selecting the responsible clinician or provider for an observation.
+- Set \`properties.style="autocomplete"\` to enable searchable mode.
+        `,
       },
     },
   },

@@ -3,6 +3,7 @@ import { Video } from 'src/components/Video.jsx';
 
 export default {
   title: 'Atomic Controls/Video',
+  tags: ['autodocs'],
   component: Video,
   args: {
     validate: false,
@@ -22,20 +23,24 @@ export default {
   },
   parameters: {
     docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+        title: 'Table of Contents',
+      },
       description: {
-        component:
-          'File upload control for video observations (MP4, MKV, OGG, etc.). ' +
-          'Shows an "Upload Video" label before a file is selected, and a video player after upload. ' +
-          'Full upload requires a Bahmni backend; these stories demonstrate the UI states only.\n\n' +
-          'Camera capture (AC 13.1): camera capture is not natively invoked — the file input does not ' +
-          'carry a capture attribute, so the OS file picker opens instead of the camera directly.\n\n' +
-          'Observation storage format (AC 13.2): observation value is stored as ' +
-          '"<patientUuid>/<filename>" after successful upload to the Bahmni visitDocument API.\n\n' +
-          'Accessibility (WCAG 2.1 AA): File input activated via keyboard (SC 2.1.1); ' +
-          'visible focus ring on the upload trigger (SC 2.4.7); ' +
-          'upload status announced via aria-live region (SC 4.1.3); ' +
-          'video player provides keyboard-accessible playback controls (SC 2.1.1); ' +
-          'mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).',
+        component: `
+## Overview
+
+File upload control for video observations (MP4, MKV, OGG, etc.). Shows an "Upload Video" label before a file is selected and a video player after upload. Full upload requires a Bahmni backend — these stories demonstrate the UI states only.
+
+**Value stored:** \`"<patientUuid>/<filename>"\` after a successful upload to the Bahmni visitDocument API.
+
+**Camera capture:** not natively invoked — the file input carries no \`capture\` attribute, so the OS file picker opens rather than the camera directly.
+
+## When to use
+
+- Attaching a video observation to an encounter — e.g. a gait or seizure recording.
+        `,
       },
     },
   },

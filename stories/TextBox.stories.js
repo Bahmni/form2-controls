@@ -3,6 +3,7 @@ import { TextBox } from 'src/components/TextBox.jsx';
 
 export default {
   title: 'Atomic Controls/TextBox',
+  tags: ['autodocs'],
   component: TextBox,
   args: {
     validate: false,
@@ -21,13 +22,23 @@ export default {
   },
   parameters: {
     docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+        title: 'Table of Contents',
+      },
       description: {
-        component:
-          'Multi-line text area for free-form text observations. Auto-resizes with content. ' +
-          'Observation value is stored as a plain string.\n\n' +
-          'Accessibility (WCAG 2.1 AA): Keyboard navigable (SC 2.1.1); visible focus ring (SC 2.4.7); ' +
-          'mandatory validation error announced via aria-invalid and adjacent error message (SC 3.3.1, 3.3.3); ' +
-          'label programmatically associated via htmlFor/id (SC 1.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).',
+        component: `
+## Overview
+
+Multi-line text area for free-form text observations. The field auto-resizes as the user types.
+
+**Value stored:** a plain string.
+
+## When to use
+
+- Capturing unstructured clinical narrative — chief complaint, history, notes.
+- When the answer is free prose rather than a coded or numeric value.
+        `,
       },
     },
   },

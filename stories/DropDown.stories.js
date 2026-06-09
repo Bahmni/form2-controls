@@ -14,6 +14,7 @@ const bloodGroupOptions = [
 
 export default {
   title: 'Atomic Controls/DropDown',
+  tags: ['autodocs'],
   component: DropDown,
   args: {
     options: bloodGroupOptions,
@@ -30,17 +31,23 @@ export default {
   },
   parameters: {
     docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+        title: 'Table of Contents',
+      },
       description: {
-        component:
-          'Non-searchable dropdown select for coded single-select observations. ' +
-          'Uses AutoComplete internally with asynchronous=false. ' +
-          'Best suited for small, finite option sets.\n\n' +
-          'DropDown is single-select only. For multi-select, use CodedControl with ' +
-          'properties.multiSelect: true. Option groups are not supported; all options ' +
-          'render in a flat list.\n\n' +
-          'Accessibility (WCAG 2.1 AA): Combobox role with aria-expanded state (SC 1.3.1, 4.1.2); ' +
-          'keyboard navigable with arrow keys (SC 2.1.1); visible focus ring (SC 2.4.7); ' +
-          'mandatory validation announced via aria-invalid (SC 3.3.1); text contrast ≥ 4.5:1 (SC 1.4.3).',
+        component: `
+## Overview
+
+Non-searchable dropdown select for coded single-select observations. Uses **AutoComplete** internally with \`asynchronous=false\`.
+
+**Value stored:** the selected coded option.
+
+## When to use
+
+- Single-select from a small, finite option set (e.g. blood group).
+- **Not** for multi-select — use **CodedControl** with \`properties.multiSelect: true\`. Option groups are not supported; all options render in a flat list.
+        `,
       },
     },
   },
