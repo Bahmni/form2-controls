@@ -19,12 +19,11 @@ export class Container extends addMoreDecorator(Component) {
     this.childControls = {};
     const { observations } = this.props;
     this.metadata = deepUnescapeStrings(this.props.metadata);
-    this._translationsInput = null;
-    this._decodedTranslations = {};
     const controlRecordTree = new ControlRecordTreeBuilder().build(this.metadata, observations);
     this.updatedControlRecordTree = controlRecordTree;
+    const formTranslations = this.getDecodedTranslations(props.translations);
     this.state = { errors: [], data: controlRecordTree,
-      collapse: props.collapse, notification: {} };
+      collapse: props.collapse, notification: {}, formTranslations };
     this.storeChildRef = this.storeChildRef.bind(this);
     this.onValueChanged = this.onValueChanged.bind(this);
     this.onControlAdd = this.onControlAdd.bind(this);
@@ -49,12 +48,27 @@ export class Container extends addMoreDecorator(Component) {
     }
   }
 
+  getDecodedTranslations(translations) {
+    const rawTranslations = Object.fromEntries(
+      Object.entries({ ...translations.labels, ...translations.concepts })
+        .filter(([key, value]) => value !== key)
+    );
+    return deepUnescapeStrings(rawTranslations);
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.collapse !== this.props.collapse) {
       this.setState({ collapse: this.props.collapse });
     }
     if (prevProps.metadata !== this.props.metadata) {
       this.metadata = deepUnescapeStrings(this.props.metadata);
+      const tree = new ControlRecordTreeBuilder().build(this.metadata, this.props.observations);
+      this.updatedControlRecordTree = tree;
+      this.setState({ data: tree });
+    }
+    if (prevProps.translations !== this.props.translations) {
+      const formTranslations = this.getDecodedTranslations(this.props.translations);
+      this.setState({ formTranslations });
     }
   }
 
@@ -184,16 +198,8 @@ export class Container extends addMoreDecorator(Component) {
 
   render() {
     const { controls, name: formName, version: formVersion } = this.metadata;
-    const { validate, translations, patient, readonly } = this.props;
-    if (translations !== this._translationsInput) {
-      this._translationsInput = translations;
-      const rawTranslations = Object.fromEntries(
-        Object.entries({ ...translations.labels, ...translations.concepts })
-          .filter(([key, value]) => value !== key)
-      );
-      this._decodedTranslations = deepUnescapeStrings(rawTranslations);
-    }
-    const formTranslations = this._decodedTranslations;
+    const { validate, patient, readonly } = this.props;
+    const formTranslations = this.state.formTranslations;
     const patientUuid = patient ? patient.uuid : undefined;
     const childProps = {
       collapse: this.state.collapse,

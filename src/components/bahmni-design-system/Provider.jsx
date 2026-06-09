@@ -97,7 +97,5 @@ Provider.propTypes = {
 Provider.defaultProps = {
   autofocus: false,
   enabled: true,
-  labelKey: 'name',
-  valueKey: 'id',
   searchable: false,
 };

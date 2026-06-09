@@ -1,58 +1,52 @@
-import { decode } from 'html-entities';
+import { decode } from "html-entities";
 
 export function unescapeHtml(str) {
-    if (typeof str !== 'string') return str;
-
-    let decoded = decode(str);
-    while (decoded !== str) {
-        str = decoded;
-        decoded = decode(str);
-    }
-    return decoded;
+  if (typeof str !== "string") return str;
+  return decode(str);
 }
 
 export function deepUnescapeStrings(obj) {
-    if (typeof obj === 'string') {
-        return unescapeHtml(obj);
+  if (typeof obj === "string") {
+    return unescapeHtml(obj);
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(deepUnescapeStrings);
+  }
+  if (typeof obj === "object" && obj !== null) {
+    const result = {};
+    for (const key of Object.keys(obj)) {
+      result[key] = deepUnescapeStrings(obj[key]);
     }
-    if (Array.isArray(obj)) {
-        return obj.map(deepUnescapeStrings);
-    }
-    if (typeof obj === 'object' && obj !== null) {
-        const result = {};
-        for (const key of Object.keys(obj)) {
-            result[key] = deepUnescapeStrings(obj[key]);
-        }
-        return result;
-    }
-    return obj;
+    return result;
+  }
+  return obj;
 }
 
 export function utf8ToBase64(str) {
-    if (str === undefined || str === null || str === '') {
-        return '';
-    }
-    const encoder = new TextEncoder();
-    const data = encoder.encode(str);
+  if (str === undefined || str === null || str === "") {
+    return "";
+  }
+  const encoder = new TextEncoder();
+  const data = encoder.encode(str);
 
-    const binaryString = String.fromCharCode.apply(null, data);
-    return btoa(binaryString);
+  const binaryString = String.fromCharCode.apply(null, data);
+  return btoa(binaryString);
 }
 
 export function base64ToUtf8(b64) {
-    if (b64 === undefined || b64 === null || b64 === '') {
-        return '';
+  if (b64 === undefined || b64 === null || b64 === "") {
+    return "";
+  }
+  try {
+    const binaryString = atob(b64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
     }
-    try {
-        const binaryString = atob(b64);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-            bytes[i] = binaryString.charCodeAt(i);
-        }
-        const decoder = new TextDecoder();
-        return decoder.decode(bytes);
-    } catch (e) {
-        console.error('Error decoding base64 string:', e);
-        return '';
-    }
+    const decoder = new TextDecoder();
+    return decoder.decode(bytes);
+  } catch (e) {
+    console.error("Error decoding base64 string:", e);
+    return "";
+  }
 }

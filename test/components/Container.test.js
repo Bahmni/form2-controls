@@ -885,5 +885,65 @@ describe('Container', () => {
         containerRef.current.onEventTrigger('some-path', 'onValueChange');
       }).not.toThrow();
     });
+
+    it('should rebuild control tree when metadata prop changes', () => {
+      const initialMetadata = createNumericControlMetadata({
+        controls: [{
+          ...createNumericControlMetadata().controls[0],
+          label: { type: 'label', value: 'Initial Pulse Label' },
+        }],
+      });
+
+      const updatedMetadata = createNumericControlMetadata({
+        controls: [{
+          ...createNumericControlMetadata().controls[0],
+          label: { type: 'label', value: 'Updated Pulse Label' },
+        }],
+      });
+
+      const containerRef = React.createRef();
+      const { rerender } = render(
+        <Container ref={containerRef} {...defaultProps} metadata={initialMetadata} />,
+      );
+
+      expect(screen.getByText(/Initial Pulse Label/)).toBeInTheDocument();
+      expect(containerRef.current).toBeTruthy();
+      const initialTreeData = containerRef.current.state.data;
+
+      rerender(
+        <Container ref={containerRef} {...defaultProps} metadata={updatedMetadata} />,
+      );
+
+      expect(screen.getByText(/Updated Pulse Label/)).toBeInTheDocument();
+      const updatedTreeData = containerRef.current.state.data;
+
+      expect(initialTreeData).not.toBe(updatedTreeData);
+    });
+
+    it('should decode HTML entities in metadata when updated', () => {
+      const initialMetadata = createNumericControlMetadata({
+        controls: [{
+          ...createNumericControlMetadata().controls[0],
+          label: { type: 'label', value: 'Pulse &gt; 60' },
+        }],
+      });
+
+      const updatedMetadata = createNumericControlMetadata({
+        controls: [{
+          ...createNumericControlMetadata().controls[0],
+          label: { type: 'label', value: 'Blood Pressure &amp; Temperature' },
+        }],
+      });
+
+      const { rerender } = renderContainer({ metadata: initialMetadata });
+
+      expect(screen.getByText(/Pulse > 60/)).toBeInTheDocument();
+
+      rerender(
+        <Container {...defaultProps} metadata={updatedMetadata} />,
+      );
+
+      expect(screen.getByText(/Blood Pressure & Temperature/)).toBeInTheDocument();
+    });
   });
 });

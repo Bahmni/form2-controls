@@ -41,12 +41,6 @@ describe('encodingUtils', () => {
             expect(unescapeHtml(null)).toBe(null);
             expect(unescapeHtml(undefined)).toBe(undefined);
         });
-
-        it('should fully decode multiple levels of HTML encoding', () => {
-            expect(unescapeHtml('&amp;amp;amp;amp;attrName')).toBe('&attrName');
-            expect(unescapeHtml('&amp;amp;')).toBe('&');
-            expect(unescapeHtml('url?a=1&amp;amp;b=2')).toBe('url?a=1&b=2');
-        });
     });
 
     describe('deepUnescapeStrings', () => {
