@@ -40,7 +40,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: /node_modules\/(@fortawesome|@carbon)/,
+        include: /node_modules\/(@fortawesome|@carbon|@bahmni)/,
         use: [
           'style-loader',
           {
