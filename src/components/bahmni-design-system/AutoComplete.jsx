@@ -55,7 +55,6 @@ export const AutoComplete = forwardRef(function AutoComplete({
   const [hasError, setHasError] = useState(initialHasErrors);
 
   const containerRef = useRef(null);
-  const blurTimerRef = useRef(null);
 
   // Keep a stable ref to current props for use inside debounced function
   const propsRef = useRef({
@@ -68,12 +67,8 @@ export const AutoComplete = forwardRef(function AutoComplete({
   const prevValidate = useRef(validate);
   const hasMounted = useRef(false);
 
-  // Cleanup setTimeout on unmount
-  useEffect(() => () => {
-    if (blurTimerRef.current) clearTimeout(blurTimerRef.current);
-  }, []);
-
   function handleInputChange(input) {
+    console.log('[AutoComplete] handleInputChange:', input);
     const {
       url: currentUrl,
       options: currentOptions,
@@ -83,6 +78,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
     } = propsRef.current;
 
     if (input.length < currentMinInput) {
+      console.log('[AutoComplete] Input too short, clearing options');
       setOptions([]);
       return;
     }
@@ -92,9 +88,11 @@ export const AutoComplete = forwardRef(function AutoComplete({
       Util.getAnswers(currentUrl, input, limit)
         .then(data => {
           const responses = Util.formatConcepts(data);
+          console.log('[AutoComplete] Async results:', responses.length);
           setOptions(responses);
         })
         .catch(() => {
+          console.log('[AutoComplete] Async error, clearing options');
           setOptions([]);
         });
     } else {
@@ -104,19 +102,23 @@ export const AutoComplete = forwardRef(function AutoComplete({
           option[currentLabelKey] && option[currentLabelKey].toLowerCase().includes(searchedInput.toLowerCase())
         )
       );
+      console.log('[AutoComplete] Filtered results:', filteredOptions.length);
       setOptions(filteredOptions);
     }
   }
 
   const debouncedOnInputChange = useRef(
     Util.debounce((input) => {
+      console.log('[AutoComplete] Debounced input change:', input);
       handleInputChange(input);
     }, 300)
   );
 
   const debouncedGetAsyncOptions = useRef(
     Util.debounce((input) => {
+      console.log('[AutoComplete] Debounced async input:', input);
       getAsyncOptions(input).then(results => {
+        console.log('[AutoComplete] Async options results:', results.length);
         setOptions(results);
       });
     }, 300)
@@ -157,8 +159,16 @@ export const AutoComplete = forwardRef(function AutoComplete({
     prevValidate.current = validate;
     const errors = getErrors(validations, propValue) || [];
     const newHasErrors = hasErrors(errors);
-    setValue(propValue);
-    setHasError(newHasErrors);
+    // Only update local value if propValue has a real value
+    // When parent clears propValue (undefined), keep the selected value in local state
+    if (propValue !== undefined) {
+      console.log('[AutoComplete] Updating value from parent:', propValue);
+      setValue(propValue);
+      setHasError(newHasErrors);
+    } else if (validateChanged) {
+      console.log('[AutoComplete] Validate changed but keeping existing value');
+      setHasError(newHasErrors);
+    }
   }, [propValue, validate, validations, onValueChange]);
 
   // Update options when searchable=false and options change
@@ -174,32 +184,28 @@ export const AutoComplete = forwardRef(function AutoComplete({
       setOptions([]);
     }
     if (Array.isArray(selectedValue) && selectedValue.length === 0) {
+      console.log('[AutoComplete] Clearing multi-select');
       setValue(undefined);
       setHasError(hasErrors(errors));
       if (onValueChange) {
         onValueChange(null, errors);
       }
     } else if (!selectedValue) {
+      console.log('[AutoComplete] Clearing single value');
       setValue(undefined);
       setHasError(hasErrors(errors));
       if (onValueChange) {
         onValueChange(null, errors);
       }
     } else {
+      console.log('[AutoComplete] Setting value:', selectedValue);
       setValue(selectedValue);
       setHasError(hasErrors(errors));
       if (onValueChange) {
+        console.log('[AutoComplete] Calling onValueChange with:', selectedValue);
         onValueChange(selectedValue, errors);
       }
     }
-
-    // Blur input immediately after selection to trigger ellipsis display
-    blurTimerRef.current = setTimeout(() => {
-      const input = containerRef.current?.querySelector('.cds--text-input');
-      if (input && document.activeElement === input) {
-        input.blur();
-      }
-    }, 0);
   }
 
   async function getAsyncOptions(input) {
@@ -231,7 +237,10 @@ export const AutoComplete = forwardRef(function AutoComplete({
           items={safeOptions.length > 0 ? safeOptions : safePropOptions}
           itemToString={(item) => (item ? item[labelKey] || '' : '')}
           initialSelectedItems={initialSelectedItems}
-          onChange={({ selectedItems }) => handleChange(selectedItems)}
+          onChange={({ selectedItems }) => {
+            console.log('[AutoComplete] MultiSelect changed:', selectedItems);
+            handleChange(selectedItems);
+          }}
         />
       </div>
     );
@@ -247,9 +256,13 @@ export const AutoComplete = forwardRef(function AutoComplete({
           items={safeOptions}
           itemToString={(item) => (item ? item[labelKey] || '' : '')}
           selectedItem={value || null}
-          onChange={({ selectedItem }) => handleChange(selectedItem)}
+          onChange={({ selectedItem }) => {
+            console.log('[AutoComplete] ComboBox selected:', selectedItem);
+            handleChange(selectedItem);
+          }}
           onBlur={onBlur}
           onInputChange={(inputValue) => {
+            console.log('[AutoComplete] ComboBox input:', inputValue);
             if (typeof inputValue === 'string') {
               debouncedGetAsyncOptions.current(inputValue);
             }
@@ -268,9 +281,13 @@ export const AutoComplete = forwardRef(function AutoComplete({
         items={safeOptions}
         itemToString={(item) => (item ? item[labelKey] || '' : '')}
         selectedItem={value || null}
-        onChange={({ selectedItem }) => handleChange(selectedItem)}
+        onChange={({ selectedItem }) => {
+          console.log('[AutoComplete] ComboBox selected:', selectedItem);
+          handleChange(selectedItem);
+        }}
         onBlur={onBlur}
         onInputChange={(inputValue) => {
+          console.log('[AutoComplete] ComboBox input:', inputValue);
           if (typeof inputValue === 'string') {
             debouncedOnInputChange.current(inputValue);
           }
