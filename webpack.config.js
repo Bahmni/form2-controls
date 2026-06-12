@@ -57,8 +57,7 @@ module.exports = {
         include: path.join(__dirname, 'src')
       },
       {
-        test: /\.css$/,
-        include: /node_modules\/(@fortawesome|@carbon|@bahmni)/,
+        test: /\.css$/i,
         use: [
           'style-loader',
           {
