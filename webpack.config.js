@@ -30,6 +30,24 @@ module.exports = {
       commonjs: "react-dom",
       amd: "react-dom",
     },
+    "@bahmni/design-system": {
+      root: "BahmniDesignSystem",
+      commonjs2: "@bahmni/design-system",
+      commonjs: "@bahmni/design-system",
+      amd: "@bahmni/design-system",
+    },
+    "@carbon/react": {
+      root: "CarbonReact",
+      commonjs2: "@carbon/react",
+      commonjs: "@carbon/react",
+      amd: "@carbon/react",
+    },
+    "@carbon/icons-react": {
+      root: "CarbonIconsReact",
+      commonjs2: "@carbon/icons-react",
+      commonjs: "@carbon/icons-react",
+      amd: "@carbon/icons-react",
+    },
   },
   module: {
     rules: [
