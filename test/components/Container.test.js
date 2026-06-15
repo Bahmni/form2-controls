@@ -886,12 +886,13 @@ describe('Container', () => {
       }).not.toThrow();
     });
 
-    it('should rebuild control tree when metadata prop changes', () => {
+    it('should rebuild control tree when a different form version is loaded', () => {
       const initialMetadata = createNumericControlMetadata({
         controls: [{
           ...createNumericControlMetadata().controls[0],
           label: { type: 'label', value: 'Initial Pulse Label' },
         }],
+        version: '1',
       });
 
       const updatedMetadata = createNumericControlMetadata({
@@ -899,6 +900,7 @@ describe('Container', () => {
           ...createNumericControlMetadata().controls[0],
           label: { type: 'label', value: 'Updated Pulse Label' },
         }],
+        version: '2',
       });
 
       const containerRef = React.createRef();
@@ -920,12 +922,31 @@ describe('Container', () => {
       expect(initialTreeData).not.toBe(updatedTreeData);
     });
 
-    it('should decode HTML entities in metadata when updated', () => {
+    it('should not rebuild control tree when same-version metadata gets a new object reference', () => {
+      const metadata = createNumericControlMetadata();
+      const containerRef = React.createRef();
+      const { rerender } = render(
+        <Container ref={containerRef} {...defaultProps} metadata={metadata} />,
+      );
+
+      const initialTreeData = containerRef.current.state.data;
+
+      // Simulate parent re-rendering with a new metadata reference but same content/version
+      const sameContentNewRef = { ...metadata };
+      rerender(
+        <Container ref={containerRef} {...defaultProps} metadata={sameContentNewRef} />,
+      );
+
+      expect(containerRef.current.state.data).toBe(initialTreeData);
+    });
+
+    it('should decode HTML entities in metadata when a new form version is loaded', () => {
       const initialMetadata = createNumericControlMetadata({
         controls: [{
           ...createNumericControlMetadata().controls[0],
           label: { type: 'label', value: 'Pulse &gt; 60' },
         }],
+        version: '1',
       });
 
       const updatedMetadata = createNumericControlMetadata({
@@ -933,6 +954,7 @@ describe('Container', () => {
           ...createNumericControlMetadata().controls[0],
           label: { type: 'label', value: 'Blood Pressure &amp; Temperature' },
         }],
+        version: '2',
       });
 
       const { rerender } = renderContainer({ metadata: initialMetadata });

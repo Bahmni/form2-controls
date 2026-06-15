@@ -326,7 +326,7 @@ $lightestGray: #eee;
           // across all field types (dropdowns, multiselect buttons, numeric inputs, text, etc).
           > .form-builder-comment-wrap {
             position: absolute;
-            right: -$spacing-07;
+            right: $spacing-13;
             top: $spacing-03;
             z-index: 100;
             pointer-events: auto;
