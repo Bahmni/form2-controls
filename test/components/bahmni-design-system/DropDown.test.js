@@ -44,7 +44,7 @@ describe('Carbon DropDown', () => {
         />
       );
 
-      expect(screen.getByText('Option A')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Option A')).toBeInTheDocument();
     });
 
     it('should be disabled when enabled is false', () => {
@@ -157,7 +157,7 @@ describe('Carbon DropDown', () => {
       expect(mockOnValueChange).toHaveBeenCalledWith(undefined, []);
     });
 
-    it('should display selected item label in the trigger button', () => {
+    it('should display selected item label in the input', () => {
       render(
         <DropDown
           formFieldPath="test1.1/1-0"
@@ -170,7 +170,7 @@ describe('Carbon DropDown', () => {
         />
       );
 
-      expect(screen.getByText('Option A')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Option A')).toBeInTheDocument();
     });
 
     it('should call onValueChange with selected item and no errors when option is clicked', () => {
@@ -191,6 +191,28 @@ describe('Carbon DropDown', () => {
       expect(mockOnValueChange).toHaveBeenCalledWith(options[1], []);
     });
 
+    it('should not clear a selected value when user types non-matching text and blurs', () => {
+      render(
+        <DropDown
+          formFieldPath="test1.1/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+          validate={false}
+          validateForm={false}
+          validations={[]}
+          value={options[0]}
+        />
+      );
+
+      mockOnValueChange.mockClear();
+
+      const input = screen.getByRole('combobox');
+      fireEvent.change(input, { target: { value: 'xyz' } });
+      fireEvent.blur(input);
+
+      expect(mockOnValueChange).not.toHaveBeenCalledWith(null, expect.anything());
+    });
+
     it('should not crash when formFieldPath is undefined', () => {
       expect(() =>
         render(
@@ -203,6 +225,21 @@ describe('Carbon DropDown', () => {
           />
         )
       ).not.toThrow();
+    });
+
+    it('should show "Select" placeholder when no value is selected', () => {
+      render(
+        <DropDown
+          formFieldPath="test1.1/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+          validate={false}
+          validateForm={false}
+          validations={[]}
+        />
+      );
+
+      expect(screen.getByPlaceholderText('Select')).toBeInTheDocument();
     });
 
     it('should treat add-more instance (formFieldPath index !== 0) as created by add-more', () => {

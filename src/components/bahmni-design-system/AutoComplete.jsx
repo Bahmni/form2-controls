@@ -47,6 +47,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
 }, ref) {
   const [value, setValue] = useState(propValue);
   const [options, setOptions] = useState([]);
+  const [isFocused, setIsFocused] = useState(false);
 
   const initialErrors = getErrors(validations, propValue) || [];
   const initialHasErrors = isCreateByAddMore(formFieldPath)
@@ -218,6 +219,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
   const className = classNames('obs-control-select-wrapper', { 'form-builder-error': hasError });
   const safeOptions = options || [];
   const safePropOptions = propOptions || [];
+  const placeholder = isFocused ? 'Type to search' : 'Select';
 
   if (multiSelect) {
     const initialSelectedItems = Array.isArray(value) ? value : (value ? [value] : []);
@@ -231,6 +233,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
           items={safeOptions.length > 0 ? safeOptions : safePropOptions}
           itemToString={(item) => (item ? item[labelKey] || '' : '')}
           initialSelectedItems={initialSelectedItems}
+          placeholder="Select"
           onChange={({ selectedItems }) => handleChange(selectedItems)}
         />
       </div>
@@ -246,9 +249,11 @@ export const AutoComplete = forwardRef(function AutoComplete({
           invalid={hasError}
           items={safeOptions}
           itemToString={(item) => (item ? item[labelKey] || '' : '')}
+          placeholder={placeholder}
           selectedItem={value || null}
           onChange={({ selectedItem }) => handleChange(selectedItem)}
-          onBlur={onBlur}
+          onFocus={() => setIsFocused(true)}
+          onBlur={(e) => { setIsFocused(false); if (onBlur) onBlur(e); }}
           onInputChange={(inputValue) => {
             if (typeof inputValue === 'string') {
               debouncedGetAsyncOptions.current(inputValue);
@@ -267,9 +272,11 @@ export const AutoComplete = forwardRef(function AutoComplete({
         invalid={hasError}
         items={safeOptions}
         itemToString={(item) => (item ? item[labelKey] || '' : '')}
+        placeholder={placeholder}
         selectedItem={value || null}
         onChange={({ selectedItem }) => handleChange(selectedItem)}
-        onBlur={onBlur}
+        onFocus={() => setIsFocused(true)}
+        onBlur={(e) => { setIsFocused(false); if (onBlur) onBlur(e); }}
         onInputChange={(inputValue) => {
           if (typeof inputValue === 'string') {
             debouncedOnInputChange.current(inputValue);

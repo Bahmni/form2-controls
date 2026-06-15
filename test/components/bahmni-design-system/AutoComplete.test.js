@@ -933,4 +933,93 @@ describe('Carbon AutoComplete', () => {
       expect(container.querySelector('.cds--combo-box')).toBeInTheDocument();
     });
   });
+
+  describe('Placeholder behaviour', () => {
+    it('should show "Select" placeholder when unfocused (sync mode)', () => {
+      const { container } = render(
+        <AutoComplete
+          asynchronous={false}
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+        />
+      );
+
+      expect(container.querySelector('input')).toHaveAttribute('placeholder', 'Select');
+    });
+
+    it('should change placeholder to "Type to search" on focus (sync mode)', () => {
+      const { container } = render(
+        <AutoComplete
+          asynchronous={false}
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+        />
+      );
+
+      fireEvent.focus(container.querySelector('input'));
+
+      expect(container.querySelector('input')).toHaveAttribute('placeholder', 'Type to search');
+    });
+
+    it('should revert placeholder to "Select" on blur (sync mode)', () => {
+      const { container } = render(
+        <AutoComplete
+          asynchronous={false}
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+          options={options}
+        />
+      );
+
+      const input = container.querySelector('input');
+      fireEvent.focus(input);
+      fireEvent.blur(input);
+
+      expect(input).toHaveAttribute('placeholder', 'Select');
+    });
+
+    it('should show "Select" placeholder when unfocused (async mode)', () => {
+      const { container } = render(
+        <AutoComplete
+          asynchronous={true}
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+        />
+      );
+
+      expect(container.querySelector('input')).toHaveAttribute('placeholder', 'Select');
+    });
+
+    it('should change placeholder to "Type to search" on focus (async mode)', () => {
+      const { container } = render(
+        <AutoComplete
+          asynchronous={true}
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+        />
+      );
+
+      fireEvent.focus(container.querySelector('input'));
+
+      expect(container.querySelector('input')).toHaveAttribute('placeholder', 'Type to search');
+    });
+
+    it('should revert placeholder to "Select" on blur (async mode)', () => {
+      const { container } = render(
+        <AutoComplete
+          asynchronous={true}
+          formFieldPath="test/1-0"
+          onValueChange={mockOnValueChange}
+        />
+      );
+
+      const input = container.querySelector('input');
+      fireEvent.focus(input);
+      fireEvent.blur(input);
+
+      expect(input).toHaveAttribute('placeholder', 'Select');
+    });
+  });
 });
