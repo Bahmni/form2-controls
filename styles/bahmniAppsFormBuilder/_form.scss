@@ -109,6 +109,24 @@ $lightestGray: #eee;
             z-index: 1;
           }
 
+          // For single dropdown controls only (not multiselect), override absolute positioning on "Add note"
+          // so it flows naturally as a flex item beside the control — no overlap, no spacing hacks.
+          &:has(.obs-control-select-wrapper):not(:has(.cds--multi-select)) {
+            flex-wrap: nowrap;
+
+            .obs-control-select-wrapper {
+              flex: 1 1 auto;
+              min-width: 0;
+            }
+
+            > .form-builder-comment-wrap {
+              position: static !important;
+              margin-left: auto;
+              flex-shrink: 0;
+              align-self: center;
+            }
+          }
+
           // TextBox (text type) renders inside obs-comment-section-wrap > cds--text-area__wrapper.
           // Shrink the wrapper so the clone fits on the same row, pinned top-right.
           // Clone is two sm icon buttons (2rem each) + gap (0.5rem) = ~4.5rem wide, so we
@@ -135,6 +153,24 @@ $lightestGray: #eee;
             // Legacy rule sets position:absolute, removing the button from flex flow.
             .form-builder-comment-toggle {
               position: static !important;
+            }
+          }
+          // Selectable-tag (chip/button) controls: same flex approach as dropdowns.
+          // flex-wrap: nowrap keeps "Add note" on same row; chips wrap inside the group.
+          &:has(.form-builder-selectable-tag-group) {
+            flex-wrap: nowrap;
+            align-items: flex-start;
+
+            .form-builder-selectable-tag-group {
+              flex: 1 1 auto;
+              min-width: 0;
+              flex-wrap: wrap;
+            }
+
+            > .form-builder-comment-wrap {
+              position: static !important;
+              flex-shrink: 0;
+              align-self: flex-start;
             }
           }
 
@@ -197,7 +233,9 @@ $lightestGray: #eee;
             flex: 0 0 auto;
             width: auto;
             min-width: $spacing-13;
-            max-width: calc(#{$spacing-13} * 3 + #{$spacing-12} + #{$spacing-06});
+            max-width: calc(
+              #{$spacing-13} * 3 + #{$spacing-12} + #{$spacing-06}
+            );
           }
 
           // List box field: flex wrapper for the input and buttons inside the dropdown/combobox.
