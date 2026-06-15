@@ -61,10 +61,16 @@ export class Container extends addMoreDecorator(Component) {
       this.setState({ collapse: this.props.collapse });
     }
     if (prevProps.metadata !== this.props.metadata) {
+      const prevId = prevProps.metadata?.uuid;
+      const prevVersion = prevProps.metadata?.version;
+      const nextId = this.props.metadata?.uuid;
+      const nextVersion = this.props.metadata?.version;
       this.metadata = deepUnescapeStrings(this.props.metadata);
-      const tree = new ControlRecordTreeBuilder().build(this.metadata, this.props.observations);
-      this.updatedControlRecordTree = tree;
-      this.setState({ data: tree });
+      if (prevId !== nextId || prevVersion !== nextVersion) {
+        const tree = new ControlRecordTreeBuilder().build(this.metadata, this.props.observations);
+        this.updatedControlRecordTree = tree;
+        this.setState({ data: tree });
+      }
     }
     if (prevProps.translations !== this.props.translations) {
       const formTranslations = this.getDecodedTranslations(this.props.translations);
