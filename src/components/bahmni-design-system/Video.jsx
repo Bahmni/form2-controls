@@ -1,6 +1,5 @@
 import { FileUploaderButton, FileUploaderItem } from '@carbon/react';
-import { Renew } from '@carbon/icons-react';
-import { Button, Loading } from '@bahmni/design-system';
+import { Loading } from '@bahmni/design-system';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { FileUpload } from './FileUpload';
@@ -9,7 +8,6 @@ export class Video extends FileUpload {
 
   displayVideo() {
     const loading = this.state.loading === true;
-    const isVoided = this.props.value && typeof this.props.value === 'string' && this.props.value.includes('voided');
     const fileName = this.getFileName(this.props.value);
 
     return (
@@ -29,21 +27,10 @@ export class Video extends FileUpload {
             <FileUploaderItem
               uuid={this.props.value}
               name={fileName}
-              status={isVoided ? 'complete' : 'edit'}
-              onDelete={isVoided ? undefined : this.handleDelete}
+              status="edit"
+              onDelete={this.handleDelete}
               iconDescription="Delete video"
             />
-            {isVoided && (
-              <Button
-                kind="ghost"
-                hasIconOnly
-                size="sm"
-                onClick={this.handleRestore}
-                iconDescription="Restore video"
-                className="restore-button-inline"
-                renderIcon={Renew}
-              />
-            )}
           </div>
         )}
       </div>

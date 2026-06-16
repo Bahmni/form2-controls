@@ -159,35 +159,35 @@ describe('Carbon Video', () => {
     expect(container.querySelector('.cds--file-close')).toBeInTheDocument();
   });
 
-  it('should call onChange with voided value when delete is clicked', () => {
+  it('should call onChange with undefined when delete is clicked', () => {
     const { container } = renderVideo({ value: 'someValue' });
 
     const deleteButton = container.querySelector('.cds--file-close');
     fireEvent.click(deleteButton);
 
-    expect(mockOnChange).toHaveBeenCalledWith({ value: 'someValuevoided', errors: [] });
+    expect(mockOnChange).toHaveBeenCalledWith({ value: undefined, errors: [] });
   });
 
-  it('should show restore button when video is voided', () => {
-    const { container } = renderVideo({ value: 'someValuevoided' });
+  it('should hide file row after delete clears the value', () => {
+    const { container, rerender } = renderVideo({ value: 'someValue' });
 
-    expect(container.querySelector('.restore-button-inline')).toBeInTheDocument();
-  });
+    const deleteButton = container.querySelector('.cds--file-close');
+    fireEvent.click(deleteButton);
 
-  it('should render restore button as design system ghost icon button', () => {
-    renderVideo({ value: 'someValuevoided' });
+    rerender(
+      <Video
+        addMore
+        formFieldPath={formFieldPath}
+        onChange={mockOnChange}
+        onControlAdd={mockOnControlAdd}
+        showNotification={mockShowNotification}
+        validate={false}
+        validations={[]}
+        value={undefined}
+      />
+    );
 
-    const restoreButton = screen.getByRole('button', { name: 'Restore video' });
-    expect(restoreButton).toHaveClass('cds--btn--ghost');
-  });
-
-  it('should hide restore button and call onChange with restored value when restore is clicked', () => {
-    const { container } = renderVideo({ value: 'someValuevoided' });
-
-    const restoreButton = container.querySelector('.restore-button-inline');
-    fireEvent.click(restoreButton);
-
-    expect(mockOnChange).toHaveBeenCalledWith({ value: 'someValue', errors: [] });
+    expect(container.querySelector('.file-row')).not.toBeInTheDocument();
   });
 
   it('should apply carbon-error class when validation fails', () => {

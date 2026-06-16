@@ -47,15 +47,13 @@ export const AutoComplete = forwardRef(function AutoComplete({
 }, ref) {
   const [value, setValue] = useState(propValue);
   const [options, setOptions] = useState([]);
+  const [isFocused, setIsFocused] = useState(false);
 
   const initialErrors = getErrors(validations, propValue) || [];
   const initialHasErrors = isCreateByAddMore(formFieldPath)
     ? hasErrors(initialErrors)
     : false;
   const [hasError, setHasError] = useState(initialHasErrors);
-
-  const containerRef = useRef(null);
-  const blurTimerRef = useRef(null);
 
   // Keep a stable ref to current props for use inside debounced function
   const propsRef = useRef({
@@ -67,11 +65,6 @@ export const AutoComplete = forwardRef(function AutoComplete({
   const prevPropValue = useRef(undefined);
   const prevValidate = useRef(validate);
   const hasMounted = useRef(false);
-
-  // Cleanup setTimeout on unmount
-  useEffect(() => () => {
-    if (blurTimerRef.current) clearTimeout(blurTimerRef.current);
-  }, []);
 
   function handleInputChange(input) {
     const {
@@ -192,14 +185,6 @@ export const AutoComplete = forwardRef(function AutoComplete({
         onValueChange(selectedValue, errors);
       }
     }
-
-    // Blur input immediately after selection to trigger ellipsis display
-    blurTimerRef.current = setTimeout(() => {
-      const input = containerRef.current?.querySelector('.cds--text-input');
-      if (input && document.activeElement === input) {
-        input.blur();
-      }
-    }, 0);
   }
 
   async function getAsyncOptions(input) {
@@ -218,11 +203,12 @@ export const AutoComplete = forwardRef(function AutoComplete({
   const className = classNames('obs-control-select-wrapper', { 'form-builder-error': hasError });
   const safeOptions = options || [];
   const safePropOptions = propOptions || [];
+  const placeholder = isFocused ? 'Type to search' : 'Select';
 
   if (multiSelect) {
     const initialSelectedItems = Array.isArray(value) ? value : (value ? [value] : []);
     return (
-      <div className={className} ref={containerRef}>
+      <div className={className}>
         <FilterableMultiSelect
           key={JSON.stringify(propValue)}
           id={conceptUuid}
@@ -231,6 +217,7 @@ export const AutoComplete = forwardRef(function AutoComplete({
           items={safeOptions.length > 0 ? safeOptions : safePropOptions}
           itemToString={(item) => (item ? item[labelKey] || '' : '')}
           initialSelectedItems={initialSelectedItems}
+          placeholder="Select"
           onChange={({ selectedItems }) => handleChange(selectedItems)}
         />
       </div>
@@ -239,16 +226,18 @@ export const AutoComplete = forwardRef(function AutoComplete({
 
   if (asynchronous) {
     return (
-      <div className={className} ref={containerRef}>
+      <div className={className}>
         <ComboBox
           id={conceptUuid}
           disabled={!enabled}
           invalid={hasError}
           items={safeOptions}
           itemToString={(item) => (item ? item[labelKey] || '' : '')}
+          placeholder={placeholder}
           selectedItem={value || null}
           onChange={({ selectedItem }) => handleChange(selectedItem)}
-          onBlur={onBlur}
+          onFocus={() => setIsFocused(true)}
+          onBlur={(e) => { setIsFocused(false); if (onBlur) onBlur(e); }}
           onInputChange={(inputValue) => {
             if (typeof inputValue === 'string') {
               debouncedGetAsyncOptions.current(inputValue);
@@ -260,16 +249,18 @@ export const AutoComplete = forwardRef(function AutoComplete({
   }
 
   return (
-    <div className={className} ref={containerRef}>
+    <div className={className}>
       <ComboBox
         id={conceptUuid}
         disabled={!enabled}
         invalid={hasError}
         items={safeOptions}
         itemToString={(item) => (item ? item[labelKey] || '' : '')}
+        placeholder={placeholder}
         selectedItem={value || null}
         onChange={({ selectedItem }) => handleChange(selectedItem)}
-        onBlur={onBlur}
+        onFocus={() => setIsFocused(true)}
+        onBlur={(e) => { setIsFocused(false); if (onBlur) onBlur(e); }}
         onInputChange={(inputValue) => {
           if (typeof inputValue === 'string') {
             debouncedOnInputChange.current(inputValue);
