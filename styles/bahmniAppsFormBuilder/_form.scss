@@ -321,19 +321,41 @@ $lightestGray: #eee;
             max-width: 83%;
           }
 
-          // "Add note" link: mirrors the clone fix from BAH-4603.
-          // Positioned absolutely on the right with consistent vertical alignment
-          // across all field types (dropdowns, multiselect buttons, numeric inputs, text, etc).
+          // "Add note" link: positioned at the right edge of obs-control-field.
+          // right: 0 keeps it inside the section boundary
           > .form-builder-comment-wrap {
             position: absolute;
-            right: -$spacing-07;
+            right: 0;
             top: $spacing-03;
             z-index: 100;
             pointer-events: auto;
           }
 
+          // Selectable-tag controls (BooleanControl): absolutely position clone
+          // to the left of "Add note" so both buttons always sit at the top-right
+          // on row 1, regardless of how many tag rows wrap below.
+          &:has(.cds--tag--selectable) {
+            // Reserve space on the right for clone (~2rem) + gap + "Add note" (~6rem).
+            padding-inline-end: calc(#{$spacing-12} + #{$spacing-07});
+
+            .form-builder-clone {
+              position: absolute;
+              right: $spacing-12; // 6rem — sits just left of "Add note"
+              top: $spacing-03;
+              z-index: 1;
+            }
+          }
+
+          // Selectable-tag wrapper (BooleanControl): cap width so tags wrap
+          // before reaching the absolutely-positioned buttons on the right.
+          > div:has(.cds--tag--selectable) {
+            max-width: 70%;
+            flex-wrap: wrap;
+          }
+
           // Show teal border on selected, remove on deselect, keep keyboard focus ring.
           .cds--tag--selectable-selected {
+
             border-color: var(--cds-focus) !important;
           }
 
@@ -688,6 +710,21 @@ $lightestGray: #eee;
             padding-inline: 0 !important;
           }
         }
+
+        // Section accordions are direct children of the fieldset (not inside
+        // obs-group-add-more-wrapper). Without this override, Carbon's default
+        // margin-inline-start and padding-inline compound with each nesting level,
+        // progressively shrinking the available width.
+        > .cds--accordion {
+          &.cds--accordion--start .cds--accordion__content {
+            margin-inline-start: 0 !important;
+          }
+
+          .cds--accordion__content {
+            padding-inline: 0 !important;
+          }
+        }
+
 
         .description {
           margin: 10px;
