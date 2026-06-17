@@ -82,7 +82,7 @@ $lightestGray: #eee;
 
         .obs-control-field {
           flex: 9;
-          padding-inline-end: $spacing-07;
+          padding-inline-end: calc(#{$spacing-12} + #{$spacing-07});
           display: flex !important;
           align-items: center;
           gap: $spacing-03;
@@ -98,33 +98,12 @@ $lightestGray: #eee;
             align-self: center;
           }
 
-          // Coded/select controls (react-select) fill 100% of the row via
-          // obs-control-select-wrapper, so the clone can't sit beside them in
-          // flex flow. Absolutely position it at the right edge of the field instead.
+          // Coded/select controls: absolutely position clone to the left of "Add note".
           &:has(.obs-control-select-wrapper) .form-builder-clone {
             position: absolute;
-            right: $spacing-07;
-            top: 50%;
-            transform: translateY(-50%);
+            right: $spacing-12;
+            top: $spacing-03;
             z-index: 1;
-          }
-
-          // For single dropdown controls only (not multiselect), override absolute positioning on "Add note"
-          // so it flows naturally as a flex item beside the control — no overlap, no spacing hacks.
-          &:has(.obs-control-select-wrapper):not(:has(.cds--multi-select)) {
-            flex-wrap: nowrap;
-
-            .obs-control-select-wrapper {
-              flex: 1 1 auto;
-              min-width: 0;
-            }
-
-            > .form-builder-comment-wrap {
-              position: static !important;
-              margin-left: auto;
-              flex-shrink: 0;
-              align-self: center;
-            }
           }
 
           // TextBox (text type) renders inside obs-comment-section-wrap > cds--text-area__wrapper.
@@ -141,7 +120,7 @@ $lightestGray: #eee;
           &:has(.obs-comment-section-wrap .cds--text-area__wrapper)
             .form-builder-clone {
             position: absolute;
-            right: $spacing-07;
+            right: $spacing-12;
             top: $spacing-03;
             z-index: 1;
           }
@@ -153,24 +132,6 @@ $lightestGray: #eee;
             // Legacy rule sets position:absolute, removing the button from flex flow.
             .form-builder-comment-toggle {
               position: static !important;
-            }
-          }
-          // Selectable-tag (chip/button) controls: same flex approach as dropdowns.
-          // flex-wrap: nowrap keeps "Add note" on same row; chips wrap inside the group.
-          &:has(.form-builder-selectable-tag-group) {
-            flex-wrap: nowrap;
-            align-items: flex-start;
-
-            .form-builder-selectable-tag-group {
-              flex: 1 1 auto;
-              min-width: 0;
-              flex-wrap: wrap;
-            }
-
-            > .form-builder-comment-wrap {
-              position: static !important;
-              flex-shrink: 0;
-              align-self: flex-start;
             }
           }
 
@@ -369,25 +330,16 @@ $lightestGray: #eee;
             pointer-events: auto;
           }
 
-          // Selectable-tag controls (BooleanControl): absolutely position clone
-          // to the left of "Add note" so both buttons always sit at the top-right
-          // on row 1, regardless of how many tag rows wrap below.
-          &:has(.cds--tag--selectable) {
-            // Reserve space on the right for clone (~2rem) + gap + "Add note" (~6rem).
-            padding-inline-end: calc(#{$spacing-12} + #{$spacing-07});
-
-            .form-builder-clone {
-              position: absolute;
-              right: $spacing-12; // 6rem — sits just left of "Add note"
-              top: $spacing-03;
-              z-index: 1;
-            }
+          // Selectable-tag controls: absolutely position clone to the left of "Add note".
+          &:has(.cds--tag--selectable) .form-builder-clone {
+            position: absolute;
+            right: $spacing-12;
+            top: $spacing-03;
+            z-index: 1;
           }
 
-          // Selectable-tag wrapper (BooleanControl): cap width so tags wrap
-          // before reaching the absolutely-positioned buttons on the right.
+          // Selectable-tag wrapper: allow tags to wrap naturally.
           > div:has(.cds--tag--selectable) {
-            max-width: 70%;
             flex-wrap: wrap;
           }
 
@@ -729,6 +681,9 @@ $lightestGray: #eee;
           top: calc(#{$spacing-09} + #{$spacing-07});
           transform: translateY(-50%);
           z-index: 1;
+          display: inline-flex;
+          align-items: center;
+          gap: $spacing-03;
         }
 
         // Exact chain prevents nested obs-group accordions from inheriting these resets.
