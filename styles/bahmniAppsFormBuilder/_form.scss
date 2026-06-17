@@ -232,7 +232,7 @@ $lightestGray: #eee;
           .cds--list-box:not(.cds--multi-select) {
             flex: 0 0 auto;
             width: auto;
-            min-width: calc(#{$spacing-13} * 2);
+            min-width: $spacing-13;
             max-width: calc(
               #{$spacing-13} * 3 + #{$spacing-12} + #{$spacing-06}
             );
