@@ -82,6 +82,7 @@ export const NumericBox = ({
     }
   }, [validate, value]);
 
+
   const handleChange = (_, { value: inputValue } = {}) => {
     // NumberInput onChange signature: (event, { value })
     let processedValue;
@@ -137,13 +138,17 @@ export const NumericBox = ({
     return null;
   };
 
-  // Ensure value is always numeric (never string) for Carbon NumberInput.toFixed() compatibility
+  // Return NaN (not 0) when there is no value so that:
+  // 1. The field shows empty instead of "0"
+  // 2. Carbon's useControllableState keeps t1=true (NaN !== undefined → controlled mode)
+  //    which allows line 55639 in NumberInput to update the display when setValue() is
+  //    called from a form event script (NaN→100 triggers the C1/u1 update path).
   const getNumericValue = () => {
     if (value === null || value === undefined || value === '') {
-      return '';
+      return NaN;
     }
     const num = parseFloat(value);
-    return isNaN(num) ? '' : num;
+    return isNaN(num) ? NaN : num;
   };
 
   return (
