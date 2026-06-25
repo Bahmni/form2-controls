@@ -5,7 +5,9 @@ import classNames from 'classnames';
 import { IntlProvider, injectIntl } from 'react-intl';
 import addMoreDecorator from 'components/AddMoreDecorator';
 import { getGroupedControls, displayRowControls } from 'src/helpers/controlsParser';
-import { Accordion, AccordionItem } from '@bahmni/design-system';
+import { Accordion, AccordionItem, IconButton, Button } from '@bahmni/design-system';
+import { Add, Close } from '@carbon/icons-react';
+import find from 'lodash/find';
 
 export class Section extends addMoreDecorator(Component) {
 
@@ -82,23 +84,52 @@ export class Section extends addMoreDecorator(Component) {
       id: label.translationKey || 'defaultId',
     });
 
+    const { properties } = this.props.metadata;
+    const isAddMoreEnabled = find(properties, (value, key) => (key === 'addMore' && value));
+
     return (
-      <div className={classNames('form-builder-fieldset', { hidden: this.props.hidden })}>
-        {this.showAddMore()}
-        <Accordion align="start">
-          <AccordionItem
-            open={!this.state.collapse}
-            onHeadingClick={this._onCollapse}
-            title={title}
-          >
-            <IntlProvider {...this.props.intl}>
-              <div className={`obsGroup-controls${disableClass}`}>
-                {displayRowControls(groupedRowControls, this.props.children.toArray(), childProps)}
+      <React.Fragment>
+        <div className={classNames('form-builder-fieldset', { hidden: this.props.hidden })}>
+          <div className="obs-group-add-more-wrapper">
+            {isAddMoreEnabled && this.props.showRemove && (
+              <div className="obs-group-remove-btn">
+                <IconButton
+                  label="Remove"
+                  kind="ghost"
+                  size="sm"
+                  onClick={this.onRemoveControl}
+                >
+                  <Close />
+                </IconButton>
               </div>
-            </IntlProvider>
-          </AccordionItem>
-        </Accordion>
-      </div>
+            )}
+            <Accordion align="start">
+              <AccordionItem
+                open={!this.state.collapse}
+                onHeadingClick={this._onCollapse}
+                title={title}
+              >
+                <IntlProvider {...this.props.intl}>
+                  <div className={`obsGroup-controls${disableClass}`}>
+                    {displayRowControls(groupedRowControls, this.props.children.toArray(), childProps)}
+                  </div>
+                </IntlProvider>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        </div>
+        {isAddMoreEnabled && this.props.showAddMore && (
+          <Button
+            kind="tertiary"
+            size="sm"
+            renderIcon={Add}
+            onClick={this.onAddControl}
+            className="obs-group-add-btn"
+          >
+            Add more
+          </Button>
+        )}
+      </React.Fragment>
     );
   }
 }
