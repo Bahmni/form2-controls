@@ -223,6 +223,8 @@ export function getFhirObservations(observations, options) {
     return [];
   }
 
+  const basedOn = options.basedOnReference ? [options.basedOnReference] : undefined;
+
   const results = [];
 
   for (const obs of observations) {
@@ -259,6 +261,7 @@ export function getFhirObservations(observations, options) {
         resource: {
           ...parentObservation,
           id: parentUuid,
+          basedOn,
         },
         fullUrl: parentFullUrl,
       });
@@ -271,6 +274,7 @@ export function getFhirObservations(observations, options) {
         resource: {
           ...observation,
           id: uuid,
+          basedOn,
         },
         fullUrl,
       });
