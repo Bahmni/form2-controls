@@ -15,7 +15,7 @@ describe('FhirObservationTransformer', () => {
     performerReference: { reference: 'Practitioner/practitioner-uuid' },
   };
 
-  describe('toFhir', () => {
+  describe('getFhirObservations', () => {
     it('should return empty array for null observations', () => {
       const result = getFhirObservations(null, defaultOptions);
       expect(result).toEqual([]);
@@ -337,6 +337,25 @@ describe('FhirObservationTransformer', () => {
       const result = getFhirObservations(observations, defaultOptions);
 
       expect(result[0].resource.valueString).toBeUndefined();
+    });
+
+    it('should handle basedOnReference when provided', () => {
+      const basedOnReference = { reference: 'ServiceRequest/sr-uuid' };
+      const optionsWithBasedOn = {
+        ...defaultOptions,
+        basedOnReference,
+      };
+
+      const observations = [
+        {
+          concept: { uuid: 'concept-uuid' },
+          value: 'test',
+        },
+      ];
+
+      const result = getFhirObservations(observations, optionsWithBasedOn);
+
+      expect(result[0].resource.basedOn).toEqual([basedOnReference]);
     });
   });
 
