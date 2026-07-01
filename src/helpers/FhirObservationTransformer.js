@@ -211,6 +211,7 @@ const createObservationResource = (observationPayload, options) => {
  * @param {Object} options.patientReference - FHIR Reference to patient (e.g., { reference: 'Patient/uuid' })
  * @param {Object} options.encounterReference - FHIR Reference to encounter (e.g., { reference: 'Encounter/uuid' })
  * @param {Object} options.performerReference - FHIR Reference to performer (e.g., { reference: 'Practitioner/uuid' })
+ * @param {Object} [options.basedOnReference] - Optional FHIR Reference for basedOn (e.g., { reference: 'ServiceRequest/uuid' })
  * @returns {Array<{resource: Object, fullUrl: string}>} Array of FHIR Observation bundle entries
  */
 export function getFhirObservations(observations, options) {
