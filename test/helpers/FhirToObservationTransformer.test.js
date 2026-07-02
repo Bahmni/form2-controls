@@ -766,4 +766,191 @@ describe('Round-trip sanity (getFhirObservations → getObservationsFromFhir)', 
 
     expect(roundTripped[0].value).toEqual({ uuid: 'male-uuid', display: 'Male' });
   });
+
+  it('should preserve a complex/attachment value on outbound→inbound round-trip', () => {
+    const original = [
+      { concept: { uuid: 'xray-uuid', datatype: 'Complex' }, value: 'http://files/xray.jpg' },
+    ];
+
+    const fhirEntries = getFhirObservations(original, defaultOptions);
+    const roundTripped = getObservationsFromFhir(fhirEntries);
+
+    expect(roundTripped[0].concept.datatype).toBe('Complex');
+    expect(roundTripped[0].value).toEqual(
+      expect.objectContaining({ url: 'http://files/xray.jpg' }),
+    );
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Edge cases and regressions
+// ---------------------------------------------------------------------------
+
+describe('Edge cases and regressions', () => {
+  it('does not throw when a Bundle contains null / non-object entries (AC14)', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const good = makeEntry(baseResource('ok-uuid', { valueString: 'ok' }), 'ok-1');
+
+    let result;
+    expect(() => {
+      result = getObservationsFromFhir({
+        resourceType: 'Bundle',
+        entry: [null, undefined, 42, good],
+      });
+    }).not.toThrow();
+
+    expect(result).toHaveLength(1);
+    expect(result[0].concept.uuid).toBe('ok-uuid');
+    warnSpy.mockRestore();
+  });
+
+  it('warns and skips a top-level resource that throws during mapping, keeping siblings (AC14)', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const boom = {
+      resourceType: 'Observation',
+      id: 'boom-1',
+      get code() {
+        throw new Error('boom');
+      },
+    };
+    const boomEntry = { resource: boom, fullUrl: 'urn:uuid:boom-1' };
+    const good = makeEntry(baseResource('safe-uuid', { valueQuantity: { value: 5 } }), 'safe-1');
+
+    let result;
+    expect(() => {
+      result = getObservationsFromFhir([boomEntry, good]);
+    }).not.toThrow();
+
+    expect(warnSpy).toHaveBeenCalled();
+    expect(result).toHaveLength(1);
+    expect(result[0].concept.uuid).toBe('safe-uuid');
+    warnSpy.mockRestore();
+  });
+
+  it('warns and skips a group child that throws during mapping (AC14)', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const boomChild = {
+      resourceType: 'Observation',
+      id: 'bc-1',
+      get code() {
+        throw new Error('boom');
+      },
+    };
+    const boomChildEntry = { resource: boomChild, fullUrl: 'urn:uuid:bc-1' };
+    const parent = {
+      resourceType: 'Observation',
+      id: 'gp-1',
+      code: makeConcept('grp-uuid', 'Group'),
+      hasMember: [{ reference: 'urn:uuid:bc-1' }],
+    };
+    const parentEntry = { resource: parent, fullUrl: 'urn:uuid:gp-1' };
+
+    let result;
+    expect(() => {
+      result = getObservationsFromFhir([boomChildEntry, parentEntry]);
+    }).not.toThrow();
+
+    expect(warnSpy).toHaveBeenCalled();
+    expect(result).toHaveLength(1);
+    expect(result[0].concept.uuid).toBe('grp-uuid');
+    expect(result[0].groupMembers).toBeUndefined();
+    warnSpy.mockRestore();
+  });
+
+  it('accepts a bare Observation[] and resolves hasMember via Observation/{id}', () => {
+    const child = {
+      resourceType: 'Observation',
+      id: 'child-9',
+      code: makeConcept('child-uuid', 'Child'),
+      valueQuantity: { value: 9 },
+    };
+    const parent = {
+      resourceType: 'Observation',
+      id: 'parent-9',
+      code: makeConcept('parent-uuid', 'Parent'),
+      hasMember: [{ reference: 'Observation/child-9' }],
+    };
+
+    const result = getObservationsFromFhir([child, parent]);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].concept.uuid).toBe('parent-uuid');
+    expect(result[0].groupMembers).toHaveLength(1);
+    expect(result[0].groupMembers[0].value).toBe(9);
+  });
+
+  it('resolves a hasMember reference given as a bare resource id', () => {
+    const child = makeEntry(baseResource('bare-child-uuid', { valueQuantity: { value: 3 } }), 'bare-child');
+    const parent = {
+      resource: {
+        resourceType: 'Observation',
+        id: 'bare-parent',
+        code: makeConcept('bare-parent-uuid', 'P'),
+        hasMember: [{ reference: 'bare-child' }],
+      },
+      fullUrl: 'urn:uuid:bare-parent',
+    };
+
+    const result = getObservationsFromFhir([child, parent]);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].groupMembers).toHaveLength(1);
+    expect(result[0].groupMembers[0].value).toBe(3);
+  });
+
+  it('returns a null value with Coded datatype for an empty coding array (AC3)', () => {
+    const resource = baseResource('empty-coded', { valueCodeableConcept: { coding: [] } });
+    const result = getObservationsFromFhir([makeEntry(resource, 'ec-1')]);
+
+    expect(result[0].concept.datatype).toBe('Coded');
+    expect(result[0].value).toBeNull();
+  });
+
+  it('omits interpretation when the code is not in CODE_TO_INTERPRETATION (AC10)', () => {
+    const resource = {
+      ...baseResource('interp-x', { valueQuantity: { value: 1 } }),
+      interpretation: [
+        { coding: [{ system: FHIR_OBSERVATION_INTERPRETATION_SYSTEM, code: 'ZZ' }] },
+      ],
+    };
+    const result = getObservationsFromFhir([makeEntry(resource, 'ix-1')]);
+
+    expect(result[0].interpretation).toBeUndefined();
+  });
+
+  it('nests a shared child under both parents and excludes it from the top level (AC7)', () => {
+    const child = makeEntry(baseResource('shared-uuid', { valueQuantity: { value: 1 } }), 'shared-1');
+    const p1 = {
+      resource: {
+        resourceType: 'Observation',
+        id: 'p1',
+        code: makeConcept('p1-uuid', 'P1'),
+        hasMember: [{ reference: 'urn:uuid:shared-1' }],
+      },
+      fullUrl: 'urn:uuid:p1',
+    };
+    const p2 = {
+      resource: {
+        resourceType: 'Observation',
+        id: 'p2',
+        code: makeConcept('p2-uuid', 'P2'),
+        hasMember: [{ reference: 'urn:uuid:shared-1' }],
+      },
+      fullUrl: 'urn:uuid:p2',
+    };
+
+    const result = getObservationsFromFhir([child, p1, p2]);
+
+    expect(result.map((o) => o.concept.uuid).sort()).toEqual(['p1-uuid', 'p2-uuid']);
+    expect(result.find((o) => o.concept.uuid === 'p1-uuid').groupMembers[0].concept.uuid).toBe('shared-uuid');
+    expect(result.find((o) => o.concept.uuid === 'p2-uuid').groupMembers[0].concept.uuid).toBe('shared-uuid');
+  });
+
+  it('treats an empty hasMember array as a scalar observation', () => {
+    const resource = { ...baseResource('empty-grp', { valueQuantity: { value: 7 } }), hasMember: [] };
+    const result = getObservationsFromFhir([makeEntry(resource, 'eg-1')]);
+
+    expect(result[0].value).toBe(7);
+    expect(result[0].groupMembers).toBeUndefined();
+  });
 });

@@ -14,12 +14,15 @@ import {
  *
  * Always returns an array of objects with shape { resource, fullUrl }.
  */
+// Keep only usable entry objects so downstream indexing never sees null/non-objects.
+const isObject = (value) => typeof value === 'object' && value !== null;
+
 const normaliseInput = (input) => {
   if (!input) return [];
 
   // Full FHIR Bundle
   if (!Array.isArray(input) && input.resourceType === 'Bundle') {
-    return Array.isArray(input.entry) ? input.entry : [];
+    return Array.isArray(input.entry) ? input.entry.filter(isObject) : [];
   }
 
   if (!Array.isArray(input)) return [];
@@ -28,13 +31,15 @@ const normaliseInput = (input) => {
   // Detect bundle-entry style by checking if elements have 'resource' or 'fullUrl' own keys.
   // We check 'fullUrl' (always present in outbound output) rather than resource value truthiness,
   // because a malformed entry may carry resource: null but still be a bundle entry.
-  const first = input[0];
-  if (first && typeof first === 'object' && ('fullUrl' in first || 'resource' in first)) {
-    return input;
+  const first = input.find(isObject);
+  if (first && ('fullUrl' in first || 'resource' in first)) {
+    return input.filter(isObject);
   }
 
-  // Plain Observation resources — wrap them
-  return input.map((res) => ({ resource: res, fullUrl: `Observation/${res && res.id || ''}` }));
+  // Plain Observation resources — wrap them (skip falsy/non-object resources)
+  return input
+    .filter(isObject)
+    .map((res) => ({ resource: res, fullUrl: `Observation/${res.id || ''}` }));
 };
 
 /**
@@ -96,6 +101,24 @@ const resolveReference = (reference, index) => {
 };
 
 /**
+ * Find an attachment-carrying extension.
+ * Matches the Bahmni attachment extension URL, and also tolerates an extension
+ * that carries a valueAttachment with a missing/undefined url — which is what the
+ * outbound transformer currently emits (it references a constant that is not yet
+ * exported from constants/fhir.js). This keeps the round-trip working without
+ * greedily matching unrelated extensions that declare a different explicit url.
+ */
+const findAttachmentExtension = (resource) => {
+  if (!Array.isArray(resource.extension)) return undefined;
+  return resource.extension.find(
+    (ext) =>
+      ext &&
+      ext.valueAttachment &&
+      (ext.url === FHIR_OBSERVATION_VALUE_ATTACHMENT_URL || ext.url === undefined)
+  );
+};
+
+/**
  * Infer the concept datatype from whichever FHIR value[x] field is present.
  */
 const inferDatatype = (resource) => {
@@ -104,14 +127,7 @@ const inferDatatype = (resource) => {
   if (resource.valueDateTime !== undefined) return 'Date';
   if (resource.valueCodeableConcept !== undefined) return 'Coded';
   if (resource.valueAttachment !== undefined) return 'Complex';
-  // Check extension for attachment
-  if (Array.isArray(resource.extension)) {
-    const hasAttachmentExt = resource.extension.some(
-      (ext) =>
-        ext.url === FHIR_OBSERVATION_VALUE_ATTACHMENT_URL && ext.valueAttachment
-    );
-    if (hasAttachmentExt) return 'Complex';
-  }
+  if (findAttachmentExtension(resource)) return 'Complex';
   return 'Text';
 };
 
@@ -156,19 +172,16 @@ const extractValue = (resource) => {
     };
   }
 
-  // AC6 — attachment stored in an extension (either the exported URL or a legacy undefined URL)
-  if (Array.isArray(resource.extension)) {
-    const attachmentExt = resource.extension.find(
-      (ext) => ext.url === FHIR_OBSERVATION_VALUE_ATTACHMENT_URL && ext.valueAttachment
-    );
-    if (attachmentExt) {
-      const att = attachmentExt.valueAttachment;
-      return {
-        url: att.url,
-        fileName: att.title,
-        contentType: att.contentType,
-      };
-    }
+  // AC6 — attachment stored in an extension (tagged with the attachment URL, or
+  // carrying a valueAttachment with a missing url as the outbound currently emits)
+  const attachmentExt = findAttachmentExtension(resource);
+  if (attachmentExt) {
+    const att = attachmentExt.valueAttachment;
+    return {
+      url: att.url,
+      fileName: att.title,
+      contentType: att.contentType,
+    };
   }
 
   // AC2 — free text (checked last so attachment extensions take precedence)
