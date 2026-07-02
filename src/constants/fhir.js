@@ -29,11 +29,9 @@ export const INTERPRETATION_TO_CODE = {
 
 /**
  * Reverse map from FHIR interpretation code back to human-readable word.
- * Covers A=Abnormal, N=Normal, H=High, L=Low.
+ * Derived from INTERPRETATION_TO_CODE so the two cannot drift apart
+ * (covers A=Abnormal, N=Normal, H=High, L=Low).
  */
-export const CODE_TO_INTERPRETATION = {
-  A: 'Abnormal',
-  N: 'Normal',
-  H: 'High',
-  L: 'Low',
-};
+export const CODE_TO_INTERPRETATION = Object.fromEntries(
+  Object.values(INTERPRETATION_TO_CODE).map(({ code, display }) => [code, display]),
+);

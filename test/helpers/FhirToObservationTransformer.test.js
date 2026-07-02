@@ -5,6 +5,7 @@ import {
   FHIR_OBSERVATION_VALUE_ATTACHMENT_URL,
   FHIR_OBSERVATION_INTERPRETATION_SYSTEM,
   CODE_TO_INTERPRETATION,
+  INTERPRETATION_TO_CODE,
 } from 'src/constants/fhir';
 
 // ---------------------------------------------------------------------------
@@ -952,5 +953,22 @@ describe('Edge cases and regressions', () => {
 
     expect(result[0].value).toBe(7);
     expect(result[0].groupMembers).toBeUndefined();
+  });
+
+  it('preserves all note entries as a newline-joined comment (AC9)', () => {
+    const resource = {
+      ...baseResource('multi-note', { valueString: 'x' }),
+      note: [{ text: 'first note' }, { text: null }, { text: 'second note' }],
+    };
+    const result = getObservationsFromFhir([makeEntry(resource, 'mn-1')]);
+
+    expect(result[0].comment).toBe('first note\nsecond note');
+  });
+
+  it('keeps CODE_TO_INTERPRETATION in sync with INTERPRETATION_TO_CODE', () => {
+    // Derived map must round-trip every INTERPRETATION_TO_CODE entry.
+    Object.values(INTERPRETATION_TO_CODE).forEach(({ code, display }) => {
+      expect(CODE_TO_INTERPRETATION[code]).toBe(display);
+    });
   });
 });

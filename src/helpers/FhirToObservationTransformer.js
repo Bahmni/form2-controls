@@ -275,9 +275,16 @@ const mapObservation = (resource, resourceIndex) => {
     }
   }
 
-  // AC9 — comment
-  if (Array.isArray(resource.note) && resource.note.length > 0 && resource.note[0].text) {
-    obs.comment = resource.note[0].text;
+  // AC9 — comment. The outbound writes a single note, but a backend observation
+  // may carry several; preserve all of them (newline-joined) so nothing is dropped.
+  if (Array.isArray(resource.note)) {
+    const noteText = resource.note
+      .map((note) => note && note.text)
+      .filter(Boolean)
+      .join('\n');
+    if (noteText) {
+      obs.comment = noteText;
+    }
   }
 
   // AC10 — interpretation
