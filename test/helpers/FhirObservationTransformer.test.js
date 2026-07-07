@@ -2,7 +2,6 @@ import { getFhirObservations, getObservationsFromFhir } from 'src/helpers/FhirOb
 import {
   FHIR_OBSERVATION_INTERPRETATION_SYSTEM,
   FHIR_OBSERVATION_FORM_NAMESPACE_PATH_URL,
-  FHIR_OBSERVATION_COMPLEX_DATA_URL,
   FHIR_OBSERVATION_VALUE_ATTACHMENT_URL,
   FHIR_OBSERVATION_STATUS_FINAL,
   FHIR_RESOURCE_TYPE_OBSERVATION,
@@ -278,7 +277,7 @@ describe('FhirObservationTransformer', () => {
 
       expect(result[0].resource.extension).toBeDefined();
       const complexExtension = result[0].resource.extension.find(
-        (ext) => ext.url === FHIR_OBSERVATION_COMPLEX_DATA_URL
+        (ext) => ext.url === FHIR_OBSERVATION_VALUE_ATTACHMENT_URL
       );
       expect(complexExtension).toBeDefined();
       expect(complexExtension.valueAttachment.url).toBe('http://example.com/image.jpg');
@@ -722,7 +721,7 @@ describe('getObservationsFromFhir', () => {
   });
 
   describe('AC3 — Coded observation', () => {
-    it('should map valueCodeableConcept to { uuid, display }', () => {
+    it('should map valueCodeableConcept to { uuid, display, name }', () => {
       const resource = baseResource('gender-uuid', {
         valueCodeableConcept: {
           coding: [{ code: 'male-uuid', display: 'Male' }],
@@ -732,7 +731,7 @@ describe('getObservationsFromFhir', () => {
 
       expect(result).toHaveLength(1);
       expect(result[0].concept.datatype).toBe('Coded');
-      expect(result[0].value).toEqual({ uuid: 'male-uuid', display: 'Male' });
+      expect(result[0].value).toEqual({ uuid: 'male-uuid', display: 'Male', name: 'Male' });
     });
 
     it('should handle coded value without display', () => {
@@ -743,7 +742,28 @@ describe('getObservationsFromFhir', () => {
       });
       const result = getObservationsFromFhir([makeEntry(resource, 'id-6')]);
 
-      expect(result[0].value).toEqual({ uuid: 'active-uuid', display: undefined });
+      expect(result[0].value).toEqual({
+        uuid: 'active-uuid',
+        display: undefined,
+        name: undefined,
+      });
+    });
+
+    it('should emit a name so CodedControl has a label when the answer is unresolved', () => {
+      // Regression (BAH-4812 review): if the saved answer is no longer among
+      // the concept's current answers, CodedControl (CodedControl.jsx:127)
+      // falls back to `{ ...val, name: val.name }` and then dereferences
+      // `name.display` (line 96). Emitting `name` alongside `display` keeps a
+      // readable label available and avoids the TypeError / blank label.
+      const resource = baseResource('diagnosis-uuid', {
+        valueCodeableConcept: {
+          coding: [{ code: 'retired-answer-uuid', display: 'Retired Answer' }],
+        },
+      });
+      const result = getObservationsFromFhir([makeEntry(resource, 'id-6b')]);
+
+      expect(result[0].value.name).toBe('Retired Answer');
+      expect(result[0].value.name).toBe(result[0].value.display);
     });
   });
 
@@ -847,6 +867,25 @@ describe('getObservationsFromFhir', () => {
 
       expect(result[0].value.fileName).toBe('file.jpg');
       expect(result[0].value.url).toBe('http://example.com/file.jpg');
+    });
+
+    it('should NOT classify an attachment extension with a non-matching url as Complex', () => {
+      // Regression (BAH-4812 review): the reverse used to match any extension
+      // whose valueAttachment carried a missing/undefined url. An unrelated
+      // sub-extension must not be mistaken for the Bahmni attachment extension.
+      const resource = {
+        ...baseResource('note-uuid', { valueString: 'plain text answer' }),
+        extension: [
+          {
+            url: 'http://example.com/some-other-extension',
+            valueAttachment: { url: 'http://example.com/unrelated.bin' },
+          },
+        ],
+      };
+      const result = getObservationsFromFhir([makeEntry(resource, 'id-14')]);
+
+      expect(result[0].concept.datatype).toBe('Text');
+      expect(result[0].value).toBe('plain text answer');
     });
   });
 
@@ -1338,7 +1377,11 @@ describe('getObservationsFromFhir', () => {
       const fhirEntries = getFhirObservations(original, defaultOptions);
       const roundTripped = getObservationsFromFhir(fhirEntries);
 
-      expect(roundTripped[0].value).toEqual({ uuid: 'male-uuid', display: 'Male' });
+      expect(roundTripped[0].value).toEqual({
+        uuid: 'male-uuid',
+        display: 'Male',
+        name: 'Male',
+      });
     });
 
     it('should preserve a complex/attachment value on outbound→inbound round-trip', () => {

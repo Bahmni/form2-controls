@@ -1,7 +1,6 @@
 import {
   FHIR_OBSERVATION_INTERPRETATION_SYSTEM,
   FHIR_OBSERVATION_FORM_NAMESPACE_PATH_URL,
-  FHIR_OBSERVATION_COMPLEX_DATA_URL,
   FHIR_OBSERVATION_VALUE_ATTACHMENT_URL,
   CONCEPT_DATATYPE_NUMERIC,
   CONCEPT_DATATYPE_COMPLEX,
@@ -13,9 +12,7 @@ import {
 } from 'src/constants/fhir';
 import { NUMBER, STRING, BOOLEAN, OBJECT } from 'src/constants';
 
-// ============================================================================
 // Reverse Transformation: FHIR Observation → Form2 Observation
-// ============================================================================
 
 const isObject = (value) => typeof value === 'object' && value !== null;
 
@@ -87,7 +84,7 @@ const findAttachmentExtension = (resource) => {
     (ext) =>
       ext &&
       ext.valueAttachment &&
-      (ext.url === FHIR_OBSERVATION_VALUE_ATTACHMENT_URL || ext.url === undefined)
+      ext.url === FHIR_OBSERVATION_VALUE_ATTACHMENT_URL
   );
 };
 
@@ -119,7 +116,11 @@ const extractValue = (resource) => {
       resource.valueCodeableConcept.coding &&
       resource.valueCodeableConcept.coding[0];
     if (coding) {
-      return { uuid: coding.code, display: coding.display };
+      // Emit `name` alongside `display` so CodedControl has a readable label
+      // to fall back on when the saved answer is no longer among the concept's
+      // current answers (CodedControl.jsx:127 → :96 would otherwise deref
+      // `name.display` on undefined).
+      return { uuid: coding.code, display: coding.display, name: coding.display };
     }
     return undefined;
   }
@@ -306,9 +307,7 @@ export function getObservationsFromFhir(input) {
   return results;
 }
 
-// ============================================================================
 // Forward Transformation: Form2 Observation → FHIR Observation
-// ============================================================================
 
 const createCoding = (code, systemURL, display) => {
   const coding = { code };
@@ -433,7 +432,7 @@ const createObservationResource = (observationPayload, options) => {
         if (conceptDatatype === CONCEPT_DATATYPE_COMPLEX && value.trim() !== '') {
           observation.extension = observation.extension || [];
           observation.extension.push({
-            url: FHIR_OBSERVATION_COMPLEX_DATA_URL,
+            url: FHIR_OBSERVATION_VALUE_ATTACHMENT_URL,
             valueAttachment: { url: value },
           });
           observation.valueString = value;

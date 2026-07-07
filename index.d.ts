@@ -417,7 +417,7 @@ export const FhirObservationTransformer
 
 export const FHIR_OBSERVATION_INTERPRETATION_SYSTEM: string;
 export const FHIR_OBSERVATION_FORM_NAMESPACE_PATH_URL: string;
-export const FHIR_OBSERVATION_COMPLEX_DATA_URL: string;
+export const FHIR_OBSERVATION_VALUE_ATTACHMENT_URL: string;
 export const CONCEPT_DATATYPE_NUMERIC: string;
 export const CONCEPT_DATATYPE_COMPLEX: string;
 export const FHIR_OBSERVATION_STATUS_FINAL: string;
