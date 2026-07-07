@@ -125,23 +125,20 @@ const extractValue = (resource) => {
     return undefined;
   }
 
-  if (resource.valueAttachment !== undefined) {
-    const att = resource.valueAttachment;
-    return {
-      url: att.url,
-      fileName: att.title,
-      contentType: att.contentType,
-    };
-  }
-
-  const attachmentExt = findAttachmentExtension(resource);
-  if (attachmentExt) {
-    const att = attachmentExt.valueAttachment;
-    return {
-      url: att.url,
-      fileName: att.title,
-      contentType: att.contentType,
-    };
+  const attachment =
+    resource.valueAttachment !== undefined
+      ? resource.valueAttachment
+      : findAttachmentExtension(resource)?.valueAttachment;
+  if (attachment) {
+    // Only map fields the source actually carries, so a bare attachment
+    // does not surface `fileName: undefined` / `contentType: undefined`
+    // (keeps parity with AC13 "only available data is mapped").
+    const value = { url: attachment.url };
+    if (attachment.title !== undefined) value.fileName = attachment.title;
+    if (attachment.contentType !== undefined) {
+      value.contentType = attachment.contentType;
+    }
+    return value;
   }
 
   if (resource.valueString !== undefined) {
@@ -247,7 +244,9 @@ const mapObservation = (resource, resourceIndex) => {
 
 /**
  * Transform a FHIR Observation Bundle (or array) back into plain form2 observation objects.
- * This is the exact inverse of `getFhirObservations`.
+ * This is the reverse of `getFhirObservations`. It reconstructs the form2 shape rather than
+ * being a strict inverse — e.g. coded values also carry a `name` label for CodedControl, and
+ * only fields present on the source are emitted.
  *
  * Accepts:
  *   - A FHIR Bundle { resourceType: 'Bundle', entry: [{resource, fullUrl}] }
