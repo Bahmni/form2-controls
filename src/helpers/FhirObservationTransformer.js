@@ -11,6 +11,7 @@ import {
   CODE_TO_INTERPRETATION,
 } from 'src/constants/fhir';
 import { NUMBER, STRING, BOOLEAN, OBJECT } from 'src/constants';
+import { cacheFileName, getCachedFileName } from 'src/helpers/FileNameCache';
 
 // Reverse Transformation: FHIR Observation → Form2 Observation
 
@@ -134,7 +135,13 @@ const extractValue = (resource) => {
     // does not surface `fileName: undefined` / `contentType: undefined`
     // (keeps parity with AC13 "only available data is mapped").
     const value = { url: attachment.url };
-    if (attachment.title !== undefined) value.fileName = attachment.title;
+    if (attachment.title !== undefined) {
+      value.fileName = attachment.title;
+      // Populate the session cache so getFileName() can display the filename
+      // even after observationsWithValues converts { url, fileName } → string URL
+      // before passing to CarbonContainer.
+      cacheFileName(attachment.url, attachment.title);
+    }
     if (attachment.contentType !== undefined) {
       value.contentType = attachment.contentType;
     }
@@ -165,6 +172,10 @@ const mapObservation = (resource, resourceIndex) => {
   }
 
   const obs = { concept };
+
+  // Preserve the FHIR resource id so callers can detect existing observations
+  // and emit PUT/DELETE bundle entries instead of POST.
+  if (resource.id) obs.uuid = resource.id;
 
   if (resource.effectiveDateTime) {
     obs.obsDatetime = resource.effectiveDateTime;
@@ -232,10 +243,7 @@ const mapObservation = (resource, resourceIndex) => {
     const interpCoding =
       resource.interpretation[0].coding && resource.interpretation[0].coding[0];
     if (interpCoding && interpCoding.code) {
-      const word = CODE_TO_INTERPRETATION[interpCoding.code];
-      if (word) {
-        obs.interpretation = word;
-      }
+      obs.interpretation = CODE_TO_INTERPRETATION[interpCoding.code] || interpCoding.code;
     }
   }
 
@@ -289,6 +297,7 @@ export function getObservationsFromFhir(input) {
   for (const entry of topLevelEntries) {
     const { resource } = entry;
     if (!resource) continue;
+    if (resource.resourceType !== 'Observation') continue;
     try {
       const obs = mapObservation(resource, resourceIndex);
       if (obs) {
@@ -429,10 +438,15 @@ const createObservationResource = (observationPayload, options) => {
         break;
       case STRING: {
         if (conceptDatatype === CONCEPT_DATATYPE_COMPLEX && value.trim() !== '') {
+          const attachment = { url: value };
+          // Look up the original filename from the session cache (set by FileUpload
+          // at upload time) so it round-trips via valueAttachment.title.
+          const cachedFileName = getCachedFileName(value);
+          if (cachedFileName) attachment.title = cachedFileName;
           observation.extension = observation.extension || [];
           observation.extension.push({
             url: FHIR_OBSERVATION_VALUE_ATTACHMENT_URL,
-            valueAttachment: { url: value },
+            valueAttachment: attachment,
           });
           observation.valueString = value;
         } else {
@@ -451,6 +465,20 @@ const createObservationResource = (observationPayload, options) => {
           observation.valueCodeableConcept = createCodeableConcept([
             createCoding(codingCode, value.system, value.display || value.displayString),
           ]);
+        } else if (value && 'url' in value) {
+          // Complex/file attachment pre-populated from a previous save:
+          // { url, fileName?, contentType? }. Preserve all available fields so
+          // the observation is not silently dropped when the user submits without
+          // changing the file, and so the filename round-trips correctly.
+          const attachment = { url: value.url };
+          if (value.fileName) attachment.title = value.fileName;
+          if (value.contentType) attachment.contentType = value.contentType;
+          observation.extension = observation.extension || [];
+          observation.extension.push({
+            url: FHIR_OBSERVATION_VALUE_ATTACHMENT_URL,
+            valueAttachment: attachment,
+          });
+          observation.valueString = value.url;
         }
         break;
     }
