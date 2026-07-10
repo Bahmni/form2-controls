@@ -243,7 +243,12 @@ const mapObservation = (resource, resourceIndex) => {
     const interpCoding =
       resource.interpretation[0].coding && resource.interpretation[0].coding[0];
     if (interpCoding && interpCoding.code) {
-      obs.interpretation = CODE_TO_INTERPRETATION[interpCoding.code] || interpCoding.code;
+      const mapped = CODE_TO_INTERPRETATION[interpCoding.code];
+      if (mapped !== undefined) {
+        obs.interpretation = mapped;
+      }
+      // Unknown codes are silently omitted — the outbound transformer only
+      // writes known codes, so an unrecognised code on the way back is noise.
     }
   }
 
