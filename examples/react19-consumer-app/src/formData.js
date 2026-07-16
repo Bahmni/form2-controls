@@ -18,7 +18,11 @@ export const clinicalFormMetadata = {
       },
       properties: {
         mandatory: true,
-        location: { row: 0, column: 0 }
+        location: { row: 0, column: 0 },
+        // Deskcheck #5: abnormal flag prepopulates from FHIR interpretation "A".
+        // Deskcheck #4: notes/comment prepopulates from the FHIR note[].
+        abnormal: true,
+        notes: true
       },
       id: 'temperature',
       concept: {
@@ -40,7 +44,9 @@ export const clinicalFormMetadata = {
       },
       properties: {
         mandatory: true,
-        location: { row: 0, column: 1 }
+        location: { row: 0, column: 1 },
+        // Deskcheck #4: notes/comment on a numeric field.
+        notes: true
       },
       id: 'heart-rate',
       concept: {
@@ -110,7 +116,12 @@ export const clinicalFormMetadata = {
       },
       properties: {
         location: { row: 2, column: 0 },
-        abnormal: false
+        abnormal: false,
+        // Deskcheck #3: "add more" the same obs group — the bundle carries two
+        // instances (blood-pressure-group-0 and -1), both prepopulate.
+        addMore: true,
+        // Deskcheck #4: notes/comment on an obs group.
+        notes: true
       },
       id: 'blood-pressure-group',
       concept: {
@@ -221,7 +232,9 @@ export const clinicalFormMetadata = {
       },
       properties: {
         mandatory: false,
-        location: { row: 4, column: 0 }
+        location: { row: 4, column: 0 },
+        // Deskcheck #4: notes/comment on a text field.
+        notes: true
       },
       id: 'chief-complaint',
       concept: {
@@ -289,7 +302,9 @@ export const clinicalFormMetadata = {
       },
       properties: {
         mandatory: false,
-        location: { row: 6, column: 1 }
+        location: { row: 6, column: 1 },
+        // Deskcheck #4: notes/comment on a boolean field.
+        notes: true
       },
       id: 'fever-present',
       // Boolean controls read their Yes/No labels from control-level `options`.
@@ -325,6 +340,118 @@ export const clinicalFormMetadata = {
         uuid: 'c36c8500-3f10-11e4-adec-0800271c1b75',
         name: 'Symptom Onset Date',
         datatype: 'Date',
+        conceptClass: 'Misc'
+      }
+    },
+
+    // Row 8: File attachment (Complex control). Deskcheck #1 — file upload.
+    // The Complex datatype delegates to the component registered under
+    // `conceptHandler`. The example registers a minimal `FileUrlHandler`
+    // (see App.jsx) that renders the {url, fileName, contentType} object the
+    // reverse transformer produces from a FHIR valueAttachment.
+    {
+      type: 'obsControl',
+      label: {
+        type: 'label',
+        value: 'Chest X-ray (attachment)'
+      },
+      properties: {
+        mandatory: false,
+        location: { row: 8, column: 0 }
+      },
+      id: 'xray-attachment',
+      concept: {
+        uuid: 'a1b2c3d4-0001-4aaa-bbbb-000000000001',
+        name: 'Chest X-ray',
+        datatype: 'Complex',
+        conceptClass: 'Misc',
+        conceptHandler: 'FileUrlHandler'
+      }
+    },
+
+    // Row 9: Nested obs group within an obs group. Deskcheck #2 —
+    // Physical Examination -> Cardiovascular Examination -> Heart Sounds.
+    {
+      type: 'obsGroupControl',
+      label: {
+        type: 'label',
+        value: 'Physical Examination'
+      },
+      properties: {
+        location: { row: 9, column: 0 },
+        abnormal: false
+      },
+      id: 'physical-exam',
+      concept: {
+        uuid: 'a1b2c3d4-0002-4aaa-bbbb-000000000002',
+        name: 'Physical Examination',
+        datatype: 'N/A',
+        conceptClass: 'Concept Details'
+      },
+      controls: [
+        {
+          type: 'obsGroupControl',
+          label: {
+            type: 'label',
+            value: 'Cardiovascular Examination'
+          },
+          properties: {
+            location: { row: 0, column: 0 },
+            abnormal: false,
+            // Deskcheck #4: notes/comment on a (nested) obs group.
+            notes: true
+          },
+          id: 'cardiovascular',
+          concept: {
+            uuid: 'a1b2c3d4-0003-4aaa-bbbb-000000000003',
+            name: 'Cardiovascular Examination',
+            datatype: 'N/A',
+            conceptClass: 'Concept Details'
+          },
+          controls: [
+            {
+              type: 'obsControl',
+              label: {
+                type: 'label',
+                value: 'Heart Sounds'
+              },
+              properties: {
+                mandatory: false,
+                location: { row: 0, column: 0 }
+              },
+              id: 'heart-sound',
+              concept: {
+                uuid: 'a1b2c3d4-0004-4aaa-bbbb-000000000004',
+                name: 'Heart Sounds',
+                datatype: 'Text',
+                conceptClass: 'Misc'
+              }
+            }
+          ]
+        }
+      ]
+    },
+
+    // Row 10: Allergy History (Text). Deskcheck #6 — forms versioning.
+    // The bundle carries two observations for this field: one recorded under
+    // form version 0.9 (stale, must be ignored) and one under 1.0 (current).
+    // Only the 1.0 value should prepopulate because matching is keyed on
+    // `${name}.${version}/${controlId}` and this form renders as version 1.0.
+    {
+      type: 'obsControl',
+      label: {
+        type: 'label',
+        value: 'Allergy History'
+      },
+      properties: {
+        mandatory: false,
+        location: { row: 10, column: 0 }
+      },
+      id: 'allergy',
+      concept: {
+        uuid: 'a1b2c3d4-0005-4aaa-bbbb-000000000005',
+        name: 'Allergy History',
+        datatype: 'Text',
         conceptClass: 'Misc'
       }
     }
