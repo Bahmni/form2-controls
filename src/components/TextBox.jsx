@@ -26,13 +26,20 @@ export class TextBox extends Component {
     this.isValueChanged = this.props.value !== nextProps.value;
     if (this.props.enabled !== nextProps.enabled ||
       this.isValueChanged ||
-      this.state.hasErrors !== nextState.hasErrors) {
+      this.state.hasErrors !== nextState.hasErrors ||
+      this.props.hidden !== nextProps.hidden) {
       return true;
     }
     return false;
   }
 
    componentDidUpdate(prevProps) {
+    if (prevProps.hidden && !this.props.hidden && this.props.validateForm) {
+      const errors = this._getErrors(this.props.value);
+      this.props.onChange({ value: this.props.value, errors });
+      return;
+    }
+
     // Update hasErrors state when validate prop changes or value changes
     if (this.props.validate !== prevProps.validate ||
         !isEqual(this.props.value, prevProps.value)) {
