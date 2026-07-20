@@ -27,16 +27,6 @@ export const INTERPRETATION_TO_CODE = {
   LOW: { code: 'L', display: 'Low' },
 };
 
-/**
- * Reverse map from FHIR interpretation code back to the canonical form2
- * interpretation word. Derived from INTERPRETATION_TO_CODE so the two cannot
- * drift apart (covers A=ABNORMAL, N=NORMAL, H=HIGH, L=LOW).
- *
- * NOTE: the word must be UPPERCASE to match what ObsControl compares against
- * (`value.interpretation === 'ABNORMAL'`) and what the forward transformer
- * consumes; emitting the title-case display text here would leave the abnormal
- * flag un-highlighted on pre-populated observations.
- */
 export const CODE_TO_INTERPRETATION = Object.fromEntries(
   Object.entries(INTERPRETATION_TO_CODE).map(([word, { code }]) => [code, word]),
 );

@@ -25,15 +25,20 @@ export const clinicalFormMetadata = {
         notes: true
       },
       id: 'temperature',
+      // Numeric range limits must live at the control top level: ObsControl's
+      // _numericContext reads metadata.hiNormal/lowNormal (not concept.*) and
+      // passes them to NumericBox, which raises the allowRange warning that
+      // drives the Abnormal auto-flag. Nesting them under `concept` leaves them
+      // undefined, so out-of-range values never highlight Abnormal.
+      lowNormal: 36.0,
+      hiNormal: 37.5,
+      lowAbsolute: 35.0,
+      hiAbsolute: 43.0,
       concept: {
         uuid: 'c36af094-3f10-11e4-adec-0800271c1b75',
         name: 'Temperature',
         datatype: 'Numeric',
-        conceptClass: 'Misc',
-        lowNormal: 36.0,
-        hiNormal: 37.5,
-        lowAbsolute: 35.0,
-        hiAbsolute: 43.0
+        conceptClass: 'Misc'
       }
     },
     {
@@ -49,15 +54,15 @@ export const clinicalFormMetadata = {
         notes: true
       },
       id: 'heart-rate',
+      lowNormal: 60,
+      hiNormal: 100,
+      lowAbsolute: 40,
+      hiAbsolute: 200,
       concept: {
         uuid: 'c36bc1a4-3f10-11e4-adec-0800271c1b75',
         name: 'Pulse',
         datatype: 'Numeric',
-        conceptClass: 'Misc',
-        lowNormal: 60,
-        hiNormal: 100,
-        lowAbsolute: 40,
-        hiAbsolute: 200
+        conceptClass: 'Misc'
       }
     },
 
@@ -73,15 +78,15 @@ export const clinicalFormMetadata = {
         location: { row: 1, column: 0 }
       },
       id: 'respiratory-rate',
+      lowNormal: 12,
+      hiNormal: 20,
+      lowAbsolute: 8,
+      hiAbsolute: 40,
       concept: {
         uuid: 'c36c7b28-3f10-11e4-adec-0800271c1b75',
         name: 'Respiratory Rate',
         datatype: 'Numeric',
-        conceptClass: 'Misc',
-        lowNormal: 12,
-        hiNormal: 20,
-        lowAbsolute: 8,
-        hiAbsolute: 40
+        conceptClass: 'Misc'
       }
     },
     {
@@ -95,15 +100,15 @@ export const clinicalFormMetadata = {
         location: { row: 1, column: 1 }
       },
       id: 'spo2',
+      lowNormal: 95,
+      hiNormal: 100,
+      lowAbsolute: 70,
+      hiAbsolute: 100,
       concept: {
         uuid: 'c36c7ce4-3f10-11e4-adec-0800271c1b75',
         name: 'Oxygen Saturation',
         datatype: 'Numeric',
-        conceptClass: 'Misc',
-        lowNormal: 95,
-        hiNormal: 100,
-        lowAbsolute: 70,
-        hiAbsolute: 100
+        conceptClass: 'Misc'
       }
     },
 
@@ -145,15 +150,15 @@ export const clinicalFormMetadata = {
             location: { row: 0, column: 0 }
           },
           id: 'systolic',
+          lowNormal: 90,
+          hiNormal: 120,
+          lowAbsolute: 60,
+          hiAbsolute: 250,
           concept: {
             uuid: 'c36e9ed8-3f10-11e4-adec-0800271c1b75',
             name: 'Systolic Blood Pressure',
             datatype: 'Numeric',
-            conceptClass: 'Misc',
-            lowNormal: 90,
-            hiNormal: 120,
-            lowAbsolute: 60,
-            hiAbsolute: 250
+            conceptClass: 'Misc'
           }
         },
         {
@@ -167,15 +172,15 @@ export const clinicalFormMetadata = {
             location: { row: 0, column: 1 }
           },
           id: 'diastolic',
+          lowNormal: 60,
+          hiNormal: 80,
+          lowAbsolute: 40,
+          hiAbsolute: 150,
           concept: {
             uuid: 'c36e9f4e-3f10-11e4-adec-0800271c1b75',
             name: 'Diastolic Blood Pressure',
             datatype: 'Numeric',
-            conceptClass: 'Misc',
-            lowNormal: 60,
-            hiNormal: 80,
-            lowAbsolute: 40,
-            hiAbsolute: 150
+            conceptClass: 'Misc'
           }
         }
       ]
@@ -193,13 +198,13 @@ export const clinicalFormMetadata = {
         location: { row: 3, column: 0 }
       },
       id: 'weight',
+      lowAbsolute: 0.5,
+      hiAbsolute: 500,
       concept: {
         uuid: 'c36c7d5a-3f10-11e4-adec-0800271c1b75',
         name: 'Weight',
         datatype: 'Numeric',
-        conceptClass: 'Misc',
-        lowAbsolute: 0.5,
-        hiAbsolute: 500
+        conceptClass: 'Misc'
       }
     },
     {
@@ -213,13 +218,13 @@ export const clinicalFormMetadata = {
         location: { row: 3, column: 1 }
       },
       id: 'height',
+      lowAbsolute: 20,
+      hiAbsolute: 300,
       concept: {
         uuid: 'c36c7dd6-3f10-11e4-adec-0800271c1b75',
         name: 'Height',
         datatype: 'Numeric',
-        conceptClass: 'Misc',
-        lowAbsolute: 20,
-        hiAbsolute: 300
+        conceptClass: 'Misc'
       }
     },
 
@@ -363,6 +368,30 @@ export const clinicalFormMetadata = {
       concept: {
         uuid: 'a1b2c3d4-0001-4aaa-bbbb-000000000001',
         name: 'Chest X-ray',
+        datatype: 'Complex',
+        conceptClass: 'Misc',
+        conceptHandler: 'FileUrlHandler'
+      }
+    },
+
+    // Row 8 (col 1): Video attachment (Complex control). Same wiring as the
+    // X-ray above — the reverse transformer maps the FHIR valueAttachment
+    // (video/mp4) to { url, fileName, contentType } and FileUrlHandler renders
+    // it as a <video> player.
+    {
+      type: 'obsControl',
+      label: {
+        type: 'label',
+        value: 'Procedure Video (attachment)'
+      },
+      properties: {
+        mandatory: false,
+        location: { row: 8, column: 1 }
+      },
+      id: 'procedure-video',
+      concept: {
+        uuid: 'a1b2c3d4-0002-4aaa-bbbb-000000000002',
+        name: 'Procedure Video',
         datatype: 'Complex',
         conceptClass: 'Misc',
         conceptHandler: 'FileUrlHandler'

@@ -2,7 +2,7 @@
   "resourceType": "Bundle",
   "id": "bah-4812-sample-bundle",
   "type": "searchset",
-  "total": 23,
+  "total": 24,
   "entry": [
     {
       "fullUrl": "urn:uuid:obs-temperature",
@@ -335,6 +335,27 @@
           {
             "url": "http://fhir.bahmni.org/ext/observation/form-namespace-path",
             "valueString": "Bahmni^Clinical Assessment Form.1.0/xray-attachment-0"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:obs-procedure-video",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-procedure-video",
+        "status": "final",
+        "code": { "coding": [{ "code": "a1b2c3d4-0002-4aaa-bbbb-000000000002", "display": "Procedure Video" }] },
+        "effectiveDateTime": "2026-07-03T09:15:00.000Z",
+        "valueAttachment": {
+          "url": "https://www.w3schools.com/html/mov_bbb.mp4",
+          "title": "procedure-clip.mp4",
+          "contentType": "video/mp4"
+        },
+        "extension": [
+          {
+            "url": "http://fhir.bahmni.org/ext/observation/form-namespace-path",
+            "valueString": "Bahmni^Clinical Assessment Form.1.0/procedure-video-0"
           }
         ]
       }

@@ -21,6 +21,7 @@ export function FileUrlHandler(props) {
 
   const { url, fileName, contentType } = value;
   const isImage = typeof contentType === 'string' && contentType.startsWith('image/');
+  const isVideo = typeof contentType === 'string' && contentType.startsWith('video/');
 
   return (
     <div className="file-attachment">
@@ -32,6 +33,16 @@ export function FileUrlHandler(props) {
             style={{ maxWidth: '160px', maxHeight: '160px', display: 'block', marginBottom: '0.5rem' }}
           />
         </a>
+      )}
+      {isVideo && (
+        <video
+          src={url}
+          controls
+          style={{ maxWidth: '320px', maxHeight: '240px', display: 'block', marginBottom: '0.5rem' }}
+        >
+          {/* Fallback for browsers that cannot play the source */}
+          <a href={url} target="_blank" rel="noreferrer">{fileName || url}</a>
+        </video>
       )}
       <a href={url} target="_blank" rel="noreferrer">
         {fileName || url}
