@@ -133,7 +133,12 @@ describe('FhirObservationTransformer', () => {
       const observations = [
         {
           concept: { uuid: 'route-uuid', datatype: 'Coded' },
-          value: { uuid: 'http://snomed.info/sct/389145006', system: 'http://snomed.info/sct', code: '389145006', displayString: 'Inhalation' },
+          value: {
+            uuid: 'http://snomed.info/sct/389145006',
+            system: 'http://snomed.info/sct',
+            code: '389145006',
+            displayString: 'Inhalation',
+          },
         },
       ];
 
