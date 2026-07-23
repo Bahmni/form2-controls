@@ -164,7 +164,14 @@ FileUpload.propTypes = {
   showNotification: PropTypes.func.isRequired,
   validate: PropTypes.bool.isRequired,
   validations: PropTypes.array.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      fileName: PropTypes.string,
+      contentType: PropTypes.string,
+    }),
+  ]),
 };
 
 FileUpload.defaultProps = {

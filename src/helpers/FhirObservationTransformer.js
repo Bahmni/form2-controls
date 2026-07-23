@@ -175,6 +175,10 @@ const mapObservation = (resource, resourceIndex) => {
 
   // Preserve the FHIR resource id so callers can detect existing observations
   // and emit PUT/DELETE bundle entries instead of POST.
+  // Assumes the FHIR server's logical id for this resource IS the OpenMRS
+  // observation UUID (true for OpenMRS's FHIR2 module) — if a server ever
+  // returns a different id format, downstream PUT/DELETE would target the
+  // wrong resource.
   if (resource.id) obs.uuid = resource.id;
 
   if (resource.effectiveDateTime) {
@@ -401,6 +405,27 @@ const handleStringValue = (value, observation, conceptDatatype) => {
 };
 
 /**
+ * Builds a valueAttachment extension for a Complex (file) observation and
+ * sets valueString to the attachment url, so both the pre-population and
+ * fresh-upload paths stay in sync.
+ * @param {Object} observation - The FHIR Observation resource being built
+ * @param {string} url - The attachment url
+ * @param {string} [title] - The original filename, if known
+ * @param {string} [contentType] - The attachment content type, if known
+ */
+const applyAttachmentValue = (observation, url, title, contentType) => {
+  const attachment = { url };
+  if (title) attachment.title = title;
+  if (contentType) attachment.contentType = contentType;
+  observation.extension = observation.extension || [];
+  observation.extension.push({
+    url: FHIR_OBSERVATION_VALUE_ATTACHMENT_URL,
+    valueAttachment: attachment,
+  });
+  observation.valueString = url;
+};
+
+/**
  * Creates a single FHIR Observation resource from a form2 observation
  * @param {Object} observationPayload - The form2 observation data
  * @param {Object} options - Configuration options
@@ -443,17 +468,9 @@ const createObservationResource = (observationPayload, options) => {
         break;
       case STRING: {
         if (conceptDatatype === CONCEPT_DATATYPE_COMPLEX && value.trim() !== '') {
-          const attachment = { url: value };
           // Look up the original filename from the session cache (set by FileUpload
           // at upload time) so it round-trips via valueAttachment.title.
-          const cachedFileName = getCachedFileName(value);
-          if (cachedFileName) attachment.title = cachedFileName;
-          observation.extension = observation.extension || [];
-          observation.extension.push({
-            url: FHIR_OBSERVATION_VALUE_ATTACHMENT_URL,
-            valueAttachment: attachment,
-          });
-          observation.valueString = value;
+          applyAttachmentValue(observation, value, getCachedFileName(value));
         } else {
           handleStringValue(value, observation, conceptDatatype);
         }
@@ -475,15 +492,7 @@ const createObservationResource = (observationPayload, options) => {
           // { url, fileName?, contentType? }. Preserve all available fields so
           // the observation is not silently dropped when the user submits without
           // changing the file, and so the filename round-trips correctly.
-          const attachment = { url: value.url };
-          if (value.fileName) attachment.title = value.fileName;
-          if (value.contentType) attachment.contentType = value.contentType;
-          observation.extension = observation.extension || [];
-          observation.extension.push({
-            url: FHIR_OBSERVATION_VALUE_ATTACHMENT_URL,
-            valueAttachment: attachment,
-          });
-          observation.valueString = value.url;
+          applyAttachmentValue(observation, value.url, value.fileName, value.contentType);
         }
         break;
     }

@@ -14,3 +14,5 @@ export const cacheFileName = (url, fileName) => {
 };
 
 export const getCachedFileName = (url) => (url ? _cache.get(url) : undefined);
+
+export const clearCache = () => _cache.clear();
