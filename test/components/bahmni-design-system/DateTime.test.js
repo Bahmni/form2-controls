@@ -129,6 +129,52 @@ describe('DateTime', () => {
     expect(container.querySelector('.form-builder-error')).toBeTruthy();
   });
 
+  test('should strip seconds from time when setValue provides HH:MM:SS format', () => {
+    const { container } = render(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+        value="2026-06-30 10:00:00"
+      />
+    );
+
+    const timeInput = container.querySelector('input[id="test-uuid-time"]');
+    expect(timeInput).toHaveValue('10:00');
+  });
+
+  test('should display time when external setValue changes value from empty to populated', () => {
+    const { container, rerender } = render(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+      />
+    );
+
+    expect(container.querySelector('input[id="test-uuid-time"]')).toHaveValue('');
+
+    rerender(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+        value="2026-06-30 10:00:00"
+      />
+    );
+
+    expect(container.querySelector('input[id="test-uuid-time"]')).toHaveValue('10:00');
+  });
+
   test('should not call onChange when validate changes to true', () => {
     const { rerender } = render(
       <DateTime
