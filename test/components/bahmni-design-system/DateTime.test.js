@@ -129,6 +129,139 @@ describe('DateTime', () => {
     expect(container.querySelector('.form-builder-error')).toBeTruthy();
   });
 
+  test('should strip seconds from time when setValue provides HH:MM:SS format', () => {
+    const { container } = render(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+        value="2026-06-30 10:00:00"
+      />
+    );
+
+    const timeInput = container.querySelector('input[id="test-uuid-time"]');
+    expect(timeInput).toHaveValue('10:00');
+  });
+
+  test('should display time when external setValue changes value from empty to populated', () => {
+    const { container, rerender } = render(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+      />
+    );
+
+    expect(container.querySelector('input[id="test-uuid-time"]')).toHaveValue('');
+
+    rerender(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+        value="2026-06-30 10:00:00"
+      />
+    );
+
+    expect(container.querySelector('input[id="test-uuid-time"]')).toHaveValue('10:00');
+  });
+
+  test('should display date when external setValue changes value from empty to populated', () => {
+    const { container, rerender } = render(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+      />
+    );
+
+    expect(container.querySelector('input[id="test-uuid-date"]')).toHaveValue('');
+
+    rerender(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+        value="2026-06-30 10:00:00"
+      />
+    );
+
+    expect(container.querySelector('input[id="test-uuid-date"]')).toHaveValue('2026-06-30');
+  });
+
+  test('should update both date and time when external setValue replaces existing value', () => {
+    const { container, rerender } = render(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+        value="2024-01-01 09:00:00"
+      />
+    );
+
+    rerender(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+        value="2026-06-30 10:30:00"
+      />
+    );
+
+    expect(container.querySelector('input[id="test-uuid-time"]')).toHaveValue('10:30');
+    expect(container.querySelector('input[id="test-uuid-date"]')).toHaveValue('2026-06-30');
+  });
+
+  test('should not remount TimePicker when rerendered with the same value', () => {
+    const { container, rerender } = render(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+        value="2026-06-30 10:00"
+      />
+    );
+    const timeBefore = container.querySelector('input[id="test-uuid-time"]');
+
+    rerender(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+        value="2026-06-30 10:00"
+      />
+    );
+
+    expect(container.querySelector('input[id="test-uuid-time"]')).toBe(timeBefore);
+  });
+
   test('should not call onChange when validate changes to true', () => {
     const { rerender } = render(
       <DateTime
