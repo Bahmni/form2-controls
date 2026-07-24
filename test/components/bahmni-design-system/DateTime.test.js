@@ -1,7 +1,22 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { DateTime } from '../../../src/components/bahmni-design-system/DateTime';
 import constants from 'src/constants';
+
+// Simulates the real controlled round-trip: parent holds value in state and echoes onChange back.
+function StatefulDateTime({ initialValue, onChange: externalOnChange, ...rest }) {
+  const [value, setValue] = React.useState(initialValue);
+  return (
+    <DateTime
+      {...rest}
+      value={value}
+      onChange={({ value: newValue, errors }) => {
+        setValue(newValue);
+        if (externalOnChange) externalOnChange({ value: newValue, errors });
+      }}
+    />
+  );
+}
 
 describe('DateTime', () => {
   const mockOnChange = jest.fn();
@@ -286,5 +301,30 @@ describe('DateTime', () => {
     );
 
     expect(mockOnChange).not.toHaveBeenCalled();
+  });
+
+  test('should not remount TimePicker when user types a time in a controlled round-trip parent', () => {
+    // Regression: getDerivedStateFromProps was treating the parent echoing back the user's own
+    // onChange as an external setValue, bumping _timeKey and destroying the input on every keystroke.
+    const { container } = render(
+      <StatefulDateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+        enabled={true}
+        initialValue="2024-01-01 10:00"
+      />
+    );
+
+    const timeBefore = container.querySelector('input[id="test-uuid-time"]');
+    expect(timeBefore).not.toBeNull();
+
+    fireEvent.change(timeBefore, { target: { value: '11:15' } });
+
+    const timeAfter = container.querySelector('input[id="test-uuid-time"]');
+    expect(timeAfter).toBe(timeBefore);
   });
 });

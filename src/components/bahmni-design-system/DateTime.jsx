@@ -27,6 +27,7 @@ export class DateTime extends Component {
       dateValue,
       timeValue,
       _propsValue: props.value,
+      _selfReportedValue: props.value,
       _timeKey: 0,
     };
     this.datePickerRef = null;
@@ -35,12 +36,13 @@ export class DateTime extends Component {
 
   static getDerivedStateFromProps(props, state) {
     if (props.value !== state._propsValue) {
+      const isSelfChange = props.value === state._selfReportedValue;
       const { dateValue, timeValue } = parseDateTime(props.value);
       return {
         dateValue,
         timeValue,
         _propsValue: props.value,
-        _timeKey: state._timeKey + 1,
+        _timeKey: isSelfChange ? state._timeKey : state._timeKey + 1,
       };
     }
     return null;
@@ -123,7 +125,7 @@ export class DateTime extends Component {
     const { dateValue, timeValue } = this.state;
     const errors = this._getAllErrors(dateValue, timeValue);
     const dateTimeValue = this._formatDateTime(dateValue, timeValue);
-    this.setState({ hasErrors: this._hasErrors(errors) });
+    this.setState({ hasErrors: this._hasErrors(errors), _selfReportedValue: dateTimeValue });
     this.props.onChange({ value: dateTimeValue, errors });
   }
 
