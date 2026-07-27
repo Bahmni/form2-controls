@@ -144,6 +144,36 @@ describe('DateTime', () => {
     expect(container.querySelector('.form-builder-error')).toBeTruthy();
   });
 
+  test('should not crash when value prop is a non-string truthy value', () => {
+    const { container, rerender } = render(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        conceptUuid="test-uuid"
+        value="2026-06-30 10:00"
+      />
+    );
+
+    expect(() => {
+      rerender(
+        <DateTime
+          formFieldPath="test1.1/1-0"
+          onChange={mockOnChange}
+          validate={false}
+          validateForm={false}
+          validations={[]}
+          conceptUuid="test-uuid"
+          value={new Date('2026-06-30')}
+        />
+      );
+    }).not.toThrow();
+
+    expect(container.querySelector('input[id="test-uuid-date"]')).toHaveValue('');
+  });
+
   test('should strip seconds from time when setValue provides HH:MM:SS format', () => {
     const { container } = render(
       <DateTime
@@ -326,5 +356,85 @@ describe('DateTime', () => {
 
     const timeAfter = container.querySelector('input[id="test-uuid-time"]');
     expect(timeAfter).toBe(timeBefore);
+  });
+
+  describe('date parsing — UTC timezone safety', () => {
+    test('date input displays correct day for month-end date set via initial value prop', () => {
+      const { container } = render(
+        <DateTime
+          formFieldPath="test1.1/1-0"
+          onChange={mockOnChange}
+          validate={false}
+          validateForm={false}
+          validations={[]}
+          conceptUuid="test-uuid"
+          value="2026-06-30 10:00"
+        />
+      );
+      expect(container.querySelector('input[id="test-uuid-date"]')).toHaveValue('2026-06-30');
+    });
+
+    test('date input displays correct day for month-end date set via getDerivedStateFromProps', () => {
+      const { container, rerender } = render(
+        <DateTime
+          formFieldPath="test1.1/1-0"
+          onChange={mockOnChange}
+          validate={false}
+          validateForm={false}
+          validations={[]}
+          conceptUuid="test-uuid"
+        />
+      );
+
+      rerender(
+        <DateTime
+          formFieldPath="test1.1/1-0"
+          onChange={mockOnChange}
+          validate={false}
+          validateForm={false}
+          validations={[]}
+          conceptUuid="test-uuid"
+          value="2026-06-30 10:00"
+        />
+      );
+
+      expect(container.querySelector('input[id="test-uuid-date"]')).toHaveValue('2026-06-30');
+    });
+
+    test('simulates UTC-7: date string does not shift DatePicker display to previous day', () => {
+      const OriginalDate = global.Date;
+      const UTC_OFFSET_MS = 7 * 60 * 60 * 1000;
+
+      class SimulatedUtcMinus7Date extends OriginalDate {
+        constructor(...args) {
+          if (args.length === 1 && typeof args[0] === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(args[0])) {
+            super(new OriginalDate(args[0]).getTime() - UTC_OFFSET_MS);
+          } else {
+            super(...args);
+          }
+        }
+      }
+      Object.setPrototypeOf(SimulatedUtcMinus7Date, OriginalDate);
+      SimulatedUtcMinus7Date.now = OriginalDate.now.bind(OriginalDate);
+      global.Date = SimulatedUtcMinus7Date;
+
+      try {
+        const { container } = render(
+          <DateTime
+            formFieldPath="test1.1/1-0"
+            onChange={mockOnChange}
+            validate={false}
+            validateForm={false}
+            validations={[]}
+            conceptUuid="test-uuid"
+            value="2026-06-30 10:00"
+          />
+        );
+
+        expect(container.querySelector('input[id="test-uuid-date"]')).toHaveValue('2026-06-30');
+      } finally {
+        global.Date = OriginalDate;
+      }
+    });
   });
 });

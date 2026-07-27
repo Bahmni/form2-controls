@@ -7,13 +7,18 @@ import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
 
 function parseDateTime(value) {
-  if (!value) {
+  if (!value || typeof value !== 'string') {
     return { dateValue: undefined, timeValue: '' };
   }
   const parts = value.split(' ');
   const rawTime = parts[1] || '';
+  let dateValue;
+  if (parts[0]) {
+    const [y, m, d] = parts[0].split('-');
+    dateValue = new Date(Number(y), Number(m) - 1, Number(d));
+  }
   return {
-    dateValue: parts[0] ? new Date(parts[0]) : undefined,
+    dateValue,
     timeValue: rawTime.substring(0, 5),
   };
 }
