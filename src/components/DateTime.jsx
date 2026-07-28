@@ -27,13 +27,20 @@ export class DateTime extends Component {
     this.isValueChanged = this.props.value !== nextProps.value;
     if (this.props.enabled !== nextProps.enabled ||
       this.isValueChanged ||
-      this.state.hasErrors !== nextState.hasErrors) {
+      this.state.hasErrors !== nextState.hasErrors ||
+      this.props.hidden !== nextProps.hidden) {
       return true;
     }
     return false;
   }
 
   componentDidUpdate(prevProps) {
+    if (prevProps.hidden && !this.props.hidden && this.props.validateForm) {
+      const errors = this._getAllErrors();
+      this.props.onChange({ value: this.props.value, errors });
+      return;
+    }
+
     // Update internal values and state when props change (moved from componentWillReceiveProps)
     let needsUpdate = false;
     
@@ -151,6 +158,7 @@ DateTime.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
   formFieldPath: PropTypes.string,
+  hidden: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   validate: PropTypes.bool.isRequired,
   validateForm: PropTypes.bool.isRequired,

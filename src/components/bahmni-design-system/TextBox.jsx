@@ -27,13 +27,20 @@ export class TextBox extends Component {
       this.props.validate !== nextProps.validate ||
       this.isValueChanged ||
       this.state.hasErrors !== nextState.hasErrors ||
-      this.state.hasWarnings !== nextState.hasWarnings) {
+      this.state.hasWarnings !== nextState.hasWarnings ||
+      this.props.hidden !== nextProps.hidden) {
       return true;
     }
     return false;
   }
 
   componentDidUpdate(prevProps) {
+    if (prevProps.hidden && !this.props.hidden && this.props.validateForm) {
+      const errors = this._getErrors(this.props.value);
+      this.props.onChange({ value: this.props.value, errors });
+      return;
+    }
+
     if (this.props.validate !== prevProps.validate ||
         !isEqual(this.props.value, prevProps.value)) {
       const errors = this._getErrors(this.props.value);
@@ -97,6 +104,7 @@ export class TextBox extends Component {
 TextBox.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
+  hidden: PropTypes.bool,
   formFieldPath: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   validate: PropTypes.bool.isRequired,

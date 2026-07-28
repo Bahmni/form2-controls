@@ -36,13 +36,20 @@ export class DateTime extends Component {
     if (this.props.enabled !== nextProps.enabled ||
         this.props.validate !== nextProps.validate ||
         valueChanged ||
-        !isEqual(this.state, nextState)) {
+        !isEqual(this.state, nextState) ||
+        this.props.hidden !== nextProps.hidden) {
       return true;
     }
     return false;
   }
 
   componentDidUpdate(prevProps) {
+    if (prevProps.hidden && !this.props.hidden && this.props.validateForm) {
+      const errors = this._getAllErrors(this.state.dateValue, this.state.timeValue);
+      this.props.onChange({ value: this.props.value, errors, calledOnMount: true });
+      return;
+    }
+
     // Use locally computed values instead of stale this.state after setState
     const { dateValue, timeValue } = !isEqual(this.props.value, prevProps.value)
       ? this._parseValue(this.props.value)
@@ -183,6 +190,7 @@ export class DateTime extends Component {
 DateTime.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
+  hidden: PropTypes.bool,
   formFieldPath: PropTypes.string.isRequired,
   label: PropTypes.string,
   onChange: PropTypes.func.isRequired,

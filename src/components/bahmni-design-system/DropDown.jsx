@@ -28,11 +28,18 @@ export class DropDown extends Component {
       this.isValueChanged ||
       this.state.hasErrors !== nextState.hasErrors ||
       this.props.enabled !== nextProps.enabled ||
-      this.props.validate !== nextProps.validate
+      this.props.validate !== nextProps.validate ||
+      this.props.hidden !== nextProps.hidden
     );
   }
 
   componentDidUpdate(prevProps) {
+    if (prevProps.hidden && !this.props.hidden && this.props.validateForm) {
+      const errors = this._getErrors(this.props.value);
+      this.props.onValueChange(this.props.value, errors);
+      return;
+    }
+
     if (this.props.validate !== prevProps.validate ||
         !isEqual(this.props.value, prevProps.value)) {
       const errors = this._getErrors(this.props.value);
@@ -129,6 +136,7 @@ export class DropDown extends Component {
 DropDown.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
+  hidden: PropTypes.bool,
   formFieldPath: PropTypes.string,
   multiSelect: PropTypes.bool,
   onValueChange: PropTypes.func.isRequired,

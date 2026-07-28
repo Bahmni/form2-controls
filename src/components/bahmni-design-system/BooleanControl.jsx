@@ -28,11 +28,18 @@ export class BooleanControl extends Component {
       this.props.value !== nextProps.value ||
       this.state.hasErrors !== nextState.hasErrors ||
       this.props.enabled !== nextProps.enabled ||
-      this.props.validate !== nextProps.validate
+      this.props.validate !== nextProps.validate ||
+      this.props.hidden !== nextProps.hidden
     );
   }
 
   componentDidUpdate(prevProps) {
+    if (prevProps.hidden && !this.props.hidden && this.props.validateForm) {
+      const errors = this._getErrors(this.props.value);
+      this.props.onChange({ value: this.props.value, errors });
+      return;
+    }
+
     const isValueChanged = prevProps.value !== this.props.value;
     if (this.props.validate !== prevProps.validate || isValueChanged) {
       const errors = this._getErrors(this.props.value);
@@ -104,6 +111,7 @@ export class BooleanControl extends Component {
 BooleanControl.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
+  hidden: PropTypes.bool,
   formFieldPath: PropTypes.string,
   intl: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
