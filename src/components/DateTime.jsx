@@ -37,6 +37,8 @@ export class DateTime extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.hidden && !this.props.hidden && this.props.validateForm) {
       const errors = this._getAllErrors();
+      const hasErrors = this._hasErrors(errors);
+      this.setState({ hasErrors });
       this.props.onChange({ value: this.props.value, errors });
       return;
     }

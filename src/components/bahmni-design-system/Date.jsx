@@ -38,6 +38,9 @@ export class Date extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.hidden && !this.props.hidden && this.props.validateForm) {
       const errors = this._getErrors(this.props.value);
+      const hasErrors = this._hasErrors(errors);
+      const hasWarnings = this._hasWarnings(errors);
+      this.setState({ hasErrors, hasWarnings });
       this.props.onChange({ value: this.props.value, errors, calledOnMount: true });
       return;
     }

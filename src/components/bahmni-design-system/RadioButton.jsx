@@ -40,6 +40,8 @@ export class RadioButton extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.hidden && !this.props.hidden && this.props.validateForm) {
       const errors = this._getErrors(this.props.value);
+      const hasErrors = this._hasErrors(errors);
+      this.setState({ hasErrors });
       this.props.onValueChange(this.props.value, errors, true);
       return;
     }

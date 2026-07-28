@@ -42,6 +42,9 @@ export class NumericBox extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.hidden && !this.props.hidden && this.props.validateForm) {
       const errors = this._getErrors(this.props.value);
+      const hasErrors = this._hasErrors(errors, constants.errorTypes.error);
+      const hasWarnings = this._hasErrors(errors, constants.errorTypes.warning);
+      this.setState({ hasErrors, hasWarnings });
       this.props.onChange({ value: this.props.value, errors, calledOnMount: true });
       return;
     }
