@@ -550,7 +550,7 @@ describe('NumericBox', () => {
       expect(screen.getByRole('spinbutton')).toBeInTheDocument();
     });
 
-    it('componentDidUpdate calls onChange with errors when hidden transitions true → false with validateForm true', () => {
+    it('componentDidUpdate calls onChange with errors when hidden→visible with validateForm true', () => {
       const { rerender } = render(
         <NumericBox
           formFieldPath="test1.1-0"
