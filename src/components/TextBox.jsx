@@ -36,7 +36,7 @@ export class TextBox extends Component {
    componentDidUpdate(prevProps) {
     if (prevProps.hidden && !this.props.hidden && this.props.validateForm) {
       const errors = this._getErrors(this.props.value);
-      this.props.onChange({ value: this.props.value, errors });
+      this.props.onChange({ value: this.props.value, errors, calledOnMount: true });
       return;
     }
 
