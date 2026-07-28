@@ -133,8 +133,8 @@ export class Button extends Component {
 Button.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
-  hidden: PropTypes.bool,
   formFieldPath: PropTypes.string,
+  hidden: PropTypes.bool,
   multiSelect: PropTypes.bool,
   nameKey: PropTypes.string,
   onValueChange: PropTypes.func.isRequired,

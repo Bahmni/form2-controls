@@ -162,6 +162,7 @@ NumericBox.propTypes = {
   enabled: PropTypes.bool,
   formFieldPath: PropTypes.string.isRequired,
   hiAbsolute: PropTypes.number,
+  hidden: PropTypes.bool,
   hiNormal: PropTypes.number,
   lowAbsolute: PropTypes.number,
   lowNormal: PropTypes.number,

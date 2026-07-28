@@ -136,8 +136,8 @@ export class DropDown extends Component {
 DropDown.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
-  hidden: PropTypes.bool,
   formFieldPath: PropTypes.string,
+  hidden: PropTypes.bool,
   multiSelect: PropTypes.bool,
   onValueChange: PropTypes.func.isRequired,
   options: PropTypes.array.isRequired,

@@ -103,8 +103,8 @@ export class FreeTextAutoComplete extends Component {
 FreeTextAutoComplete.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
-  hidden: PropTypes.bool,
   formFieldPath: PropTypes.string,
+  hidden: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.array.isRequired,
   validate: PropTypes.bool.isRequired,

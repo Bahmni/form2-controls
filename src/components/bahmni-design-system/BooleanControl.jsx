@@ -111,8 +111,8 @@ export class BooleanControl extends Component {
 BooleanControl.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
-  hidden: PropTypes.bool,
   formFieldPath: PropTypes.string,
+  hidden: PropTypes.bool,
   intl: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.array.isRequired,

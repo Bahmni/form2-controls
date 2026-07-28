@@ -154,8 +154,8 @@ export class Date extends Component {
 Date.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
-  hidden: PropTypes.bool,
   formFieldPath: PropTypes.string.isRequired,
+  hidden: PropTypes.bool,
   label: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   validate: PropTypes.bool.isRequired,

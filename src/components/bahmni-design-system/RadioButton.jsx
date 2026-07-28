@@ -123,8 +123,8 @@ export class RadioButton extends Component {
 RadioButton.propTypes = {
   conceptUuid: PropTypes.string,
   enabled: PropTypes.bool,
-  hidden: PropTypes.bool,
   formFieldPath: PropTypes.string,
+  hidden: PropTypes.bool,
   nameKey: PropTypes.string,
   onBlur: PropTypes.func,
   onValueChange: PropTypes.func.isRequired,
