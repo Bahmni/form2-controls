@@ -48,19 +48,26 @@ Use this for read-only views, autosave drafts, or passing current form state to 
 
 ### `getObservationBundleForSave(options)`
 
-Returns a `transaction` bundle with only the observations that changed relative to the initial state (POST/PUT/DELETE). Runs the form's `onFormSave` script and validates mandatory fields before building. Throws `FhirBundleValidationError` if the form has errors.
+Returns a `transaction` bundle with only the observations that changed relative to the initial state (POST/PUT/DELETE). Runs the form's `onFormSave` script and validates mandatory fields before building. Throws `FormValidationError` if either step fails.
 
 ```js
-import { FhirBundleValidationError } from '@bahmni/form2-controls';
+import { FormValidationError } from '@bahmni/form2-controls';
 
 try {
   const bundle = containerRef.current.getObservationBundleForSave(options);
   await submitBundle(bundle);
 } catch (error) {
-  if (error instanceof FhirBundleValidationError) {
-    console.error(error.errors); // field-level validation errors
+  if (error instanceof FormValidationError) {
+    // error.errors is a flat array of { type, message, source }
+    const fieldErrors = error.errors.filter(e => e.source === 'field');
+    const scriptErrors = error.errors.filter(e => e.source === 'script');
   }
 }
+```
+
+Each error item has the shape:
+```ts
+{ type: 'error' | 'warning', message: string, source: 'field' | 'script' }
 ```
 
 ## Transaction bundle entry structure
@@ -98,7 +105,7 @@ const [isDirty, setIsDirty] = useState(false);
 
 ## TypeScript
 
-All props and ref methods are fully typed in [`index.d.ts`](../index.d.ts). Key types: `ContainerProps`, `ContainerMethods`, `FhirTransformOptions`, `FhirBundle`, `FhirBundleValidationError`.
+All props and ref methods are fully typed in [`index.d.ts`](../index.d.ts). Key types: `ContainerProps`, `ContainerMethods`, `FhirTransformOptions`, `FhirBundle`, `FormValidationError`.
 
 `FhirBundle` is a discriminated union — narrow on `type` to get precise entry types:
 
