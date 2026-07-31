@@ -15,7 +15,7 @@ import { deepUnescapeStrings } from '../helpers/encodingUtils';
 import { getObservationsFromFhir } from 'src/helpers/FhirObservationTransformer';
 import { buildFhirObservationTransactionBundle, buildFhirObservationCollection } from 'src/helpers/FhirBundleBuilder';
 import { hasObservationChanges } from 'src/helpers/ObservationComparator';
-import { FhirBundleValidationError } from 'src/helpers/FhirBundleValidationError';
+import { FormValidationError } from 'src/helpers/FormValidationError';
 
 const deriveObservations = (props) =>
   props.fhirObservations ? getObservationsFromFhir(props.fhirObservations) : props.observations;
@@ -203,17 +203,21 @@ export class Container extends addMoreDecorator(Component) {
   runFormSaveEvent() {
     const saveScript = this.metadata.events && this.metadata.events.onFormSave;
     if (!saveScript) return this.state.data;
-    const updatedTree = new ScriptRunner(this.state.data, this.props.patient).execute(saveScript);
-    this.setState({ data: updatedTree });
-    return updatedTree;
+    try {
+      const updatedTree = new ScriptRunner(this.state.data, this.props.patient).execute(saveScript);
+      this.setState({ data: updatedTree });
+      return updatedTree;
+    } catch (scriptError) {
+      throw FormValidationError.fromScriptError(scriptError);
+    }
   }
 
   getObservationBundleForSave(options) {
     const tree = this.runFormSaveEvent();
     const observations = (new ObservationMapper()).from(tree);
-    const errors = tree.getErrors();
-    if (!isEmpty(errors)) {
-      throw new FhirBundleValidationError(errors);
+    const rawErrors = tree.getErrors();
+    if (!isEmpty(rawErrors)) {
+      throw FormValidationError.fromFieldErrors(rawErrors);
     }
     return buildFhirObservationTransactionBundle(observations, this.initialObservations, options);
   }
