@@ -12,7 +12,7 @@ import { CodedControl } from 'components/CodedControl.jsx';
 import ComponentStore from 'src/helpers/componentStore';
 import ControlRecordTreeMgr from 'src/helpers/ControlRecordTreeMgr';
 import { utf8ToBase64 } from '../../src/helpers/encodingUtils';
-import { FhirBundleValidationError } from 'src/helpers/FhirBundleValidationError';
+import { FormValidationError } from 'src/helpers/FormValidationError';
 
 const PULSE_UUID = 'c36bc411-3f10-11e4-adec-0800271c1b75';
 const ADMISSION_UUID = 'c5cdd4e5-86e0-400c-9742-d73ffb323fa8';
@@ -1018,7 +1018,7 @@ describe('Container', () => {
       expect(bundle.entry).toEqual([]);
     });
 
-    it('should throw FhirBundleValidationError from getObservationBundleForSave on mandatory errors', async () => {
+    it('should throw FormValidationError from getObservationBundleForSave on mandatory errors', async () => {
       const metadata = createNumericControlMetadata({
         controls: [{
           ...createNumericControlMetadata().controls[0],
@@ -1046,7 +1046,7 @@ describe('Container', () => {
       }, { timeout: 3000 });
 
       expect(() => containerRef.current.getObservationBundleForSave(fhirOptions))
-        .toThrow(FhirBundleValidationError);
+        .toThrow(FormValidationError);
     });
 
     it('getObservationBundleForSave should PUT the changed, previously-saved observation', () => {

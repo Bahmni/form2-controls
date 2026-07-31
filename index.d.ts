@@ -398,12 +398,19 @@ export interface FhirBundleEntry extends FhirObservationEntry {
 export type FhirBundle =
   | { resourceType: 'Bundle'; type: 'collection'; entry: FhirObservationEntry[] }
   | { resourceType: 'Bundle'; type: 'transaction'; entry: FhirBundleEntry[] };
+export interface FormValidationErrorItem {
+  type: 'error' | 'warning';
+  message: string;
+  source: 'field' | 'script';
+}
+
 /**
- * Thrown by Container.getObservationBundleForSave() when the form has validation errors
+ * Thrown by Container.getObservationBundleForSave() when the form has field validation
+ * errors or the onFormSave script throws.
  */
-export class FhirBundleValidationError extends Error {
-  errors: any[];
-  constructor(errors: any[]);
+export class FormValidationError extends Error {
+  errors: FormValidationErrorItem[];
+  constructor(errors: FormValidationErrorItem[]);
 }
 
 /**
