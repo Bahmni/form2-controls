@@ -12,12 +12,14 @@ import NotificationContainer from '../helpers/Notification';
 import Constants from '../constants';
 import { executeEventsFromCurrentRecord } from '../helpers/ExecuteEvents';
 import { deepUnescapeStrings } from '../helpers/encodingUtils';
+import { hasObservationChanges } from '../helpers/ObservationComparator';
 
 export class Container extends addMoreDecorator(Component) {
   constructor(props) {
     super(props);
     this.childControls = {};
     const { observations } = this.props;
+    this.initialObservations = observations;
     this.metadata = deepUnescapeStrings(this.props.metadata);
     const controlRecordTree = new ControlRecordTreeBuilder().build(this.metadata, observations);
     this.updatedControlRecordTree = controlRecordTree;
@@ -67,6 +69,7 @@ export class Container extends addMoreDecorator(Component) {
       const nextVersion = this.props.metadata?.version;
       this.metadata = deepUnescapeStrings(this.props.metadata);
       if (prevId !== nextId || prevVersion !== nextVersion) {
+        this.initialObservations = this.props.observations;
         const tree = new ControlRecordTreeBuilder().build(this.metadata, this.props.observations);
         this.updatedControlRecordTree = tree;
         this.setState({ data: tree });
@@ -108,6 +111,13 @@ export class Container extends addMoreDecorator(Component) {
     const onValueUpdatedFn = this.props.onValueUpdated || null;
     if (onValueUpdatedFn) {
       this.props.onValueUpdated(this.state.data);
+    }
+    if (this.props.setIsFormUpdated) {
+      const changed = hasObservationChanges(this.getValue().observations, this.initialObservations);
+      if (changed !== this.lastHasChanges) {
+        this.lastHasChanges = changed;
+        this.props.setIsFormUpdated(changed);
+      }
     }
   }
 
@@ -160,7 +170,7 @@ export class Container extends addMoreDecorator(Component) {
       data: previousState.data.remove(formFieldPath),
       collapse: undefined,
       }
-    ));
+    ), () => this.onValueUpdated());
   }
 
   getValue() {
@@ -257,6 +267,7 @@ Container.propTypes = {
   onValueUpdated: PropTypes.func,
   patient: PropTypes.object.isRequired,
   readonly: PropTypes.bool,
+  setIsFormUpdated: PropTypes.func,
   translations: PropTypes.object.isRequired,
   validate: PropTypes.bool.isRequired,
   validateForm: PropTypes.bool.isRequired,

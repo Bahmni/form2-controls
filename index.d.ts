@@ -49,6 +49,7 @@ export interface ContainerProps {
   collapse?: boolean;
   locale?: string;
   onValueUpdated?: (data: any) => void;
+  setIsFormUpdated?: (changed: boolean) => void;
   componentStore?: {
     getRegisteredComponent(type: string): any;
   };
