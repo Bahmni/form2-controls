@@ -14,11 +14,13 @@ export default {
     options: {
       storySort: {
         order: [
-          'Introduction',
-          'Atomic Controls', ['Bahmni DS', 'Legacy Components'],
-          'Complex Controls', ['Bahmni DS', 'Legacy Components'],
-          'Orchestrator',
-          'Example Forms',
+          "Introduction",
+          "Atomic Controls",
+          ["Bahmni Design System", "Legacy Components"],
+          "Complex Controls",
+          ["Bahmni Design System", "Legacy Components"],
+          "Orchestrator",
+          "Example Forms",
         ],
       },
     },
