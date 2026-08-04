@@ -29,8 +29,11 @@ module.exports = {
       ],
     });
 
+    // .scss only — plain .css is handled by Storybook's own built-in rule.
+    // Routing .css through sass-loader makes it fail to parse the compiled
+    // stylesheet shipped by @bahmni/design-system.
     config.module.rules.push({
-      test: /\.(scss|css)$/,
+      test: /\.scss$/,
       use: ['style-loader', 'css-loader', 'sass-loader'],
     });
 
