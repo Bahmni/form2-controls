@@ -3,6 +3,7 @@ import StoryWrapper from './StoryWrapper';
 import { Container } from 'src/components/Container.jsx';
 import { runEventScript } from 'src/helpers/runEventScript';
 import { SYSTOLIC_UUID, DIASTOLIC_UUID } from './mockData';
+import { description, argTypes } from './_meta/formsMeta';
 
 const form = {
   id: 1,
@@ -163,23 +164,13 @@ const obsList = [
 
 export default {
   title: 'Example Forms/Lifecycle & Events',
+  component: Container,
+  tags: ['autodocs'],
+  argTypes,
   parameters: {
     docs: {
       description: {
-        component: `
-A guided tour of the form lifecycle. Each story documents one event or method exposed
-by the form engine and shows it working on a real form.
-
-**Stories on this page:**
-
-- **Basic Data Binding** — foundation: how the Container renders pre-populated observations.
-- **Form Lifecycle Demo** — all six lifecycle events on one interactive form with a live
-  Event Log: onFormInit, onValueChange, onValueUpdated, getValue(), onFormSave, Submit/Reset.
-- **Event Flow Diagram** — the complete init → change → submit → post-save timeline.
-- **Handler Templates** — copy-pasteable handler snippets for the most common patterns.
-- **Accessibility for Events** — keyboard and assistive-technology considerations when
-  events update the form dynamically.
-        `,
+        component: description,
       },
     },
   },

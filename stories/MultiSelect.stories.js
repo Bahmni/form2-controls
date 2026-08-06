@@ -1,6 +1,7 @@
 import React from 'react';
 import StoryWrapper from './StoryWrapper';
 import { Container } from 'src/components/Container.jsx';
+import { description, argTypes } from './_meta/multiSelectMeta';
 
 const form = {
   id: 1,
@@ -320,6 +321,9 @@ const obsList = [
 ];
 
 export default {
+  component: Container,
+  tags: ['autodocs'],
+  argTypes,
   title: 'Atomic Controls/Legacy Components/MultiSelect',
   tags: ['autodocs'],
   parameters: {
