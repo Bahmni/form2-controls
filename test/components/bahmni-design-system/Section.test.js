@@ -143,7 +143,7 @@ describe('Carbon Section', () => {
     ComponentStore.deRegisterComponent('numeric');
   });
 
-  it('should render AddMore control above accordion header when addMore is enabled', () => {
+  it('should render Add more button below fieldset and remove button inside when addMore is enabled', () => {
     const addMoreMetadata = {
       ...metadata,
       properties: { ...metadata.properties, addMore: true },
@@ -154,13 +154,15 @@ describe('Carbon Section', () => {
         {...defaultProps}
         metadata={addMoreMetadata}
         showAddMore
-        showRemove={false}
+        showRemove
       />
     );
 
+    expect(screen.getByText('Add more')).toBeInTheDocument();
+    expect(screen.getByLabelText('Remove')).toBeInTheDocument();
     const fieldset = document.querySelector('.form-builder-fieldset');
-    expect(fieldset.firstChild).toHaveClass('form-builder-clone');
-    expect(fieldset.children[1]).toHaveClass('cds--accordion');
+    expect(fieldset.querySelector('.obs-group-add-more-wrapper')).toBeInTheDocument();
+    expect(fieldset.querySelector('.obs-group-remove-btn')).toBeInTheDocument();
   });
 
   it('should pass prop collapse value to children regardless of internal toggle state', () => {

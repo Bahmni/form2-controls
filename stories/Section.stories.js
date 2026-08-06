@@ -157,7 +157,7 @@ const nestedSectionsMetadata = {
 };
 
 export default {
-  title: 'Complex Controls/Section',
+  title: 'Complex Controls/Legacy Components/Section',
   component: Container,
   tags: ['autodocs'],
   argTypes,

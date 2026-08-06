@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Image } from 'components/bahmni-design-system/Image.jsx';
 import { Util } from 'helpers/Util';
 import constants from 'src/constants';
+import { clearCache } from 'helpers/FileNameCache';
 
 jest.mock('helpers/Util', () => ({
   Util: {
@@ -26,6 +27,7 @@ describe('Carbon Image', () => {
   const formFieldPath = 'test1.1/1-0';
 
   beforeEach(() => {
+    clearCache();
     mockOnChange = jest.fn();
     mockOnControlAdd = jest.fn();
     mockShowNotification = jest.fn();
@@ -159,35 +161,35 @@ describe('Carbon Image', () => {
     expect(container.querySelector('.cds--file-close')).toBeInTheDocument();
   });
 
-  it('should call onChange with voided value when delete is clicked', () => {
+  it('should call onChange with undefined when delete is clicked', () => {
     const { container } = renderImage({ value: 'someValue' });
 
     const deleteButton = container.querySelector('.cds--file-close');
     fireEvent.click(deleteButton);
 
-    expect(mockOnChange).toHaveBeenCalledWith({ value: 'someValuevoided', errors: [] });
+    expect(mockOnChange).toHaveBeenCalledWith({ value: undefined, errors: [] });
   });
 
-  it('should show restore button when file is voided', () => {
-    const { container } = renderImage({ value: 'someValuevoided' });
+  it('should hide file row after delete clears the value', () => {
+    const { container, rerender } = renderImage({ value: 'someValue' });
 
-    expect(container.querySelector('.restore-button-inline')).toBeInTheDocument();
-  });
+    const deleteButton = container.querySelector('.cds--file-close');
+    fireEvent.click(deleteButton);
 
-  it('should render restore button as design system ghost icon button', () => {
-    renderImage({ value: 'someValuevoided' });
+    rerender(
+      <Image
+        addMore
+        formFieldPath={formFieldPath}
+        onChange={mockOnChange}
+        onControlAdd={mockOnControlAdd}
+        showNotification={mockShowNotification}
+        validate={false}
+        validations={[]}
+        value={undefined}
+      />
+    );
 
-    const restoreButton = screen.getByRole('button', { name: 'Restore image' });
-    expect(restoreButton).toHaveClass('cds--btn--ghost');
-  });
-
-  it('should hide restore button and call onChange with restored value when restore is clicked', () => {
-    const { container } = renderImage({ value: 'someValuevoided' });
-
-    const restoreButton = container.querySelector('.restore-button-inline');
-    fireEvent.click(restoreButton);
-
-    expect(mockOnChange).toHaveBeenCalledWith({ value: 'someValue', errors: [] });
+    expect(container.querySelector('.file-row')).not.toBeInTheDocument();
   });
 
   it('should apply carbon-error class when validation fails', () => {

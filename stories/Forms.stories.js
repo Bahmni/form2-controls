@@ -177,7 +177,7 @@ export default {
 };
 
 // ---------------------------------------------------------------------------
-// Overview — landing page (mirrors Carbon Design System's "Overview" tab)
+// Overview — landing page (Storybook docs-style "Overview" tab)
 // ---------------------------------------------------------------------------
 
 const lifecycleRows = [

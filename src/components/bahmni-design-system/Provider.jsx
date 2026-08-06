@@ -5,6 +5,7 @@ import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import Spinner from 'src/helpers/Spinner';
 import Constants from 'src/constants';
 import find from 'lodash/find';
+import { unescapeHtml } from 'src/helpers/encodingUtils';
 
 export class Provider extends Component {
 
@@ -18,7 +19,7 @@ export class Provider extends Component {
   componentDidMount() {
     this._isMounted = true;
     const { properties } = this.props;
-    const url = properties.URL || '/openmrs/ws/rest/v1/provider?v=custom:(id,name,uuid)';
+    const url = unescapeHtml(properties.URL || '/openmrs/ws/rest/v1/provider?v=custom:(id,name,uuid)');
     httpInterceptor
       .get(url)
       .then((data) => {
@@ -64,6 +65,7 @@ export class Provider extends Component {
         conceptUuid={conceptUuid}
         enabled={enabled}
         formFieldPath={formFieldPath}
+        labelKey="name"
         minimumInput={minimumInput}
         multiSelect={false}
         onValueChange={this.onValueChange}
@@ -95,7 +97,5 @@ Provider.propTypes = {
 Provider.defaultProps = {
   autofocus: false,
   enabled: true,
-  labelKey: 'name',
-  valueKey: 'id',
   searchable: false,
 };

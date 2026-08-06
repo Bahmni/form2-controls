@@ -82,48 +82,33 @@ $lightestGray: #eee;
 
         .obs-control-field {
           flex: 9;
-          padding-inline-end: $spacing-07;
+          padding-inline-end: calc(#{$spacing-12} + #{$spacing-07});
           display: flex !important;
           align-items: center;
           gap: $spacing-03;
           flex-wrap: wrap;
           position: relative;
 
-          // Default: clone stays in the flex flow (for text, numeric, image, video etc.)
+          // Clone: consistently positioned at the right, to the left of "Add note",
+          // for all control types (dropdowns, text, numeric, tags, etc.).
           .form-builder-clone {
             float: none;
             display: inline-flex;
             align-items: center;
             gap: $spacing-03;
-            align-self: center;
-          }
-
-          // Coded/select controls (react-select) fill 100% of the row via
-          // obs-control-select-wrapper, so the clone can't sit beside them in
-          // flex flow. Absolutely position it at the right edge of the field instead.
-          &:has(.obs-control-select-wrapper) .form-builder-clone {
             position: absolute;
-            right: $spacing-07;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 1;
-          }
-
-          // TextBox (text type) renders inside obs-comment-section-wrap > cds--text-area__wrapper.
-          // Shrink the wrapper so the clone fits on the same row, pinned top-right.
-          &:has(.obs-comment-section-wrap .cds--text-area__wrapper) > .obs-comment-section-wrap {
-            flex: 1 1 auto;
-            max-width: calc(100% - #{$spacing-09});
-            margin-top: 0;
-          }
-
-          &:has(.obs-comment-section-wrap .cds--text-area__wrapper) .form-builder-clone {
-            position: absolute;
-            right: $spacing-07;
+            right: $spacing-12;
             top: $spacing-03;
             z-index: 1;
           }
 
+          // TextBox (text type) renders inside obs-comment-section-wrap > cds--text-area__wrapper.
+          &:has(.obs-comment-section-wrap .cds--text-area__wrapper)
+            > .obs-comment-section-wrap {
+            flex: 1 1 auto;
+            max-width: calc(100% - #{$spacing-11});
+            margin-top: 0;
+          }
 
           .form-builder-comment-wrap {
             margin-left: auto !important; // beats legacy { clear:both; overflow:hidden } rule
@@ -181,18 +166,76 @@ $lightestGray: #eee;
           }
 
           .cds--date-picker.cds--date-picker--single,
-          .cds--date-picker.cds--date-picker--single > .cds--date-picker-container {
+          .cds--date-picker.cds--date-picker--single
+            > .cds--date-picker-container {
             width: fit-content !important;
             flex: 0 0 auto !important;
           }
 
-          // width:100% by default — constrain so AddMore button stays on same row.
+          // Bounded width for ellipsis (responsive max-width, not fixed width)
           .cds--combo-box,
           .cds--dropdown,
           .cds--list-box:not(.cds--multi-select) {
             flex: 0 0 auto;
             width: auto;
-            max-width: 600px;
+            min-width: $spacing-13;
+            max-width: calc(
+              #{$spacing-13} * 3 + #{$spacing-12} + #{$spacing-06}
+            );
+          }
+
+          // List box field: flex wrapper for the input and buttons inside the dropdown/combobox.
+          // min-width: 0 is critical to allow the input to shrink below text width.
+          .cds--list-box__field {
+            display: flex !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+          }
+
+          // Text input: force ellipsis even in focused/active states.
+          // Carbon removes ellipsis on focus by default; we override to keep it visible.
+          // Apply to base, focus, and active states to ensure ellipsis is always shown.
+          input.cds--text-input,
+          input.cds--text-input:focus,
+          input.cds--text-input:active,
+          .cds--list-box input.cds--text-input,
+          .cds--list-box input.cds--text-input:focus,
+          .cds--list-box input.cds--text-input:active {
+            width: 100% !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+          }
+
+          // Expanded/focus-within states: maintain ellipsis when dropdown is open or focused.
+          .cds--list-box--expanded input.cds--text-input,
+          .cds--list-box:focus-within input.cds--text-input {
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+          }
+
+          // Dropdown label: truncate with ellipsis.
+          .cds--list-box__label {
+            display: inline-block !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+          }
+
+          // Dropdown menu expands to fit the longest option so text is never truncated.
+          .cds--list-box__menu {
+            min-width: max-content;
+          }
+
+          .cds--list-box__menu-item__option {
+            white-space: normal;
+            height: auto;
+            overflow-wrap: break-word;
           }
 
           .carbon-obs-comment-section-wrap {
@@ -219,15 +262,29 @@ $lightestGray: #eee;
             gap: $spacing-03;
 
             // Override generic input rule that squashes Carbon NumberInput internals.
+            // Use Carbon's own default width (12.5rem) to avoid squashing while also
+            // preventing long numbers from expanding the input and overlapping the ± buttons.
             .cds--number input[type="number"] {
               width: auto !important;
+              max-width: 12.5rem !important;
               margin: 0 !important;
               padding-block: 0 !important;
+              padding-inline-end: 6rem !important;
             }
 
             .cds--number__controls,
             .cds--number__control-btn {
               height: 100% !important;
+            }
+
+            // Carbon defaults: .down-icon { order: 1 } .up-icon { order: 2 }
+            // Swap so + appears first (top) and − appears second (bottom).
+            .cds--number__control-btn.up-icon {
+              order: 1;
+            }
+
+            .cds--number__control-btn.down-icon {
+              order: 2;
             }
 
             // Validation messages rendered via custom .form-builder-error styles.
@@ -246,6 +303,32 @@ $lightestGray: #eee;
 
           .form-control-buttons {
             max-width: 83%;
+          }
+
+          // "Add note" link: positioned at the right edge of obs-control-field.
+          // right: 0 keeps it inside the section boundary
+          > .form-builder-comment-wrap {
+            position: absolute;
+            right: 0;
+            top: $spacing-03;
+            z-index: 100;
+            pointer-events: auto;
+          }
+
+
+          // Selectable-tag wrapper: allow tags to wrap naturally.
+          > div:has(.cds--tag--selectable) {
+            flex-wrap: wrap;
+          }
+
+          // Show teal border on selected, remove on deselect, keep keyboard focus ring.
+          .cds--tag--selectable-selected {
+
+            border-color: var(--cds-focus) !important;
+          }
+
+          .cds--tag--selectable:focus:not(:focus-visible) {
+            outline: none;
           }
 
           .form-builder-radio-wrapper {
@@ -268,7 +351,7 @@ $lightestGray: #eee;
           margin: initial;
         }
 
-        input {
+        input:not(.cds--text-input) {
           width: 12.5em;
           color: $bahmniTextColor;
           padding: 2px 10px;
@@ -554,11 +637,12 @@ $lightestGray: #eee;
       }
 
       div.form-builder-fieldset {
-        border: 1px solid carbon-theme.$border-subtle-01;
+        border: none;
       }
 
       .form-builder-fieldset {
-        border-top: 1px solid #c0c0c0;
+        border: none;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
         margin: 15px 3px 3px;
         box-sizing: border-box;
         border-radius: 5px;
@@ -568,15 +652,8 @@ $lightestGray: #eee;
           z-index: 1;
         }
 
-        // Section-level add-more: align with the right edge of the first field
-        // and vertically centred with its row (accordion header ~48px + field offset).
-        > .form-builder-clone {
-          position: absolute;
-          right: $spacing-07;
-          top: calc(#{$spacing-09} + #{$spacing-07});
-          transform: translateY(-50%);
-          z-index: 1;
-        }
+        // Section now uses "Add more" button below the fieldset (same as ObsGroupControl),
+        // so no absolute clone positioning needed here.
 
         // Exact chain prevents nested obs-group accordions from inheriting these resets.
         > .obs-group-add-more-wrapper > .cds--accordion {
@@ -595,6 +672,21 @@ $lightestGray: #eee;
             padding-inline: 0 !important;
           }
         }
+
+        // Section accordions are direct children of the fieldset (not inside
+        // obs-group-add-more-wrapper). Without this override, Carbon's default
+        // margin-inline-start and padding-inline compound with each nesting level,
+        // progressively shrinking the available width.
+        > .cds--accordion {
+          &.cds--accordion--start .cds--accordion__content {
+            margin-inline-start: 0 !important;
+          }
+
+          .cds--accordion__content {
+            padding-inline: 0 !important;
+          }
+        }
+
 
         .description {
           margin: 10px;
@@ -1042,7 +1134,8 @@ input.computed-value {
 }
 
 // Shrink heading click area so it doesn't overlap the Remove button.
-.obs-group-add-more-wrapper:has(.obs-group-remove-btn) .cds--accordion__heading {
+.obs-group-add-more-wrapper:has(.obs-group-remove-btn)
+  .cds--accordion__heading {
   padding-inline-end: 2.5rem;
 }
 
@@ -1050,4 +1143,5 @@ input.computed-value {
   margin-top: 0.5rem;
   align-self: flex-start;
   --cds-layout-density-padding-inline-local: 0.5rem;
+  padding-inline-end: 1.75rem;
 }

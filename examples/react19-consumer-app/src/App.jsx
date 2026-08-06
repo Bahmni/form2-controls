@@ -1,15 +1,23 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
-import { CarbonContainer } from '@bahmni/form2-controls';
+import { CarbonContainer, getObservationsFromFhir, ComponentStore } from '@bahmni/form2-controls';
 import '@bahmni/form2-controls/dist/bundle.css';
 import '@bahmni/design-system/styles';
 import {
   clinicalFormMetadata,
-  existingObservations,
   patientData,
   translationData
 } from './formData';
+import { FileUrlHandler } from './FileUrlHandler';
 import './App.css';
-import formData from './form.json';
+import sampleFhirBundle from './sampleFhirBundle.json';
+
+// BAH-4812 (Deskcheck #1): register a Complex-media handler so the pre-populated
+// file attachment actually renders. Must run before CarbonContainer mounts.
+ComponentStore.registerComponent('FileUrlHandler', FileUrlHandler);
+
+// BAH-4812 demo: reverse a real FHIR searchset Bundle (the shape the backend
+// $fetch-all returns) into Form2 observations, then render them in the form.
+const existingObservations = getObservationsFromFhir(sampleFhirBundle);
 
 /**
  * React 19 Demo Application - Clinical Assessment Form
@@ -285,7 +293,7 @@ function App() {
               <ErrorBoundary>
                 <CarbonContainer
                   ref={formRef}
-                  metadata={formData}
+                  metadata={clinicalFormMetadata}
                   observations={observations}
                   patient={patientData}
                   translations={translationData}

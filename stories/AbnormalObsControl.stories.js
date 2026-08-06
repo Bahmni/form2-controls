@@ -11,10 +11,10 @@ import { description, argTypes } from './_meta/abnormalObsControlMeta';
 registerCoreComponents();
 
 export default {
-  title: 'Complex Controls/AbnormalObsControl',
   component: ObsGroupControl,
   tags: ['autodocs'],
   argTypes,
+  title: 'Complex Controls/Legacy Components/AbnormalObsControl',
   parameters: {
     docs: {
       description: {
