@@ -2,10 +2,12 @@ import React from 'react';
 import { CarbonContainer } from 'src/components/bahmni-design-system/CarbonContainer';
 import StoryWrapper from '../StoryWrapper';
 import { carbonContainerCommonProps, buildFormMetadata, buildColumnHeader } from './complexFixtures';
-import { SYSTOLIC_UUID, DIASTOLIC_UUID } from '../mockData';
 import '../../styles/styles.scss';
 
 const VITALS_FORM = 'Vitals Table Form';
+
+const SYSTOLIC_UUID = 'carbon-systolic-uuid';
+const DIASTOLIC_UUID = 'carbon-diastolic-uuid';
 
 const textCell = (id, name, uuid, column, row) => ({
   type: 'obsControl',
@@ -25,7 +27,7 @@ const booleanCell = (id, name, uuid, column, row) => ({
   concept: { name, uuid, datatype: 'Boolean' },
 });
 
-const labResultsTable = {
+const labResultsTable = () => ({
   type: 'table',
   label: { type: 'label', value: 'Lab Results' },
   properties: { mandatory: false, location: { column: 0, row: 0 } },
@@ -38,9 +40,9 @@ const labResultsTable = {
     textCell('3', 'White Blood Cell Count', 'carbon-wbc-uuid', 0, 1),
     textCell('4', 'Platelets', 'carbon-platelets-uuid', 0, 2),
   ],
-};
+});
 
-const screeningTable = {
+const screeningTable = () => ({
   type: 'table',
   label: { type: 'label', value: 'Screening Results' },
   properties: { mandatory: false, location: { column: 0, row: 0 } },
@@ -55,9 +57,9 @@ const screeningTable = {
     textCell('4', 'BMI', 'carbon-bmi-uuid', 0, 1),
     booleanCell('5', 'Referred for BMI', 'carbon-bmi-referred-uuid', 1, 1),
   ],
-};
+});
 
-const vitalsTable = {
+const vitalsTable = () => ({
   type: 'table',
   label: { type: 'label', value: 'Vitals Measurements' },
   properties: { mandatory: false, location: { column: 0, row: 0 } },
@@ -70,7 +72,7 @@ const vitalsTable = {
     textCell('2', 'Systolic', SYSTOLIC_UUID, 0, 0),
     textCell('3', 'Diastolic', DIASTOLIC_UUID, 1, 0),
   ],
-};
+});
 
 const vitalsTableObservations = [
   {
@@ -91,10 +93,11 @@ const vitalsTableObservations = [
   },
 ];
 
-const defaultForm = buildFormMetadata(400, 'carbon-table-default-uuid', 'Lab Results Form', [labResultsTable]);
-const multiColumnForm = buildFormMetadata(401, 'carbon-table-multicolumn-uuid', 'Screening Form', [screeningTable]);
-const withValuesForm = buildFormMetadata(402, 'carbon-table-values-uuid', VITALS_FORM, [vitalsTable]);
-const disabledForm = buildFormMetadata(403, 'carbon-table-disabled-uuid', 'Lab Results Disabled Form', [labResultsTable]);
+const defaultForm = buildFormMetadata(400, 'carbon-table-default-uuid', 'Lab Results Form', [labResultsTable()]);
+const multiColumnForm = buildFormMetadata(401, 'carbon-table-multicolumn-uuid', 'Screening Form', [screeningTable()]);
+const withValuesForm = buildFormMetadata(402, 'carbon-table-values-uuid', VITALS_FORM, [vitalsTable()]);
+const disabledForm = buildFormMetadata(403, 'carbon-table-disabled-uuid', 'Lab Results Disabled Form',
+  [labResultsTable()]);
 
 export default {
   title: 'Complex Controls/Bahmni Design System/Table',

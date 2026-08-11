@@ -11,19 +11,17 @@ const FEVER_UUID = 'carbon-fever-uuid';
 const COUGH_UUID = 'carbon-cough-uuid';
 const FATIGUE_UUID = 'carbon-fatigue-uuid';
 
-const yesNoOptions = [{ name: 'Yes', value: true }, { name: 'No', value: false }];
-
 const booleanChild = (id, name, uuid, column, row) => ({
   type: 'obsControl',
   label: { type: 'label', value: name },
   displayType: 'Button',
-  options: yesNoOptions,
+  options: [{ name: 'Yes', value: true }, { name: 'No', value: false }],
   properties: { mandatory: false, location: { column, row } },
   id,
   concept: { name, uuid, datatype: 'Boolean' },
 });
 
-const reviewOfSystemsGroup = {
+const reviewOfSystemsGroup = () => ({
   type: 'obsGroupControl',
   concept: { name: 'Review of Systems', uuid: ROS_GROUP_UUID, datatype: 'N/A' },
   label: { type: 'label', value: 'Review of Systems' },
@@ -34,11 +32,12 @@ const reviewOfSystemsGroup = {
     booleanChild('3', 'Cough', COUGH_UUID, 1, 0),
     booleanChild('4', 'Fatigue', FATIGUE_UUID, 0, 1),
   ],
-};
+});
 
-const defaultForm = buildFormMetadata(200, 'carbon-obsgroup-default-uuid', FORM_NAME, [reviewOfSystemsGroup]);
-const expandedForm = buildFormMetadata(201, 'carbon-obsgroup-expanded-uuid', FORM_NAME, [reviewOfSystemsGroup]);
-const disabledForm = buildFormMetadata(202, 'carbon-obsgroup-disabled-uuid', FORM_NAME, [reviewOfSystemsGroup]);
+const defaultForm = buildFormMetadata(200, 'carbon-obsgroup-default-uuid', FORM_NAME, [reviewOfSystemsGroup()]);
+const expandedForm = buildFormMetadata(201, 'carbon-obsgroup-expanded-uuid', FORM_NAME, [reviewOfSystemsGroup()]);
+const disabledForm = buildFormMetadata(202, 'carbon-obsgroup-disabled-uuid', FORM_NAME, [reviewOfSystemsGroup()]);
+const nestedForm = buildFormMetadata(203, 'carbon-obsgroup-nested-uuid', FORM_NAME, [reviewOfSystemsGroup()]);
 
 const GROUP_FIELD_PATH = `${FORM_NAME}.1/1-0`;
 
@@ -131,10 +130,10 @@ export const Expanded = {
 
 export const WithNestedObservations = {
   render: () => (
-    <StoryWrapper json={defaultForm}>
+    <StoryWrapper json={nestedForm}>
       <CarbonContainer
         {...carbonContainerCommonProps}
-        metadata={defaultForm}
+        metadata={nestedForm}
         observations={nestedObservations}
         collapse={false}
       />

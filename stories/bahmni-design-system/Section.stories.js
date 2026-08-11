@@ -1,129 +1,68 @@
-import React from "react";
-import { CarbonContainer } from "src/components/bahmni-design-system/CarbonContainer";
-import StoryWrapper from "../StoryWrapper";
-import {
-  carbonContainerCommonProps,
-  buildFormMetadata,
-} from "./complexFixtures";
-import "../../styles/styles.scss";
+import React from 'react';
+import { CarbonContainer } from 'src/components/bahmni-design-system/CarbonContainer';
+import StoryWrapper from '../StoryWrapper';
+import { carbonContainerCommonProps, buildFormMetadata } from './complexFixtures';
+import '../../styles/styles.scss';
 
-const patientHistorySection = {
-  type: "section",
-  label: { type: "label", value: "Patient History" },
+const textControl = (id, name, uuid, column, row) => ({
+  type: 'obsControl',
+  label: { type: 'label', value: name },
+  properties: { mandatory: false, location: { column, row } },
+  id,
+  concept: { name, uuid, datatype: 'Text' },
+});
+
+const booleanControl = (id, name, uuid, column, row) => ({
+  type: 'obsControl',
+  label: { type: 'label', value: name },
+  displayType: 'Button',
+  options: [{ name: 'Yes', value: true }, { name: 'No', value: false }],
+  properties: { mandatory: false, location: { column, row } },
+  id,
+  concept: { name, uuid, datatype: 'Boolean' },
+});
+
+const patientHistorySection = () => ({
+  type: 'section',
+  label: { type: 'label', value: 'Patient History' },
   properties: { mandatory: false, location: { column: 0, row: 0 } },
-  id: "1",
+  id: '1',
   controls: [
-    {
-      type: "obsControl",
-      label: { type: "label", value: "Chief Complaint" },
-      properties: { mandatory: false, location: { column: 0, row: 0 } },
-      id: "2",
-      concept: {
-        name: "Chief Complaint",
-        uuid: "carbon-chief-complaint-uuid",
-        datatype: "Text",
-      },
-    },
-    {
-      type: "obsControl",
-      label: { type: "label", value: "Duration" },
-      properties: { mandatory: false, location: { column: 1, row: 0 } },
-      id: "3",
-      concept: {
-        name: "Duration",
-        uuid: "carbon-duration-uuid",
-        datatype: "Text",
-      },
-    },
+    textControl('2', 'Chief Complaint', 'carbon-chief-complaint-uuid', 0, 0),
+    textControl('3', 'Duration', 'carbon-duration-uuid', 1, 0),
   ],
-};
+});
 
-const multiControlSection = {
-  type: "section",
-  label: { type: "label", value: "Vitals Notes" },
+const vitalsNotesSection = () => ({
+  type: 'section',
+  label: { type: 'label', value: 'Vitals Notes' },
   properties: { mandatory: false, location: { column: 0, row: 0 } },
-  id: "4",
+  id: '4',
   controls: [
-    {
-      type: "obsControl",
-      label: { type: "label", value: "General Notes" },
-      properties: { mandatory: false, location: { column: 0, row: 0 } },
-      id: "5",
-      concept: {
-        name: "General Notes",
-        uuid: "carbon-general-notes-uuid",
-        datatype: "Text",
-      },
-    },
-    {
-      type: "obsControl",
-      label: { type: "label", value: "Fever" },
-      displayType: "Button",
-      options: [
-        { name: "Yes", value: true },
-        { name: "No", value: false },
-      ],
-      properties: { mandatory: false, location: { column: 1, row: 0 } },
-      id: "6",
-      concept: {
-        name: "Fever",
-        uuid: "carbon-section-fever-uuid",
-        datatype: "Boolean",
-      },
-    },
-    {
-      type: "obsControl",
-      label: { type: "label", value: "Follow-up Required" },
-      displayType: "Button",
-      options: [
-        { name: "Yes", value: true },
-        { name: "No", value: false },
-      ],
-      properties: { mandatory: false, location: { column: 0, row: 1 } },
-      id: "7",
-      concept: {
-        name: "Follow-up Required",
-        uuid: "carbon-followup-uuid",
-        datatype: "Boolean",
-      },
-    },
+    textControl('5', 'General Notes', 'carbon-general-notes-uuid', 0, 0),
+    booleanControl('6', 'Fever', 'carbon-section-fever-uuid', 1, 0),
+    booleanControl('7', 'Follow-up Required', 'carbon-followup-uuid', 0, 1),
   ],
-};
+});
 
-const defaultForm = buildFormMetadata(
-  300,
-  "carbon-section-default-uuid",
-  "Section Default Form",
-  [patientHistorySection],
-);
-const expandedForm = buildFormMetadata(
-  301,
-  "carbon-section-expanded-uuid",
-  "Section Expanded Form",
-  [patientHistorySection],
-);
-const multiForm = buildFormMetadata(
-  302,
-  "carbon-section-multi-uuid",
-  "Section Multi Control Form",
-  [multiControlSection],
-);
-const disabledForm = buildFormMetadata(
-  303,
-  "carbon-section-disabled-uuid",
-  "Section Disabled Form",
-  [patientHistorySection],
-);
+const defaultForm = buildFormMetadata(300, 'carbon-section-default-uuid', 'Section Default Form',
+  [patientHistorySection()]);
+const expandedForm = buildFormMetadata(301, 'carbon-section-expanded-uuid', 'Section Expanded Form',
+  [patientHistorySection()]);
+const multiForm = buildFormMetadata(302, 'carbon-section-multi-uuid', 'Section Multi Control Form',
+  [vitalsNotesSection()]);
+const disabledForm = buildFormMetadata(303, 'carbon-section-disabled-uuid', 'Section Disabled Form',
+  [patientHistorySection()]);
 
 export default {
-  title: "Complex Controls/Bahmni Design System/Section",
-  tags: ["autodocs"],
+  title: 'Complex Controls/Bahmni Design System/Section',
+  tags: ['autodocs'],
   component: CarbonContainer,
   parameters: {
     docs: {
       toc: {
-        headingSelector: "h2, h3",
-        title: "Table of Contents",
+        headingSelector: 'h2, h3',
+        title: 'Table of Contents',
       },
       description: {
         component: `
@@ -184,8 +123,8 @@ export const WithMultipleControls = {
     docs: {
       description: {
         story:
-          "Three controls spread across two rows (`properties.location.row`/`column`), showing how " +
-          "Section lays out grouped controls within the Accordion content.",
+          'Three controls spread across two rows (`properties.location.row`/`column`), showing how ' +
+          'Section lays out grouped controls within the Accordion content.',
       },
     },
   },
