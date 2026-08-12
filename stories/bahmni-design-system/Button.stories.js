@@ -51,14 +51,16 @@ export const Default = {};
 export const SingleSelect = {
   args: {
     multiSelect: false,
+    value: codedConceptAnswers[1],
   },
   parameters: {
     docs: {
       description: {
         story:
-          '`multiSelect` defaults to falsy, so this looks identical to `Default` — both render a ' +
-          'single-select tag group where choosing one pill clears any other selection. This variant ' +
-          'just makes the intent explicit.',
+          '`multiSelect` defaults to falsy, so single-select is also what `Default` renders — this ' +
+          'variant makes the intent explicit and pre-selects one pill so the mode is visible. In ' +
+          'single-select mode `value` is a single option object: picking another pill replaces it, ' +
+          'and picking the selected pill again clears it.',
       },
     },
   },
@@ -87,10 +89,23 @@ export const Disabled = {
   },
 };
 
-export const WithValidation = {
+export const WithValidationError = {
   args: {
     validate: true,
     validations: ['mandatory'],
+    formFieldPath: 'test/1-1',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A mandatory Button with no value, rendered with Carbon\'s invalid styling. The ' +
+          '`formFieldPath` ends in `-1` on purpose: `Button` only applies a computed error to state ' +
+          'at mount when `_isCreateByAddMore()` is true, which it derives from the path suffix ' +
+          '(`formFieldPath.split(\'-\')[1] !== \'0\'`). With the default `test/1-0` path the mandatory ' +
+          'error is computed and then discarded, so nothing visible would change.',
+      },
+    },
   },
 };
 
