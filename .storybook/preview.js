@@ -23,6 +23,7 @@ export default {
           "Complex Controls",
           ["Bahmni Design System", "Legacy Components"],
           "Orchestrator",
+          ["Bahmni Design System", "Legacy Components"],
           "Example Forms",
         ],
       },

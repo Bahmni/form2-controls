@@ -21,7 +21,7 @@ import 'src/components/AutoComplete.jsx';
 import 'src/components/DropDown.jsx';
 
 export default {
-  title: 'Orchestrator/Container',
+  title: 'Orchestrator/Legacy Components/Container',
   component: Container,
   parameters: {
     docs: {

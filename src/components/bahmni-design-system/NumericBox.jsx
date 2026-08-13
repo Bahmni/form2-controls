@@ -1,8 +1,35 @@
 import { NumberInput } from '@bahmni/design-system';
 import { Validator } from 'src/helpers/Validator';
 import isEmpty from 'lodash/isEmpty';
+import omit from 'lodash/omit';
 import constants from 'src/constants';
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+
+// Props ObsControl passes to every registered component as part of the Bahmni
+// control contract. Whatever is left in the rest bag gets spread onto Carbon's
+// NumberInput, which forwards anything it doesn't recognise to the underlying
+// <input> — so these have to be stripped, or React logs "Unknown event handler
+// property" / "React does not recognize the X prop on a DOM element" for each
+// one on every render. `properties` and `options` log nothing (React passes
+// unknown all-lowercase props straight through) but still land as stray
+// `properties="[object Object]"` attributes, so they go too. None of these is
+// read by this component.
+//
+// `hidden` is deliberately NOT in this list: it is a valid DOM attribute and
+// the contract relies on it reaching the input to hide the control.
+const CONTROL_CONTRACT_PROPS = [
+  'patientUuid',
+  'conceptUuid',
+  'addMore',
+  'showNotification',
+  'conceptClass',
+  'conceptHandler',
+  'componentStore',
+  'onControlAdd',
+  'onEventTrigger',
+  'properties',
+  'options',
+];
 
 export const NumericBox = ({
   value,
@@ -175,7 +202,7 @@ export const NumericBox = ({
         warn={hasWarnings}
         disabled={!enabled}
         step={1}
-        {...props}
+        {...omit(props, CONTROL_CONTRACT_PROPS)}
       />
       {formatRange() && (
         <span className="obs-numeric-range">{formatRange()}</span>

@@ -615,6 +615,40 @@ describe('NumericBox', () => {
     expect(container.querySelector('input[type="number"]')).toHaveValue(100);
   });
 
+  it('should not forward Bahmni control-contract props to the DOM input', () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    const { container } = render(
+      <NumericBox
+        addMore={false}
+        componentStore={{}}
+        conceptClass="Misc"
+        conceptHandler="SomeHandler"
+        conceptUuid="concept-uuid"
+        formFieldPath="test1.1/1-0"
+        onChange={onChangeMock}
+        onControlAdd={jest.fn()}
+        onEventTrigger={jest.fn()}
+        options={[]}
+        patientUuid="patient-uuid"
+        properties={{ mandatory: false }}
+        showNotification={jest.fn()}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+      />
+    );
+
+    const input = container.querySelector('input[type="number"]');
+    ['patientuuid', 'conceptuuid', 'addmore', 'shownotification', 'conceptclass',
+      'concepthandler', 'componentstore', 'properties', 'options'].forEach((attribute) => {
+      expect(input).not.toHaveAttribute(attribute);
+    });
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+    consoleErrorSpy.mockRestore();
+  });
+
   it('should handle undefined errors from validator gracefully', () => {
     const getErrorsSpy = jest.spyOn(Validator, 'getErrors').mockReturnValue(undefined);
 
