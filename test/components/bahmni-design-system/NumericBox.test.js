@@ -615,6 +615,75 @@ describe('NumericBox', () => {
     expect(container.querySelector('input[type="number"]')).toHaveValue(100);
   });
 
+  it('should display updated value when external setValue changes field from one value to another', () => {
+    const { container, rerender } = render(
+      <NumericBox
+        formFieldPath="test1.1/1-0"
+        onChange={onChangeMock}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value={50}
+      />
+    );
+
+    expect(container.querySelector('input[type="number"]')).toHaveValue(50);
+
+    rerender(
+      <NumericBox
+        formFieldPath="test1.1/1-0"
+        onChange={onChangeMock}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value={75}
+      />
+    );
+
+    expect(container.querySelector('input[type="number"]')).toHaveValue(75);
+  });
+
+  it('should display updated value when form condition sets value programmatically multiple times', () => {
+    const { container, rerender } = render(
+      <NumericBox
+        formFieldPath="test1.1/1-0"
+        onChange={onChangeMock}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value={10}
+      />
+    );
+
+    expect(container.querySelector('input[type="number"]')).toHaveValue(10);
+
+    rerender(
+      <NumericBox
+        formFieldPath="test1.1/1-0"
+        onChange={onChangeMock}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value={20}
+      />
+    );
+
+    expect(container.querySelector('input[type="number"]')).toHaveValue(20);
+
+    rerender(
+      <NumericBox
+        formFieldPath="test1.1/1-0"
+        onChange={onChangeMock}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value={30}
+      />
+    );
+
+    expect(container.querySelector('input[type="number"]')).toHaveValue(30);
+  });
+
   it('should handle undefined errors from validator gracefully', () => {
     const getErrorsSpy = jest.spyOn(Validator, 'getErrors').mockReturnValue(undefined);
 
