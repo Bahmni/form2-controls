@@ -31,7 +31,6 @@ export const argTypes = {
       'array of child control descriptors.',
     table: {
       type: { summary: 'object' },
-      defaultValue: { summary: 'undefined' },
     },
   },
   observations: {

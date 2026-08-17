@@ -50,25 +50,19 @@ export default class StoryWrapper extends PureComponent {
 
   render() {
     const { title, children, json, showDebug } = this.props;
-    if (!showDebug) {
-      return (
-        <div style={styles.wrap}>
-          <div>
-            {title && <div style={headerStyle}>{title}</div>}
-            {children}
-          </div>
+    return (
+      <div style={styles.wrap}>
+        <div style={showDebug ? styles.box : undefined}>
+          {title && <div style={headerStyle}>{title}</div>}
+          {children}
         </div>
-      );
-    }
-    return (<div style={styles.wrap}>
-                <div style={styles.box}>
-                    {title && <div style={headerStyle}>{title}</div>}
-                    { children }
-                </div>
-                <div style={styles.box}>
-                    <JSONTree data={json} theme={theme} />
-                </div>
-            </div>);
+        {showDebug && (
+          <div style={styles.box}>
+            <JSONTree data={json} theme={theme} />
+          </div>
+        )}
+      </div>
+    );
   }
 
 }

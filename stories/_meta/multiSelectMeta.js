@@ -31,7 +31,6 @@ export const argTypes = {
       'array provides the selectable options.',
     table: {
       type: { summary: 'object' },
-      defaultValue: { summary: 'undefined' },
     },
   },
   observations: {

@@ -33,25 +33,26 @@ export const argTypes = {
       '{name: "No", value: false}]`.',
     table: {
       type: { summary: 'object' },
-      defaultValue: { summary: 'undefined' },
     },
   },
-  obs: {
+  value: {
     description:
       'The current ObsGroup value as an immutable `Obs` record. Must include a `groupMembers` ' +
       'List containing child `Obs` instances for the numeric and abnormal concepts.',
     table: {
       type: { summary: 'Obs (immutable record)' },
-      defaultValue: { summary: 'undefined' },
     },
   },
-  mapper: {
-    description:
-      'Instance of `ObsGroupMapper` used to read and write group member values. ' +
-      'Provided by the parent Container in production; pass `new ObsGroupMapper()` in stories.',
+  formName: {
+    description: 'Name of the parent form this ObsGroup belongs to.',
     table: {
-      type: { summary: 'ObsGroupMapper' },
-      defaultValue: { summary: 'new ObsGroupMapper()' },
+      type: { summary: 'string' },
+    },
+  },
+  formVersion: {
+    description: 'Version of the parent form this ObsGroup belongs to.',
+    table: {
+      type: { summary: 'string' },
     },
   },
   validate: {
@@ -69,13 +70,6 @@ export const argTypes = {
       'Signature: `(formFieldPath: string, value: object, errors: array) => void`.',
     table: {
       type: { summary: 'function' },
-    },
-  },
-  errors: {
-    description: 'Array of validation error objects for this group. Pass `[]` when valid.',
-    table: {
-      type: { summary: 'array' },
-      defaultValue: { summary: '[]' },
     },
   },
 };

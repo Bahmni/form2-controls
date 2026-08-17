@@ -325,7 +325,6 @@ export default {
   tags: ['autodocs'],
   argTypes,
   title: 'Atomic Controls/Legacy Components/MultiSelect',
-  tags: ['autodocs'],
   parameters: {
     docs: {
       toc: {
@@ -333,27 +332,17 @@ export default {
         title: 'Table of Contents',
       },
       description: {
-        component: `
-## Overview
-
-Multi-select coded observation — clinicians choose several answers for a single concept, and each answer is stored as a separate observation record. This story demonstrates the control inside a full form (Tuberculosis Comorbidity).
-
-**Value stored:** each selected answer as its own observation record.
-
-## When to use
-
-- A single concept that accepts multiple coded answers — e.g. comorbidities, presenting symptoms.
-- For single-select coded answers, use **CodedControl**, **DropDown**, or **RadioButton** instead.
-        `,
+        component: description,
       },
     },
   },
 };
 
 export const MultiSelect = {
-  render: () => (
+  args: { validate: false },
+  render: (args) => (
     <StoryWrapper json={form}>
-      <Container metadata={form} observations={obsList} validate={false} translations={{ labels: {}, concepts: {} }} />
+      <Container metadata={form} observations={obsList} translations={{ labels: {}, concepts: {} }} {...args} />
     </StoryWrapper>
   ),
 };

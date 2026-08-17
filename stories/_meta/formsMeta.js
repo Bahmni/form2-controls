@@ -34,7 +34,6 @@ export const argTypes = {
       '`controls` array. May include an `events` object with base64-encoded lifecycle scripts.',
     table: {
       type: { summary: 'object' },
-      defaultValue: { summary: 'undefined' },
     },
   },
   observations: {

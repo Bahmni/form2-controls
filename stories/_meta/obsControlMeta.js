@@ -37,7 +37,6 @@ export const argTypes = {
       'widget is rendered.',
     table: {
       type: { summary: 'object' },
-      defaultValue: { summary: 'undefined' },
     },
   },
   value: {
@@ -47,17 +46,6 @@ export const argTypes = {
       'empty / unsaved field.',
     table: {
       type: { summary: '{ value: any, comment: string, interpretation: string }' },
-      defaultValue: { summary: 'undefined' },
-    },
-  },
-  formUuid: {
-    description:
-      'UUID of the parent form. Used to construct the `formFieldPath` ' +
-      '(`"<formUuid>/<controlId>"`) which uniquely identifies this control\'s value in the ' +
-      'ControlRecordTree.',
-    table: {
-      type: { summary: 'string' },
-      defaultValue: { summary: 'undefined' },
     },
   },
   formFieldPath: {

@@ -25,7 +25,8 @@ export default {
 };
 
 export const BasicView = {
-  render: () => {
+  args: { validate: false },
+  render: (args) => {
     const pulseObs = new Obs({ concept: pulseDataMetadata.controls[0].concept, formFieldPath: 'f.1/6-0', formNamespace: 'bahmni' });
     const pulseAbnormalObs = new Obs({ concept: pulseDataMetadata.controls[1].concept, formFieldPath: 'f.1/7-0', formNamespace: 'bahmni' });
     const pulseDataObs = new Obs({
@@ -42,9 +43,10 @@ export const BasicView = {
           mapper={new ObsGroupMapper()}
           metadata={pulseDataMetadata}
           obs={pulseDataObs}
-          onValueChanged={() => {}}
-          validate={false}
           children={List()}
+          value={pulseDataObs}
+          onValueChanged={() => {}}
+          {...args}
         />
       </StoryWrapper>
     );
