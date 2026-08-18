@@ -87,14 +87,13 @@ export const NumericBox = ({
 
   // Carbon's internal isNaN check doesn't fire when value goes from "" to a number
   // (Number("") === 0, not NaN), so setValue() from scripts won't update the display.
-  // Force a re-mount via key when an external setValue sets a value on an empty field.
+  // Force a re-mount via key when an external setValue changes the value programmatically.
   useLayoutEffect(() => {
     if (!isInitialized) return;
     const prevVal = prevValueRef.current;
     prevValueRef.current = value;
-    const wasEmpty = prevVal === undefined || prevVal === null || prevVal === '';
-    const hasValue = value !== undefined && value !== null && value !== '';
-    if (!isUserChangeRef.current && wasEmpty && hasValue) {
+    const normalize = (v) => (v === undefined || v === null || v === '' ? '' : v);
+    if (!isUserChangeRef.current && normalize(prevVal) !== normalize(value)) {
       setCarbonKey((k) => k + 1);
     }
     isUserChangeRef.current = false;
