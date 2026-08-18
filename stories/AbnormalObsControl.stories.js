@@ -6,25 +6,27 @@ import { List } from 'immutable';
 import StoryWrapper from './StoryWrapper';
 import { registerCoreComponents } from './componentRegistry';
 import { pulseDataMetadata } from './mockData';
+import { description, argTypes } from './_meta/abnormalObsControlMeta';
 
 registerCoreComponents();
 
 export default {
+  component: ObsGroupControl,
+  tags: ['autodocs'],
+  argTypes,
   title: 'Complex Controls/Legacy Components/AbnormalObsControl',
   parameters: {
     docs: {
       description: {
-        component:
-          'AbnormalObsControl demonstrates an ObsGroup that pairs a numeric observation with a ' +
-          'Boolean "Abnormal" toggle button. The toggle is rendered inline using the Button display ' +
-          'type and lets clinicians flag an out-of-range reading without leaving the field.',
+        component: description,
       },
     },
   },
 };
 
 export const BasicView = {
-  render: () => {
+  args: { validate: false },
+  render: (args) => {
     const pulseObs = new Obs({ concept: pulseDataMetadata.controls[0].concept, formFieldPath: 'f.1/6-0', formNamespace: 'bahmni' });
     const pulseAbnormalObs = new Obs({ concept: pulseDataMetadata.controls[1].concept, formFieldPath: 'f.1/7-0', formNamespace: 'bahmni' });
     const pulseDataObs = new Obs({
@@ -41,9 +43,10 @@ export const BasicView = {
           mapper={new ObsGroupMapper()}
           metadata={pulseDataMetadata}
           obs={pulseDataObs}
-          onValueChanged={() => {}}
-          validate={false}
           children={List()}
+          value={pulseDataObs}
+          onValueChanged={() => {}}
+          {...args}
         />
       </StoryWrapper>
     );

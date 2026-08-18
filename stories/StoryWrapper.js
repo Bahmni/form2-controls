@@ -65,29 +65,38 @@ const headerStyle = {
 export default class StoryWrapper extends PureComponent {
 
   render() {
-    const { title, children, json } = this.props;
-    return (<div style={styles.wrap}>
-                <div style={styles.canvas}>
-                    {title && <div style={headerStyle}>{title}</div>}
-                    { children }
-                </div>
-                <div>
-                    <p style={styles.jsonHeading}>Metadata</p>
-                    <div style={styles.jsonPanel}>
-                        <JSONTree
-                          data={json}
-                          theme={theme}
-                          invertTheme
-                          shouldExpandNodeInitially={(keyPath, data, level) => level < 3}
-                        />
-                    </div>
-                </div>
-            </div>);
+    const { title, children, json, showDebug } = this.props;
+    return (
+      <div style={styles.wrap}>
+        <div style={styles.canvas}>
+          {title && <div style={headerStyle}>{title}</div>}
+          {children}
+        </div>
+        {showDebug && (
+          <div>
+            <p style={styles.jsonHeading}>Metadata</p>
+            <div style={styles.jsonPanel}>
+              <JSONTree
+                data={json}
+                theme={theme}
+                invertTheme
+                shouldExpandNodeInitially={(keyPath, data, level) => level < 3}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    );
   }
 
 }
 
 StoryWrapper.propTypes = {
-  json: PropTypes.object.isRequired,
+  json: PropTypes.object,
   title: PropTypes.string,
+  showDebug: PropTypes.bool,
+};
+
+StoryWrapper.defaultProps = {
+  showDebug: false,
 };
