@@ -92,7 +92,8 @@ export const NumericBox = ({
     if (!isInitialized) return;
     const prevVal = prevValueRef.current;
     prevValueRef.current = value;
-    if (!isUserChangeRef.current && prevVal !== value) {
+    const normalize = (v) => (v === undefined || v === null || v === '' ? '' : v);
+    if (!isUserChangeRef.current && normalize(prevVal) !== normalize(value)) {
       setCarbonKey((k) => k + 1);
     }
     isUserChangeRef.current = false;
