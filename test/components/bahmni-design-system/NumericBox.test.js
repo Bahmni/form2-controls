@@ -684,6 +684,90 @@ describe('NumericBox', () => {
     expect(container.querySelector('input[type="number"]')).toHaveValue(30);
   });
 
+  it('should not remount the input when value transitions between empty-equivalent representations', () => {
+    const { container, rerender } = render(
+      <NumericBox
+        formFieldPath="test1.1/1-0"
+        onChange={onChangeMock}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value={undefined}
+      />
+    );
+
+    const inputBeforeUndefinedToNull = container.querySelector(
+      'input[type="number"]'
+    );
+
+    rerender(
+      <NumericBox
+        formFieldPath="test1.1/1-0"
+        onChange={onChangeMock}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value={null}
+      />
+    );
+
+    const inputAfterUndefinedToNull = container.querySelector(
+      'input[type="number"]'
+    );
+    expect(inputAfterUndefinedToNull).toBe(inputBeforeUndefinedToNull);
+    expect(inputAfterUndefinedToNull).toHaveValue(null);
+
+    rerender(
+      <NumericBox
+        formFieldPath="test1.1/1-0"
+        onChange={onChangeMock}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value=""
+      />
+    );
+
+    const inputAfterNullToEmptyString = container.querySelector(
+      'input[type="number"]'
+    );
+    expect(inputAfterNullToEmptyString).toBe(inputBeforeUndefinedToNull);
+    expect(inputAfterNullToEmptyString).toHaveValue(null);
+  });
+
+  it('should not remount the input when value is re-rendered with the same value', () => {
+    const { container, rerender } = render(
+      <NumericBox
+        formFieldPath="test1.1/1-0"
+        onChange={onChangeMock}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value={42}
+      />
+    );
+
+    const inputBeforeRerender = container.querySelector(
+      'input[type="number"]'
+    );
+    expect(inputBeforeRerender).toHaveValue(42);
+
+    rerender(
+      <NumericBox
+        formFieldPath="test1.1/1-0"
+        onChange={onChangeMock}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value={42}
+      />
+    );
+
+    const inputAfterRerender = container.querySelector('input[type="number"]');
+    expect(inputAfterRerender).toBe(inputBeforeRerender);
+    expect(inputAfterRerender).toHaveValue(42);
+  });
+
   it('should handle undefined errors from validator gracefully', () => {
     const getErrorsSpy = jest.spyOn(Validator, 'getErrors').mockReturnValue(undefined);
 
