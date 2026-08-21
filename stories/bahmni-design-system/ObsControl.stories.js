@@ -89,7 +89,14 @@ The tag reflects the observation's \`interpretation\`. Two details are worth kno
 1. \`ObsControl.onChange\` derives \`interpretation\` from an \`allowRange\` **warning**, which only \`NumericBox\` produces — so an automatic abnormal flag is inherently a Numeric-datatype behaviour.
 2. A stored \`interpretation\` only survives mount if the leaf control passes \`calledOnMount: true\` to \`onChange\`. \`NumericBox\`, \`Date\` and \`DateTime\` do; \`TextBox\` and \`BooleanControl\` do not, so a Text-datatype control always mounts with the tag **unselected**.
 
-These stories use a Text-datatype control, so the tag renders unselected and is toggled by clicking it. A Numeric-datatype control is deliberately avoided here: \`NumericBox\` is the only leaf that re-spreads its entire prop bag onto Carbon's \`NumberInput\`, so the bookkeeping props \`ObsControl\` passes to every leaf (\`conceptUuid\`, \`patientUuid\`, \`componentStore\`, \`onControlAdd\`, \`onEventTrigger\`, \`addMore\`, \`showNotification\`, \`conceptClass\`, \`conceptHandler\`) reach the DOM and log nine React errors. That is a pre-existing \`src/\` defect, tracked separately rather than worked around here.
+These stories use a Text-datatype control, so the tag renders unselected and is toggled by
+clicking it. \`NumericBox\` used to re-spread the bookkeeping props \`ObsControl\` passes to
+every leaf (\`conceptUuid\`, \`patientUuid\`, \`componentStore\`, \`onControlAdd\`,
+\`onEventTrigger\`, \`addMore\`, \`showNotification\`, \`conceptClass\`, \`conceptHandler\`,
+\`intl\`, \`properties\`, \`options\`) straight onto Carbon's \`NumberInput\` and the DOM,
+logging nine React errors — that was fixed in BAH-4936, so a Numeric-datatype control is no
+longer avoided here for that reason (see NumericBox.stories.js and CarbonContainer.stories.js's
+\`CarbonObsControl\`/\`CarbonNumericBox\` variants).
         `,
       },
     },

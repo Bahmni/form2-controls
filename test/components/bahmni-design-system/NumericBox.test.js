@@ -387,6 +387,47 @@ describe('NumericBox', () => {
     expect(input).toHaveAttribute('max', '100');
   });
 
+  it('should filter the full Bahmni control contract out of the NumberInput prop spread', () => {
+    // The full set of props bds ObsControl.displayObsControl() passes to every leaf
+    // control, exactly as NumericBox would receive them when rendered through
+    // CarbonContainer/ObsControl. `intl`/`properties`/`options`/`componentStore` are the
+    // ones that leak *silently* (no console warning, since React only warns for unknown
+    // attribute names containing uppercase letters) as a stringified `[object Object]`
+    // DOM attribute if not filtered — this was missed on a first attempt at this fix.
+    const fullContractProps = {
+      formFieldPath: 'test1.1/1-0',
+      onChange: onChangeMock,
+      validate: false,
+      validateForm: false,
+      validations: [],
+      hidden: true,
+      properties: { mandatory: true },
+      options: [{ name: 'A', value: 'a' }],
+      onControlAdd: () => {},
+      onEventTrigger: () => {},
+      patientUuid: 'patient-uuid',
+      conceptUuid: 'concept-uuid',
+      addMore: true,
+      showNotification: () => {},
+      conceptClass: 'Misc',
+      conceptHandler: 'ImageUrlHandler',
+      intl: { formatMessage: () => {} },
+      componentStore: { getRegisteredComponent: () => {} },
+    };
+
+    console.error.mockClear();
+    const { container } = render(<NumericBox {...fullContractProps} />);
+    const input = container.querySelector('input[type="number"]');
+
+    ['properties', 'options', 'oncontroladd', 'oneventtrigger', 'patientuuid', 'conceptuuid',
+      'addmore', 'shownotification', 'conceptclass', 'concepthandler', 'intl', 'componentstore']
+      .forEach((attributeName) => expect(input).not.toHaveAttribute(attributeName));
+    
+    expect(container.innerHTML).not.toContain('[object Object]');
+    expect(input).toHaveAttribute('hidden');
+    expect(console.error).not.toHaveBeenCalled();
+  });
+
   it('should handle null value gracefully', () => {
     const { container } = render(
       <NumericBox

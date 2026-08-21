@@ -128,9 +128,16 @@ One \`TableCell\` is rendered **per entry in \`metadata.columnHeaders\`**, and e
 - The number of column headers must match the number of distinct \`column\` indices the controls use. Declaring three headers while every control sits at \`column: 0\` leaves two empty columns on every row.
 - Every column header needs a unique \`id\`; it is used as the React \`key\` for the rendered \`TableHeader\`.
 
-## Known limitation
+## A note on datatypes
 
-These stories use \`Text\`-datatype \`obsControl\`s (→ \`TextBox\`) rather than \`Numeric\` (→ \`NumericBox\`), even for naturally numeric fields such as Haemoglobin or Systolic BP. \`NumericBox\` is the only leaf control that re-spreads its whole prop bag onto Carbon's \`NumberInput\`, so the bookkeeping props \`ObsControl\` passes to every leaf (\`conceptUuid\`, \`patientUuid\`, \`componentStore\`, \`onControlAdd\`, \`onEventTrigger\`, \`addMore\`, \`showNotification\`, \`conceptClass\`, \`conceptHandler\`) reach the DOM and log nine React errors. That is a pre-existing \`src/\` defect unrelated to the Table primitive, tracked separately rather than worked around here.
+These stories use \`Text\`-datatype \`obsControl\`s (→ \`TextBox\`) rather than \`Numeric\` (→
+\`NumericBox\`), even for naturally numeric fields such as Haemoglobin or Systolic BP — this
+is just an illustrative choice for the Table primitive, not a workaround. \`NumericBox\` used
+to re-spread the bookkeeping props \`ObsControl\` passes to every leaf (\`conceptUuid\`,
+\`patientUuid\`, \`componentStore\`, \`onControlAdd\`, \`onEventTrigger\`, \`addMore\`,
+\`showNotification\`, \`conceptClass\`, \`conceptHandler\`, \`intl\`, \`properties\`,
+\`options\`) straight onto Carbon's \`NumberInput\` and the DOM, logging nine React errors;
+that was fixed in BAH-4936 (see \`CarbonNumericBox\` in CarbonContainer.stories.js).
         `,
       },
     },

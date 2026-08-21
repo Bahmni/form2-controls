@@ -3,9 +3,6 @@ import { fn } from '@storybook/test';
 import { Container } from 'src/components/Container.jsx';
 import StoryWrapper from './StoryWrapper';
 import '../styles/styles.scss';
-
-// Import components to trigger self-registration in ComponentStore.
-// Each component registers itself via ComponentStore.registerComponent() on import.
 import 'src/components/ObsControl.jsx';
 import 'src/components/ObsGroupControl.jsx';
 import 'src/components/Section.jsx';
@@ -21,7 +18,7 @@ import 'src/components/AutoComplete.jsx';
 import 'src/components/DropDown.jsx';
 
 export default {
-  title: 'Orchestrator/Container',
+  title: 'Orchestrator/Legacy Components/Container',
   component: Container,
   parameters: {
     docs: {
