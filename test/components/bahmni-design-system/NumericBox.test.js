@@ -284,7 +284,6 @@ describe('NumericBox', () => {
     );
 
     const input = container.querySelector('input[type="number"]');
-    // When validate=true and value is undefined, the NumberInput should be marked as invalid
     expect(input).toHaveAttribute('aria-invalid', 'true');
   });
 
@@ -300,11 +299,9 @@ describe('NumericBox', () => {
       />
     );
 
-    // Verify component renders with validations
     const input = container.querySelector('input[type="number"]');
     expect(input).toBeInTheDocument();
 
-    // onChange should be called on mount with validateForm=true
     expect(onChangeMock).toHaveBeenCalledWith(
       expect.objectContaining({
         errors: expect.any(Array),
@@ -323,8 +320,6 @@ describe('NumericBox', () => {
       />
     );
 
-    // Component should call onChange on mount with validateForm=true
-    // and include validation errors
     expect(onChangeMock).toHaveBeenCalledWith(
       expect.objectContaining({
         value: undefined,
@@ -388,12 +383,6 @@ describe('NumericBox', () => {
   });
 
   it('should filter the full Bahmni control contract out of the NumberInput prop spread', () => {
-    // The full set of props bds ObsControl.displayObsControl() passes to every leaf
-    // control, exactly as NumericBox would receive them when rendered through
-    // CarbonContainer/ObsControl. `intl`/`properties`/`options`/`componentStore` are the
-    // ones that leak *silently* (no console warning, since React only warns for unknown
-    // attribute names containing uppercase letters) as a stringified `[object Object]`
-    // DOM attribute if not filtered — this was missed on a first attempt at this fix.
     const fullContractProps = {
       formFieldPath: 'test1.1/1-0',
       onChange: onChangeMock,
@@ -503,7 +492,6 @@ describe('NumericBox', () => {
     );
 
     const input = container.querySelector('input[type="number"]');
-    // On mount, hasErrors is initialized to false
     expect(input).not.toHaveAttribute('aria-invalid', 'true');
   });
 
@@ -520,7 +508,6 @@ describe('NumericBox', () => {
     );
 
     const input = container.querySelector('input[type="number"]');
-    // On mount with a valid value, should not be marked as invalid
     expect(input).not.toHaveAttribute('aria-invalid', 'true');
   });
 
@@ -536,7 +523,6 @@ describe('NumericBox', () => {
       />
     );
 
-    // First render should call onChange on mount with initial value
     expect(onChangeMock).toHaveBeenCalledWith(
       expect.objectContaining({
         value: 42,
@@ -652,7 +638,6 @@ describe('NumericBox', () => {
       />
     );
 
-    // Re-query: the key-remount mechanism replaces the DOM node
     expect(container.querySelector('input[type="number"]')).toHaveValue(100);
   });
 

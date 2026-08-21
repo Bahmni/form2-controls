@@ -81,8 +81,6 @@ describe('httpStub', () => {
       expect(screen.getByTestId('prov')).toHaveTextContent('Dr. John Smith');
     });
 
-    // Cross-contamination check: Location's fetch must not have received Provider data
-    // (or vice versa).
     expect(screen.getByTestId('loc')).not.toHaveTextContent('Dr. John Smith');
     expect(screen.getByTestId('prov')).not.toHaveTextContent('General Ward');
   });
