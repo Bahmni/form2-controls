@@ -1,8 +1,24 @@
 import { NumberInput } from '@bahmni/design-system';
 import { Validator } from 'src/helpers/Validator';
 import isEmpty from 'lodash/isEmpty';
+import omit from 'lodash/omit';
 import constants from 'src/constants';
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+
+const CONTROL_CONTRACT_PROPS = [
+  'properties',
+  'options',
+  'onControlAdd',
+  'onEventTrigger',
+  'patientUuid',
+  'conceptUuid',
+  'addMore',
+  'showNotification',
+  'conceptClass',
+  'conceptHandler',
+  'intl',
+  'componentStore',
+];
 
 export const NumericBox = ({
   value,
@@ -174,7 +190,7 @@ export const NumericBox = ({
         warn={hasWarnings}
         disabled={!enabled}
         step={1}
-        {...props}
+        {...omit(props, CONTROL_CONTRACT_PROPS)}
       />
       {formatRange() && (
         <span className="obs-numeric-range">{formatRange()}</span>
