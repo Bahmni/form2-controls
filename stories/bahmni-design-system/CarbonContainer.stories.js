@@ -1,14 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { CarbonContainer } from 'src/components/bahmni-design-system/CarbonContainer';
-import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import StoryWrapper from '../StoryWrapper';
+import { carbonContainerCommonProps, buildFormMetadata, buildColumnHeader } from './complexFixtures';
+import { withLocationHttp, withProviderHttp } from './httpStub';
 import {
-  carbonContainerCommonProps,
-  buildFormMetadata,
-  buildColumnHeader,
-  mockLocations,
-  mockProviders,
   carbonCodedAnswers,
   textControl,
   numericControl,
@@ -36,43 +31,6 @@ import '../../styles/styles.scss';
 // stories/Container.stories.js.
 import 'src/components/CodedControl.jsx';
 import 'src/components/ComplexControl.jsx';
-
-// Location/Provider fetch their option list over HTTP in componentDidMount,
-// so the stub has to be installed before they mount and stay installed until
-// that request resolves. Swapping it back in the same tick (or in a
-// microtask) restores the real implementation before componentDidMount ever
-// runs, which leaves the control rendering an empty selector and firing a
-// real network call. Installing during the wrapper's render phase — React
-// renders a parent before its children — guarantees the mock is in place for
-// the child's mount, and the unmount cleanup keeps it from leaking into any
-// other story.
-const HttpGetStub = ({ children, resolver }) => {
-  const originalRef = useRef(null);
-  if (originalRef.current === null) {
-    originalRef.current = httpInterceptor.get;
-    httpInterceptor.get = (url) => Promise.resolve({ results: resolver(url) });
-  }
-  useEffect(() => () => {
-    httpInterceptor.get = originalRef.current;
-    originalRef.current = null;
-  }, []);
-  return children;
-};
-
-HttpGetStub.propTypes = {
-  resolver: PropTypes.func.isRequired,
-};
-
-// Scoped per-story via the story-level `decorators` array.
-const stubHttpGet = (resolver) => (Story) => (
-  <HttpGetStub resolver={resolver}><Story /></HttpGetStub>
-);
-
-const locationHttpStub = stubHttpGet(() => mockLocations);
-const providerHttpStub = stubHttpGet(() => mockProviders);
-const locationAndProviderHttpStub = stubHttpGet((url) => (
-  url.includes('provider') ? mockProviders : mockLocations
-));
 
 // ---------------------------------------------------------------------------
 // The 3 original coded variants (AutoComplete/DropDown/Button), preserved
@@ -309,6 +267,7 @@ const allControlsForm = buildFormMetadata(599, 'all-controls-form-uuid', ALL_FOR
 
 export default {
   title: 'Orchestrator/Bahmni Design System/CarbonContainer',
+  component: CarbonContainer,
   parameters: {
     docs: {
       description: {
@@ -459,7 +418,7 @@ export const CarbonTable = {
 };
 
 export const CarbonLocation = {
-  decorators: [locationHttpStub],
+  decorators: [withLocationHttp],
   render: () => (
     <StoryWrapper json={locationForm}>
       <CarbonContainer {...carbonContainerCommonProps} metadata={locationForm} observations={[]} />
@@ -468,7 +427,7 @@ export const CarbonLocation = {
 };
 
 export const CarbonProvider = {
-  decorators: [providerHttpStub],
+  decorators: [withProviderHttp],
   render: () => (
     <StoryWrapper json={providerForm}>
       <CarbonContainer {...carbonContainerCommonProps} metadata={providerForm} observations={[]} />
@@ -493,7 +452,7 @@ export const CarbonVideo = {
 };
 
 export const AllControls = {
-  decorators: [locationAndProviderHttpStub],
+  decorators: [withLocationHttp, withProviderHttp],
   render: () => (
     <StoryWrapper json={allControlsForm}>
       <CarbonContainer

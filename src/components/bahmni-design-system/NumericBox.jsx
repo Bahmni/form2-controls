@@ -5,30 +5,38 @@ import omit from 'lodash/omit';
 import constants from 'src/constants';
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 
-// Props ObsControl passes to every registered component as part of the Bahmni
-// control contract. Whatever is left in the rest bag gets spread onto Carbon's
-// NumberInput, which forwards anything it doesn't recognise to the underlying
-// <input> — so these have to be stripped, or React logs "Unknown event handler
-// property" / "React does not recognize the X prop on a DOM element" for each
-// one on every render. `properties` and `options` log nothing (React passes
-// unknown all-lowercase props straight through) but still land as stray
-// `properties="[object Object]"` attributes, so they go too. None of these is
-// read by this component.
+// Unlike its sibling leaf controls, NumericBox intentionally forwards unknown
+// props to Carbon's NumberInput, so callers can set DOM/Carbon attributes such
+// as `placeholder`, `min` and `max` (see the pass-through test in
+// test/components/bahmni-design-system/NumericBox.test.js).
 //
-// `hidden` is deliberately NOT in this list: it is a valid DOM attribute and
-// the contract relies on it reaching the input to hide the control.
+// That passthrough has to exclude the Bahmni control contract. ObsControl
+// renders every registered component with the full contract (see
+// `displayObsControl` in bahmni-design-system/ObsControl.jsx), and NumberInput
+// forwards anything it doesn't recognise to the underlying <input>. Left in,
+// the function-valued ones make React log "Unknown event handler property" and
+// the rest land as stray attributes — silently for all-lowercase names such as
+// `intl`, `options` and `properties`, which React forwards without warning.
+//
+// This list is every contract prop NumericBox does not destructure for itself;
+// keep it in step with `displayObsControl` if the contract changes.
+//
+// `hidden` is deliberately absent: it is a valid boolean DOM attribute the
+// input understands. Control-level visibility does not depend on it — Row.jsx
+// wraps each control's subtree in a `.hidden { display: none }` div.
 const CONTROL_CONTRACT_PROPS = [
-  'patientUuid',
-  'conceptUuid',
   'addMore',
-  'showNotification',
+  'componentStore',
   'conceptClass',
   'conceptHandler',
-  'componentStore',
+  'conceptUuid',
+  'intl',
   'onControlAdd',
   'onEventTrigger',
-  'properties',
   'options',
+  'patientUuid',
+  'properties',
+  'showNotification',
 ];
 
 export const NumericBox = ({

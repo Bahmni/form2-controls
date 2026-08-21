@@ -5,17 +5,12 @@
 // `carbonComponents` map for the full list of 18).
 //
 // Shared building blocks (`carbonContainerCommonProps` / `buildFormMetadata` /
-// `buildColumnHeader`, `codedConceptAnswers` / `booleanYesNoOptions` /
-// `mockLocations` / `mockProviders`) are reused from the sibling fixtures
-// files rather than re-declared — see complexFixtures.js and fixtures.js.
+// `buildColumnHeader` from complexFixtures.js, `codedConceptAnswers` /
+// `booleanYesNoOptions` / `mockLocations` / `mockProviders` from fixtures.js)
+// are reused rather than re-declared. Consumers import those directly from
+// their own modules, as the sibling stories do — this file only adds the
+// per-type control builders.
 import { codedConceptAnswers, booleanYesNoOptions } from './fixtures';
-
-export {
-  carbonContainerCommonProps,
-  buildFormMetadata,
-  buildColumnHeader,
-} from './complexFixtures';
-export { codedConceptAnswers, booleanYesNoOptions, mockLocations, mockProviders } from './fixtures';
 
 // The 3 pre-existing coded variants (AutoComplete/DropDown/Button) were built
 // against this exact answer shape — `name: { display } }` — because

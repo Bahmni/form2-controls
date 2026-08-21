@@ -615,24 +615,34 @@ describe('NumericBox', () => {
     expect(container.querySelector('input[type="number"]')).toHaveValue(100);
   });
 
+  // ObsControl passes the whole Bahmni control contract to every registered
+  // component. None of it belongs on a DOM node: the event-handler-shaped
+  // props make React log "Unknown event handler property", and the rest land
+  // as stray attributes (all-lowercase names are forwarded silently, so they
+  // produce no warning at all — which is how `intl` was missed once already).
+  const CONTROL_CONTRACT_PROPS = {
+    addMore: false,
+    componentStore: {},
+    conceptClass: 'Misc',
+    conceptHandler: 'SomeHandler',
+    conceptUuid: 'concept-uuid',
+    intl: { formatMessage: jest.fn() },
+    onControlAdd: jest.fn(),
+    onEventTrigger: jest.fn(),
+    options: [],
+    patientUuid: 'patient-uuid',
+    properties: { mandatory: false },
+    showNotification: jest.fn(),
+  };
+
   it('should not forward Bahmni control-contract props to the DOM input', () => {
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
     const { container } = render(
       <NumericBox
-        addMore={false}
-        componentStore={{}}
-        conceptClass="Misc"
-        conceptHandler="SomeHandler"
-        conceptUuid="concept-uuid"
+        {...CONTROL_CONTRACT_PROPS}
         formFieldPath="test1.1/1-0"
         onChange={onChangeMock}
-        onControlAdd={jest.fn()}
-        onEventTrigger={jest.fn()}
-        options={[]}
-        patientUuid="patient-uuid"
-        properties={{ mandatory: false }}
-        showNotification={jest.fn()}
         validate={false}
         validateForm={false}
         validations={[]}
@@ -640,13 +650,37 @@ describe('NumericBox', () => {
     );
 
     const input = container.querySelector('input[type="number"]');
-    ['patientuuid', 'conceptuuid', 'addmore', 'shownotification', 'conceptclass',
-      'concepthandler', 'componentstore', 'properties', 'options'].forEach((attribute) => {
-      expect(input).not.toHaveAttribute(attribute);
+    const attributeNames = [...input.attributes].map((attribute) => attribute.name);
+
+    Object.keys(CONTROL_CONTRACT_PROPS).forEach((prop) => {
+      expect(attributeNames).not.toContain(prop.toLowerCase());
     });
+
+    // Catches any future contract prop, not just the ones listed above: an
+    // object or array forwarded to the DOM always stringifies this way.
+    expect(input.outerHTML).not.toContain('[object Object]');
+
+    // Secondary check only — React deduplicates unknown-prop warnings per prop
+    // name for the lifetime of the module registry, so it can pass even when a
+    // leak exists. The assertions above are the real guard.
     expect(consoleErrorSpy).not.toHaveBeenCalled();
 
     consoleErrorSpy.mockRestore();
+  });
+
+  it('should still forward hidden to the DOM input', () => {
+    const { container } = render(
+      <NumericBox
+        formFieldPath="test1.1/1-0"
+        hidden
+        onChange={onChangeMock}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+      />
+    );
+
+    expect(container.querySelector('input[type="number"]')).toHaveAttribute('hidden');
   });
 
   it('should handle undefined errors from validator gracefully', () => {
