@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import {
   HttpGetStub, withLocationHttp, withProviderHttp,
-} from '../../../stories/bahmni-design-system/httpStub';
-import { mockLocations } from '../../../stories/bahmni-design-system/fixtures';
+} from '../../stories/httpStub';
+import { mockLocations } from '../../stories/bahmni-design-system/fixtures';
 
 const LOCATION_URL = '/openmrs/ws/rest/v1/location?v=custom:(id,name,uuid)';
 const PROVIDER_URL = '/openmrs/ws/rest/v1/provider?v=custom:(id,name,uuid)';
@@ -33,11 +33,47 @@ MountFetcher.propTypes = {
   url: PropTypes.string.isRequired,
 };
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  render() {
+    const { children } = this.props;
+    return this.state.failed ? <div data-testid="boundary">failed</div> : children;
+  }
+}
+
+ErrorBoundary.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 const resolveLocationUrl = (url) => (
   url.includes('/location') ? Promise.resolve({ results: mockLocations }) : undefined
 );
 
+// The stub defers its "was this render committed?" sweep to a macrotask, so
+// tests that assert on a render which never committed have to let it run.
+const flushSweep = () => act(async () => {
+  await new Promise((resolve) => setTimeout(resolve, 0));
+});
+
 describe('httpStub', () => {
+  let pristineGet;
+
+  beforeEach(() => {
+    pristineGet = httpInterceptor.get;
+  });
+
+  afterEach(() => {
+    httpInterceptor.get = pristineGet;
+  });
+
   it('gives a mounted control the mocked data without ever calling the real implementation', async () => {
     const realHttpGet = jest.fn(() => Promise.resolve({ results: 'REAL' }));
     httpInterceptor.get = realHttpGet;
@@ -133,5 +169,50 @@ describe('httpStub', () => {
     const unmatchedUrl = '/openmrs/ws/rest/v1/something-else';
     await expect(httpInterceptor.get(unmatchedUrl)).resolves.toEqual({ results: `REAL:${unmatchedUrl}` });
     expect(realHttpGet).toHaveBeenCalledWith(unmatchedUrl);
+  });
+
+  it('wraps a resolver that answers with a plain value in a Promise', async () => {
+    render(
+      <HttpGetStub resolveUrl={() => ({ results: 'PLAIN' })}><div /></HttpGetStub>
+    );
+
+    const returned = httpInterceptor.get(LOCATION_URL);
+
+    expect(returned).toBeInstanceOf(Promise);
+    await expect(returned).resolves.toEqual({ results: 'PLAIN' });
+  });
+
+  it('surfaces a synchronously throwing resolver as a rejection, not an exception', async () => {
+    const failure = new Error('resolver blew up');
+
+    render(
+      <HttpGetStub resolveUrl={() => { throw failure; }}><div /></HttpGetStub>
+    );
+
+    let returned;
+    expect(() => { returned = httpInterceptor.get(LOCATION_URL); }).not.toThrow();
+    await expect(returned).rejects.toBe(failure);
+  });
+
+  it('does not leave the real implementation patched when a render never commits', async () => {
+    const realHttpGet = jest.fn(() => Promise.resolve({ results: 'REAL' }));
+    httpInterceptor.get = realHttpGet;
+
+    const Boom = () => { throw new Error('sibling render failure'); };
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    render(
+      <ErrorBoundary>
+        <HttpGetStub resolveUrl={resolveLocationUrl}><div /></HttpGetStub>
+        <Boom />
+      </ErrorBoundary>
+    );
+
+    expect(screen.getByTestId('boundary')).toBeInTheDocument();
+
+    await flushSweep();
+
+    expect(httpInterceptor.get).toBe(realHttpGet);
+    console.error.mockRestore();
   });
 });

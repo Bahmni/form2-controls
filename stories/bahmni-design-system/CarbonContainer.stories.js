@@ -3,7 +3,7 @@ import { CarbonContainer } from 'src/components/bahmni-design-system/CarbonConta
 import StoryWrapper from '../StoryWrapper';
 import { carbonContainerCommonProps, buildFormMetadata } from './complexFixtures';
 import { codedConceptAnswers, booleanYesNoOptions } from './fixtures';
-import { withLocationHttp, withProviderHttp } from './httpStub';
+import { withLocationHttp, withProviderHttp } from '../httpStub';
 import {
   buildTextBoxControl,
   buildNumericBoxControl,
@@ -68,72 +68,65 @@ const carbonButtonControl = {
   },
 };
 
-const carbonFormMetadata = (control) => ({
-  id: 'carbon-coded-form',
-  uuid: 'carbon-coded-form-uuid',
-  name: 'Carbon Coded Form',
-  version: '1',
-  controls: [control],
-});
-
-const carbonCommonProps = {
-  observations: [],
-  patient: { uuid: 'demo-patient-uuid' },
-  translations: {},
-  validate: false,
-  validateForm: false,
-  collapse: false,
-  locale: 'en',
-  onValueUpdated: () => {},
-};
-
 export default {
   title: 'Orchestrator/Bahmni Design System/CarbonContainer',
+  tags: ['autodocs'],
   component: CarbonContainer,
   parameters: {
     docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+        title: 'Table of Contents',
+      },
       description: {
-        component:
-          'CarbonContainer is a Carbon Design System–backed variant of Container. It resolves each ' +
-          'of the 18 types registered in `carbonComponents` (see CarbonContainer.jsx) to a Bahmni ' +
-          'Design System widget — text, numeric, date, datetime, boolean and coded controls, layout ' +
-          'controls (Section, ObsGroupControl, Table), and the Complex-datatype handlers (Location, ' +
-          'Provider, Image, Video) — providing an accessible, consistent look for newer deployments. ' +
-          'Types not yet migrated to Carbon fall back to their original Bahmni UI implementation.',
+        component: `
+## Overview
+
+Carbon Design System–backed variant of \`Container\`, the control that walks a form's metadata and renders one widget per control. It resolves each of the 18 types registered in \`carbonComponents\` (see \`CarbonContainer.jsx\`) to a Bahmni Design System widget — text, numeric, date, datetime, boolean and coded controls, the layout controls (\`Section\`, \`ObsGroupControl\`, \`Table\`), and the \`Complex\`-datatype handlers (\`Location\`, \`Provider\`, \`Image\`, \`Video\`). Types not yet migrated to Carbon fall back to their original Bahmni UI implementation.
+
+**Value stored:** none of its own — \`CarbonContainer\` owns the form's \`ControlRecordTree\` and reports every child observation upwards through \`onValueUpdated\`.
+
+## When to use
+
+- Rendering a whole form with the Carbon look in a newer deployment, instead of the legacy \`Container\`.
+- As the umbrella showcase for the Carbon controls: one story per registered type, plus \`AllControls\`, which renders all 18 through a single \`CarbonContainer\` instance.
+- The per-control stories under *Atomic Controls* / *Complex Controls* are the place to explore a single widget's props in isolation; these stories exercise it as metadata driven end-to-end through the container.
+        `,
       },
     },
   },
 };
 
+const autoCompleteCodedForm = buildFormMetadata(
+  497, 'carbon-coded-autocomplete-form-uuid', 'Carbon Coded AutoComplete Form', [carbonAutoCompleteControl]
+);
+const dropDownCodedForm = buildFormMetadata(
+  498, 'carbon-coded-dropdown-form-uuid', 'Carbon Coded DropDown Form', [carbonDropDownControl]
+);
+const buttonCodedForm = buildFormMetadata(
+  499, 'carbon-coded-button-form-uuid', 'Carbon Coded Button Form', [carbonButtonControl]
+);
+
 export const CarbonCodedAutoComplete = {
   render: () => (
-    <StoryWrapper json={carbonAutoCompleteControl}>
-      <CarbonContainer
-        {...carbonCommonProps}
-        metadata={carbonFormMetadata(carbonAutoCompleteControl)}
-      />
+    <StoryWrapper json={autoCompleteCodedForm}>
+      <CarbonContainer {...carbonContainerCommonProps} metadata={autoCompleteCodedForm} observations={[]} />
     </StoryWrapper>
   ),
 };
 
 export const CarbonCodedDropDown = {
   render: () => (
-    <StoryWrapper json={carbonDropDownControl}>
-      <CarbonContainer
-        {...carbonCommonProps}
-        metadata={carbonFormMetadata(carbonDropDownControl)}
-      />
+    <StoryWrapper json={dropDownCodedForm}>
+      <CarbonContainer {...carbonContainerCommonProps} metadata={dropDownCodedForm} observations={[]} />
     </StoryWrapper>
   ),
 };
 
 export const CarbonCodedButton = {
   render: () => (
-    <StoryWrapper json={carbonButtonControl}>
-      <CarbonContainer
-        {...carbonCommonProps}
-        metadata={carbonFormMetadata(carbonButtonControl)}
-      />
+    <StoryWrapper json={buttonCodedForm}>
+      <CarbonContainer {...carbonContainerCommonProps} metadata={buttonCodedForm} observations={[]} />
     </StoryWrapper>
   ),
 };
@@ -189,7 +182,10 @@ export const CarbonNumericBox = {
     docs: {
       description: {
         story: 'All four bounds (lowNormal/hiNormal/lowAbsolute/hiAbsolute) are set on the control ' +
-          'so the "(60 - 100)" range label renders next to the input (AC #3).',
+          'so the "(60 - 100)" range label renders next to the input (AC #3). Driving it through ' +
+          '`CarbonContainer` also covers the prop-leak fix in this PR: `ObsControl` hands every leaf ' +
+          'a bag of bookkeeping props (`conceptUuid`, `patientUuid`, `componentStore`, …) which ' +
+          '`NumericBox` used to re-spread onto Carbon\'s `NumberInput`, logging nine React errors.',
       },
     },
   },
@@ -331,6 +327,16 @@ export const CarbonTable = {
       />
     </StoryWrapper>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Systolic/Diastolic BP are `Text`-datatype controls (→ `TextBox`) rather than ' +
+          '`Numeric`, matching the illustrative choice in the Table stories. This story therefore ' +
+          'demonstrates the Table layout only — it does not exercise the `NumericBox` prop-leak fix; ' +
+          '`CarbonNumericBox` above is the story that covers that.',
+      },
+    },
+  },
 };
 
 const locationControl = buildLocationControl();

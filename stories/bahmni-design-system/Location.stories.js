@@ -1,21 +1,11 @@
-import React from 'react';
-import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import { Location } from 'src/components/bahmni-design-system/Location';
-import { mockLocations } from './fixtures';
+import { withLocationHttp } from '../httpStub';
 
 export default {
   title: 'Atomic Controls/Bahmni Design System/Location',
   tags: ['autodocs'],
   component: Location,
-  decorators: [
-    (Story) => {
-      const original = httpInterceptor.get;
-      httpInterceptor.get = () => Promise.resolve({ results: mockLocations });
-      const result = <Story />;
-      httpInterceptor.get = original;
-      return result;
-    },
-  ],
+  decorators: [withLocationHttp],
   args: {
     validate: false,
     validateForm: false,

@@ -1,6 +1,5 @@
-import React from 'react';
-import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import { AutoComplete } from 'src/components/AutoComplete.jsx';
+import { createHttpGetStubDecorator } from './httpStub';
 
 const medicationOptions = [
   { uuid: 'med-uuid-1', name: 'Paracetamol', display: 'Paracetamol' },
@@ -77,15 +76,7 @@ export const MultiSelect = {
 };
 
 export const AsynchronousSelect = {
-  decorators: [
-    (Story) => {
-      const original = httpInterceptor.get;
-      httpInterceptor.get = () => Promise.resolve({ results: medicationOptions });
-      const result = <Story />;
-      httpInterceptor.get = original;
-      return result;
-    },
-  ],
+  decorators: [createHttpGetStubDecorator(() => Promise.resolve({ results: medicationOptions }))],
   args: {
     asynchronous: true,
     options: [],
