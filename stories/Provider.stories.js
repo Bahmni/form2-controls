@@ -1,28 +1,11 @@
-import React from 'react';
-import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import { Provider } from 'src/components/Provider.jsx';
-
-const mockProviders = [
-  { id: 201, name: 'Dr. John Smith', uuid: 'prov-uuid-201' },
-  { id: 202, name: 'Dr. Aisha Patel', uuid: 'prov-uuid-202' },
-  { id: 203, name: 'Dr. Carlos Rivera', uuid: 'prov-uuid-203' },
-  { id: 204, name: 'Nurse Mary Johnson', uuid: 'prov-uuid-204' },
-  { id: 205, name: 'Dr. Fatima Al-Hassan', uuid: 'prov-uuid-205' },
-];
+import { withProviderHttp } from './httpStub';
 
 export default {
   title: 'Atomic Controls/Legacy Components/Provider',
   tags: ['autodocs'],
   component: Provider,
-  decorators: [
-    (Story) => {
-      const original = httpInterceptor.get;
-      httpInterceptor.get = () => Promise.resolve({ results: mockProviders });
-      const result = <Story />;
-      httpInterceptor.get = original;
-      return result;
-    },
-  ],
+  decorators: [withProviderHttp],
   args: {
     validate: false,
     validations: [],

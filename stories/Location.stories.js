@@ -1,28 +1,11 @@
-import React from 'react';
-import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import { Location } from 'src/components/Location.jsx';
-
-const mockLocations = [
-  { id: 101, name: 'General Ward', uuid: 'loc-uuid-101' },
-  { id: 102, name: 'Emergency', uuid: 'loc-uuid-102' },
-  { id: 103, name: 'Outpatient Clinic', uuid: 'loc-uuid-103' },
-  { id: 104, name: 'ICU', uuid: 'loc-uuid-104' },
-  { id: 105, name: 'Maternity Ward', uuid: 'loc-uuid-105' },
-];
+import { withLocationHttp } from './httpStub';
 
 export default {
   title: 'Atomic Controls/Legacy Components/Location',
   tags: ['autodocs'],
   component: Location,
-  decorators: [
-    (Story) => {
-      const original = httpInterceptor.get;
-      httpInterceptor.get = () => Promise.resolve({ results: mockLocations });
-      const result = <Story />;
-      httpInterceptor.get = original;
-      return result;
-    },
-  ],
+  decorators: [withLocationHttp],
   args: {
     validate: false,
     validations: [],

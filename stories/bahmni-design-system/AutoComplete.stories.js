@@ -1,7 +1,6 @@
-import React from 'react';
-import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import { AutoComplete } from 'src/components/bahmni-design-system/AutoComplete';
 import { codedConceptAnswers } from './fixtures';
+import { createHttpGetStubDecorator } from '../httpStub';
 
 export default {
   title: 'Atomic Controls/Bahmni Design System/AutoComplete',
@@ -69,15 +68,7 @@ export const MultiSelect = {
 };
 
 export const Asynchronous = {
-  decorators: [
-    (Story) => {
-      const original = httpInterceptor.get;
-      httpInterceptor.get = () => Promise.resolve({ results: codedConceptAnswers });
-      const result = <Story />;
-      httpInterceptor.get = original;
-      return result;
-    },
-  ],
+  decorators: [createHttpGetStubDecorator(() => Promise.resolve({ results: codedConceptAnswers }))],
   args: {
     asynchronous: true,
     options: [],

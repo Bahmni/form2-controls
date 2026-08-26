@@ -1,21 +1,11 @@
-import React from 'react';
-import { httpInterceptor } from 'src/helpers/httpInterceptor';
 import { Provider } from 'src/components/bahmni-design-system/Provider';
-import { mockProviders } from './fixtures';
+import { withProviderHttp } from '../httpStub';
 
 export default {
   title: 'Atomic Controls/Bahmni Design System/Provider',
   tags: ['autodocs'],
   component: Provider,
-  decorators: [
-    (Story) => {
-      const original = httpInterceptor.get;
-      httpInterceptor.get = () => Promise.resolve({ results: mockProviders });
-      const result = <Story />;
-      httpInterceptor.get = original;
-      return result;
-    },
-  ],
+  decorators: [withProviderHttp],
   args: {
     validate: false,
     validateForm: false,
