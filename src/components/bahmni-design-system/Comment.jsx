@@ -74,7 +74,7 @@ export class Comment extends Component {
           this.setState(prev => ({ showCommentSection: !prev.showCommentSection }));
         }}
       >
-        Add note
+        {this.state.showCommentSection ? 'Hide note' : 'Add note'}
       </Link>
     );
   }
