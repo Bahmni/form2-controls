@@ -205,7 +205,7 @@ describe('Carbon ObsControl', () => {
       renderWithIntl(
         <ObsControlWithIntl {...defaultProps} metadata={notesOpenMetadata} />
       );
-      expect(screen.getByRole('button', { name: /add note/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /hide note/i })).toBeInTheDocument();
       expect(screen.getByPlaceholderText('Notes')).toBeInTheDocument();
     });
   });
