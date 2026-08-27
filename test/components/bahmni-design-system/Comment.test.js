@@ -33,8 +33,20 @@ describe('Carbon Comment', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /add note/i }));
 
-    expect(screen.getByRole('button', { name: /add note/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /hide note/i })).toBeInTheDocument();
     expect(screen.getByRole('textbox')).toBeInTheDocument();
+  });
+
+  it('should toggle link text between "Add note" and "Hide note" when clicked', () => {
+    render(<Comment onCommentChange={mockOnCommentChange} />);
+
+    const link = screen.getByRole('button', { name: /add note/i });
+
+    fireEvent.click(link);
+    expect(link).toHaveTextContent('Hide note');
+
+    fireEvent.click(link);
+    expect(link).toHaveTextContent('Add note');
   });
 
   it('should hide the comment section on second click of add note link', () => {
