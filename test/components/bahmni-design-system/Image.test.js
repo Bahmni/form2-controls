@@ -264,7 +264,35 @@ describe('Carbon Image', () => {
 
     fireEvent.change(fileInput, { target: { files: [file] } });
 
-    expect(container.querySelector('.cds--loading')).toBeInTheDocument();
+    expect(container.querySelector('.cds--loading')).not.toBeInTheDocument();
+    expect(document.body.querySelector('.cds--loading-overlay')).toBeInTheDocument();
+  });
+
+  it('should portal the loading overlay to document.body so it escapes ancestor stacking contexts', async () => {
+    const { container } = renderImage();
+
+    const fileInput = container.querySelector('input[type="file"]');
+    const file = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    const overlay = document.querySelector('[data-testid="file-upload-loading-overlay"]');
+    expect(overlay).toBeInTheDocument();
+    expect(overlay.parentElement).toBe(document.body);
+  });
+
+  it('should remove the loading overlay once the upload completes', async () => {
+    const { container } = renderImage();
+
+    const fileInput = container.querySelector('input[type="file"]');
+    const file = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+
+    fireEvent.change(fileInput, { target: { files: [file] } });
+    mockFileReader.onloadend({ target: { result: 'data:image/jpeg;base64,/9j/4SumRXhpZgAATU' } });
+
+    await waitFor(() => {
+      expect(document.body.querySelector('.cds--loading-overlay')).not.toBeInTheDocument();
+    });
   });
 
   it('should display upload label and description text', () => {

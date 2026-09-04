@@ -1,5 +1,4 @@
 import { FileUploaderButton, FileUploaderItem } from '@carbon/react';
-import { Loading } from '@bahmni/design-system';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { FileUpload } from './FileUpload';
@@ -7,12 +6,11 @@ import { FileUpload } from './FileUpload';
 export class Video extends FileUpload {
 
   displayVideo() {
-    const loading = this.state.loading === true;
     const fileName = this.getFileName(this.props.value);
 
     return (
       <div className={classNames('carbon-video-upload', { 'carbon-error': this.state.hasErrors })}>
-        {loading && <Loading active small />}
+        {this.renderLoadingOverlay()}
         <p className="upload-label">Upload video</p>
         <p className="upload-description">Supported video formats: .mp4, .avi and more.</p>
         <FileUploaderButton
