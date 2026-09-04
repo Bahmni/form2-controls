@@ -479,10 +479,8 @@ describe('Container', () => {
       }
 
       await waitFor(() => {
-        const notification = screen.getByText('Error message');
-        expect(
-          notification.closest('.error-message-container'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Error message')).toBeInTheDocument();
+        expect(screen.getByText('Error')).toBeInTheDocument();
       });
     });
   });
