@@ -1,5 +1,4 @@
 import { FileUploaderButton, FileUploaderItem } from '@carbon/react';
-import { Loading } from '@bahmni/design-system';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { FileUpload } from './FileUpload';
@@ -7,12 +6,11 @@ import { FileUpload } from './FileUpload';
 export class Image extends FileUpload {
 
   displayImage() {
-    const loading = this.state.loading === true;
     const fileName = this.getFileName(this.props.value);
 
     return (
       <div className={classNames('carbon-image-upload', { 'carbon-error': this.state.hasErrors })}>
-        {loading && <Loading active small />}
+        {this.renderLoadingOverlay()}
         <p className="upload-label">Upload files</p>
         <p className="upload-description">Max file size is 500kb. Supported file types are .jpg, .png, and .pdf.</p>
         <FileUploaderButton

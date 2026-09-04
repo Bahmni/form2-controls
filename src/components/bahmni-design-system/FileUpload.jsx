@@ -6,6 +6,8 @@ import { Util } from 'src/helpers/Util';
 import { Validator } from 'src/helpers/Validator';
 import { UploadHandler } from 'src/helpers/UploadHandler';
 import { cacheFileName, getCachedFileName } from 'src/helpers/FileNameCache';
+import { createPortal } from 'react-dom';
+import { Loading } from '@bahmni/design-system';
 
 export class FileUpload extends Component {
 
@@ -135,6 +137,18 @@ export class FileUpload extends Component {
 
   handleDelete() {
     this.update(undefined);
+  }
+
+  renderLoadingOverlay() {
+    if (!this.state.loading) {
+      return null;
+    }
+    return createPortal(
+      <div data-testid="file-upload-loading-overlay">
+        <Loading active withOverlay />
+      </div>,
+      document.body
+    );
   }
 
   getFileName(value) {
