@@ -8,7 +8,7 @@ import { IntlProvider } from 'react-intl';
 import { displayRowControls, getGroupedControls } from '../helpers/controlsParser';
 import addMoreDecorator from './AddMoreDecorator';
 import ObservationMapper from '../helpers/ObservationMapper';
-import NotificationContainer from '../helpers/Notification';
+import { NotificationContainer } from '@bahmni/design-system';
 import Constants from '../constants';
 import { executeEventsFromCurrentRecord } from '../helpers/ExecuteEvents';
 import { deepUnescapeStrings } from '../helpers/encodingUtils';
@@ -158,7 +158,12 @@ export class Container extends addMoreDecorator(Component) {
       this.updatedControlRecordTree = updatedRecordTree;
       this.setState({
         data: updatedRecordTree,
-        notification: { message: addMoreMessage, type: Constants.messageType.success },
+        notification: {
+          id: 'form-engine-notification',
+          title: 'Success',
+          message: addMoreMessage,
+          type: Constants.messageType.success
+        },
       });
     } else {
       this.updatedControlRecordTree = updatedRecordTree;
@@ -232,7 +237,13 @@ export class Container extends addMoreDecorator(Component) {
   }
 
   showNotification(message, notificationType) {
-    this.setState({ notification: { message, type: notificationType } });
+    const title= notificationType === Constants.messageType.success ? 'Success' : 'Error';
+    this.setState({ notification: {
+        id: 'form-engine-notification',
+        title,
+        message,
+        type: notificationType
+    } });
     this.hideNotification();
   }
 
@@ -273,10 +284,12 @@ export class Container extends addMoreDecorator(Component) {
     return (
       <IntlProvider locale="en" messages={formTranslations}>
         <div>
-          <NotificationContainer
-            notification={this.state.notification}
-            onClose={this.clearNotification}
-          />
+          {this.state.notification.message && (
+            <NotificationContainer
+              notifications={[this.state.notification]}
+              onClose={this.clearNotification}
+            />
+          )}
           {displayRowControls(groupedRowControls, records, childProps)}
         </div>
       </IntlProvider>
