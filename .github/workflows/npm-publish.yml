@@ -33,7 +33,7 @@ jobs:
         run: npm run build
       - name: Publish the package
         if: startsWith(github.ref, 'refs/tags/')
-        run: yarn publish
+        run: yarn publish --access public
       - name: Publish dev build to npm
         working-directory: ${{env.PACKAGE_PATH}}
         run: |
