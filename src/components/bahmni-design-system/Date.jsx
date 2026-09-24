@@ -135,7 +135,7 @@ export class Date extends Component {
     return (
       <DatePicker
         datePickerType="single"
-        dateFormat="d-M-y"
+        dateFormat="d-M-Y"
         value={this.props.value}
         onChange={(dates) => this.handleChange(dates)}
         ref={(ref) => { this.datePickerRef = ref; }}
