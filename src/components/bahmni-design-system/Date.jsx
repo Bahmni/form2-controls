@@ -143,7 +143,7 @@ export class Date extends Component {
         <DatePickerInput
           id={conceptUuid}
           labelText={label}
-          placeholder="dd-mm-yyyy"
+          placeholder="dd-Mmm-yyyy"
           size="sm"
           disabled={!enabled}
           invalid={this.state.hasErrors}
