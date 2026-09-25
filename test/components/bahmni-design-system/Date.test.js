@@ -128,6 +128,20 @@ describe('Date', () => {
     expect(document.querySelector('[data-invalid]')).toBeTruthy();
   });
 
+  test('renders date input with dd-Mmm-yyyy placeholder and format', () => {
+    const { container } = render(
+      <Date
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+      />
+    );
+    const input = container.querySelector('input.flatpickr-input');
+    expect(input).toHaveAttribute('placeholder', 'dd-Mmm-yyyy');
+  });
+
   test('should not call onChange when validate changes to true', () => {
     const validations = [constants.validations.mandatory];
     const { rerender } = render(

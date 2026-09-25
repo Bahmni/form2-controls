@@ -135,7 +135,7 @@ export class Date extends Component {
     return (
       <DatePicker
         datePickerType="single"
-        dateFormat="Y-m-d"
+        dateFormat="d-M-Y"
         value={this.props.value}
         onChange={(dates) => this.handleChange(dates)}
         ref={(ref) => { this.datePickerRef = ref; }}
@@ -143,7 +143,7 @@ export class Date extends Component {
         <DatePickerInput
           id={conceptUuid}
           labelText={label}
-          placeholder="yyyy-mm-dd"
+          placeholder="dd-Mmm-yyyy"
           size="sm"
           disabled={!enabled}
           invalid={this.state.hasErrors}
