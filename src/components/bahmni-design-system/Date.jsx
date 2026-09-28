@@ -101,6 +101,13 @@ export class Date extends Component {
     return `${year}-${month}-${day}`;
   }
 
+  _parseDate(dateString) {
+    if (!dateString) return false;
+    const [year, month, day] = dateString.split('-').map(Number);
+    if (!year || !month || !day) return false;
+    return new globalThis.Date(year, month - 1, day);
+  }
+
   _shouldValidateOnMount() {
     if (!this.props.formFieldPath) {
       return false;
@@ -137,6 +144,7 @@ export class Date extends Component {
         datePickerType="single"
         dateFormat="d-M-Y"
         value={this.props.value}
+        parseDate={(dateString) => this._parseDate(dateString)}
         onChange={(dates) => this.handleChange(dates)}
         ref={(ref) => { this.datePickerRef = ref; }}
       >
