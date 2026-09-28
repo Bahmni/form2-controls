@@ -142,6 +142,25 @@ describe('Date', () => {
     expect(input).toHaveAttribute('placeholder', 'dd-Mmm-yyyy');
   });
 
+  test.each([
+    ['2024-06-15', '15-Jun-2024'],
+    ['2020-01-01', '01-Jan-2020'],
+    ['1999-12-31', '31-Dec-1999'],
+  ])('displays the provided value %s as %s instead of an unrelated default date', (value, displayedValue) => {
+    const { container } = render(
+      <Date
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value={value}
+      />
+    );
+    const input = container.querySelector('input.flatpickr-input');
+    expect(input.value).toBe(displayedValue);
+  });
+
   test('should not call onChange when validate changes to true', () => {
     const validations = [constants.validations.mandatory];
     const { rerender } = render(
