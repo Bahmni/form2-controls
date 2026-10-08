@@ -70,7 +70,7 @@ export class ObsControl extends addMoreDecorator(Component) {
       showNotification, intl } = this.props;
     const options = metadata.options || concept.answers;
     const { conceptClass, conceptHandler } = concept;
-    const validations = getValidations(metadata.properties, concept.properties);
+    const validations = getValidations(metadata.properties, concept.properties, concept.datatype);
     const isAddMoreEnabled =
       find(metadata.properties, (value, key) => (key === 'addMore' && value));
     return React.createElement(registeredComponent, {

@@ -147,7 +147,7 @@ describe('Validator', () => {
   describe('allowFutureDates validation', () => {
     const validations = [constants.validations.allowFutureDates];
     const allowFutureDatesError = new Error({
-      message: validations[0],
+      message: constants.validations.allowFutureDates,
     });
 
     it('should give error if date is in future', () => {
@@ -168,6 +168,14 @@ describe('Validator', () => {
 
     it('should not give error if the date value is undefined', () => {
       const errors = Validator.getErrors({ validations, value: undefined });
+      expect(errors).toEqual([]);
+    });
+
+    it('should not give error when allowFutureDates is not in the validations list', () => {
+      const date = new Date();
+      const changedDate = new Date(date.setDate(date.getDate() + 10));
+      const futureDate = changedDate.toISOString().split('T')[0];
+      const errors = Validator.getErrors({ validations: [], value: futureDate });
       expect(errors).toEqual([]);
     });
   });

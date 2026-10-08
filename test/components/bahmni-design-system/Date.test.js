@@ -161,6 +161,30 @@ describe('Date', () => {
     expect(input.value).toBe(displayedValue);
   });
 
+  test('wires the allowFutureDates validation through to onChange errors', () => {
+    const future = new window.Date();
+    future.setFullYear(future.getFullYear() + 1);
+    const futureValue = future.toISOString().slice(0, 10);
+    const validations = [constants.validations.allowFutureDates];
+
+    render(
+      <Date
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={validations}
+        value={futureValue}
+      />
+    );
+
+    expect(mockOnChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        errors: [expect.objectContaining({ message: constants.validations.allowFutureDates })],
+      })
+    );
+  });
+
   test('should not call onChange when validate changes to true', () => {
     const validations = [constants.validations.mandatory];
     const { rerender } = render(
