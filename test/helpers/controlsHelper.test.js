@@ -21,12 +21,37 @@ describe('ControlsHelper', () => {
       expect(validations[0]).toBe(constants.validations.mandatory);
     });
 
-    it('get allowFutureDates validations from properties', () => {
-      const props = { allowFutureDates: false };
-      const validations = getValidations(props, undefined);
+    it.each([
+      ['explicitly false', { allowFutureDates: false }, 'Date'],
+      ['unset', {}, 'Date'],
+      ['unset on a Datetime field', {}, 'Datetime'],
+    ])('gets allowFutureDates validation when %s', (description, props, datatype) => {
+      const validations = getValidations(props, undefined, datatype);
 
       expect(validations).toHaveLength(1);
       expect(validations[0]).toBe(constants.validations.allowFutureDates);
+    });
+
+    it('Validations should not include allowFutureDates when explicitly true on a Date field', () => {
+      const validations = getValidations({ allowFutureDates: true }, undefined, 'Date');
+      expect(validations).toHaveLength(0);
+    });
+
+    it.each([
+      ['a non-date field', 'Coded'],
+      ['conceptDatatype omitted', undefined],
+    ])('does not get allowFutureDates validation for %s, even when unset', (description, datatype) => {
+      const validations = getValidations({}, undefined, datatype);
+
+      expect(validations).toHaveLength(0);
+    });
+
+    it('Validations should include allowDecimal without allowFutureDates for a numeric field', () => {
+      const conceptProperties = { allowDecimal: false };
+      const validations = getValidations({}, conceptProperties, 'Numeric');
+
+      expect(validations).toHaveLength(1);
+      expect(validations[0]).toBe(constants.validations.allowDecimal);
     });
 
     it('get allowDecimal validations from properties', () => {

@@ -358,6 +358,30 @@ describe('DateTime', () => {
     expect(timeAfter).toBe(timeBefore);
   });
 
+  test('Should reject a future date when allowFutureDates validation is active', () => {
+    const future = new window.Date();
+    future.setFullYear(future.getFullYear() + 1);
+    const futureValue = `${future.toISOString().slice(0, 10)} 10:00`;
+    const validations = [constants.validations.allowFutureDates];
+
+    render(
+      <DateTime
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={validations}
+        value={futureValue}
+      />
+    );
+
+    expect(mockOnChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        errors: [expect.objectContaining({ message: constants.validations.allowFutureDates })],
+      })
+    );
+  });
+
   describe('date parsing — UTC timezone safety', () => {
     test('date input displays correct day for month-end date set via initial value prop', () => {
       const { container } = render(

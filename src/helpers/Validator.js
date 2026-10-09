@@ -83,5 +83,5 @@ Validator.propertyValidators = {
   [constants.validations.minMaxRange]:
     (obsVal, params) => Validator.minMaxRange(obsVal, params),
   [constants.validations.allowFutureDates]:
-    (obsValue) => Validator.allowFutureDates(obsValue),
+    (obsVal) => Validator.allowFutureDates(obsVal),
 };

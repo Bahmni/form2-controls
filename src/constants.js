@@ -37,6 +37,10 @@ const Constants = {
     uploadFailed: 'Upload failed. Please try again.',
   },
 
+  dataTypes: {
+    date: "Date", dateTime: "Datetime"
+  },
+
   toastTimeout: 4000,
 };
 
