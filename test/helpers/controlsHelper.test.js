@@ -32,9 +32,8 @@ describe('ControlsHelper', () => {
       expect(validations[0]).toBe(constants.validations.allowFutureDates);
     });
 
-    it('does not get allowFutureDates validation when explicitly true on a Date field', () => {
+    it('Validations should not include allowFutureDates when explicitly true on a Date field', () => {
       const validations = getValidations({ allowFutureDates: true }, undefined, 'Date');
-
       expect(validations).toHaveLength(0);
     });
 
@@ -47,7 +46,7 @@ describe('ControlsHelper', () => {
       expect(validations).toHaveLength(0);
     });
 
-    it('gets allowDecimal without allowFutureDates for a numeric field', () => {
+    it('Validations should include allowDecimal without allowFutureDates for a numeric field', () => {
       const conceptProperties = { allowDecimal: false };
       const validations = getValidations({}, conceptProperties, 'Numeric');
 

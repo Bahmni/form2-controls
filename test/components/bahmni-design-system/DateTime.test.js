@@ -358,7 +358,7 @@ describe('DateTime', () => {
     expect(timeAfter).toBe(timeBefore);
   });
 
-  test('wires the allowFutureDates validation through to onChange errors', () => {
+  test('Should reject a future date when allowFutureDates validation is active', () => {
     const future = new window.Date();
     future.setFullYear(future.getFullYear() + 1);
     const futureValue = `${future.toISOString().slice(0, 10)} 10:00`;
