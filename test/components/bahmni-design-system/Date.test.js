@@ -211,4 +211,32 @@ describe('Date', () => {
 
     expect(mockOnChange).not.toHaveBeenCalled();
   });
+
+  describe('prefilling date value when edit form', () => {
+    const renderWithValue = (value) => render(
+      <Date
+        conceptUuid="c1"
+        formFieldPath="test1.1/1-0"
+        onChange={mockOnChange}
+        validate={false}
+        validateForm={false}
+        validations={[]}
+        value={value}
+      />
+    );
+
+    test.each([
+      ['date only', '2026-10-13'],
+      ['date with time', '2026-10-13 00:00:00'],
+      ['ISO datetime', '2026-10-13T00:00:00'],
+    ])('should display %s value as 13-Oct-2026', (_, value) => {
+      const { container } = renderWithValue(value);
+      expect(container.querySelector('input').value).toBe('13-Oct-2026');
+    });
+
+    test('should render empty input when there is no value', () => {
+      const { container } = renderWithValue(undefined);
+      expect(container.querySelector('input').value).toBe('');
+    });
+  });
 });
