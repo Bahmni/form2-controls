@@ -18,10 +18,11 @@ jobs:
         with:
           node-version: 18.x
           registry-url: "https://registry.npmjs.org"
-      - run: npm cache clean --force
-      - name: Install dependencies
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install native build dependencies
         run: sudo apt-get update && sudo apt-get install -y automake autoconf libtool pkg-config nasm libpng-dev
-      - name: npm install
-        run: npm install --legacy-peer-deps
-      - name: npm test
-        run: npm test
+      - name: yarn install
+        run: yarn install --immutable
+      - name: yarn test
+        run: yarn test
