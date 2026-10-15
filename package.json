@@ -10,7 +10,7 @@
     "clean": "rimraf dist",
     "build": "webpack && copyfiles index.d.ts dist",
     "build-dev": "webpack --config webpack.dev.config.js",
-    "test": "rimraf coverage && jest && eslint --ext .js --ext .jsx ./src ./test",
+    "test": "jest && eslint --ext .js --ext .jsx ./src ./test",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:ci": "jest --coverage --watchAll=false",
