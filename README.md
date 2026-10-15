@@ -27,6 +27,8 @@ This library (`@bahmni/form2-controls`) provides a range of form controls that c
 2. Build - `yarn build`
 3. Test - `yarn test`
 
+> **Note:** `yarn` is configured with a 7-day `npmMinimalAgeGate` (see `.yarnrc.yml`), which blocks resolving package versions published in the last week. `@bahmni/design-system` is preapproved since it publishes frequently, but if `yarn add`/`yarn up` ever fails on a freshly published package, re-run it with `--no-time-gate` to bypass the age check for that command.
+
 ### SNOMED Integration Support
 
 form-controls also integrates with SNOMED for terminology lookup as part of form configuration and generation. More details can be found in [this](https://bahmni.atlassian.net/wiki/spaces/BAH/pages/3132686337/SNOMED+FHIR+Terminology+Server+Integration+with+Bahmni) Wiki link
