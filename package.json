@@ -101,7 +101,9 @@
   "resolutions": {
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.14",
-    "open": "^6.0.0"
+    "open": "^6.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "files": [
     "dist/",
