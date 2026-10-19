@@ -18,8 +18,10 @@ This library (`@bahmni/form2-controls`) provides a range of form controls that c
 ### Setup Steps
 
 1. Install nvm
-2. Install node
-3. Install yarn - https://yarnpkg.com/en/docs/install
+2. Install node (`>=18.12.0`, see `engines` in `package.json`)
+3. Enable Corepack - `corepack enable`
+
+> **Note:** This project uses [Yarn Berry (4.x)](https://yarnpkg.com/), pinned via the `packageManager` field in `package.json`. Corepack reads that field and automatically installs/uses the pinned Yarn version (`4.18.1`) - there's no separate Yarn install step, and you should not install Yarn Classic (1.x) globally.
 
 ### Build
 
