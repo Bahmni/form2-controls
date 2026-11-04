@@ -6,3 +6,11 @@ node_modules*
 dist*
 npm-debug.log
 *.iml
+
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
