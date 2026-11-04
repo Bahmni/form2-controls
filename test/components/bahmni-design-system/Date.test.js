@@ -239,4 +239,29 @@ describe('Date', () => {
       expect(container.querySelector('input').value).toBe('');
     });
   });
+  describe('_parseDate', () => {
+    const parse = (v) => new Date({
+    formFieldPath: 'test1.1/1-0',
+    onChange: jest.fn(),
+    validate: false,
+    validateForm: false,
+    validations: [],
+  })._parseDate(v);
+
+    test('should parse dates in DD-MMM-YYYY format', () => {
+      const d = parse('01-Nov-2027');
+      expect([d.getFullYear(), d.getMonth(), d.getDate()]).toEqual([2027, 10, 1]);
+    });
+
+    test('should parse ISO date-time strings', () => {
+      const d = parse('2026-10-13T00:00:00');
+      expect([d.getFullYear(), d.getMonth(), d.getDate()]).toEqual([2026, 9, 13]);
+    });
+
+    test.each(['foo', '31-Feb-2027', '01-Xyz-2027'])(
+      'should return false for invalid date "%s"',
+      (v) => {
+        expect(parse(v)).toBe(false);
+    });
+  });
 });

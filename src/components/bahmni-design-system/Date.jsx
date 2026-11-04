@@ -6,6 +6,8 @@ import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import constants from 'src/constants';
 
+const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+
 export class Date extends Component {
   constructor(props) {
     super(props);
@@ -102,10 +104,23 @@ export class Date extends Component {
   }
 
   _parseDate(dateString) {
-    if (!dateString) return false;
-    const [year, month, day] = dateString.split(/[ T]/)[0].split('-').map(Number);
+    if (!dateString || typeof dateString !== 'string') return false;
+    const text = dateString.trim();
+    const displayMatch = text.match(/^(\d{1,2})-([A-Za-z]{3})-(\d{4})$/);
+    let year;
+    let month;
+    let day;
+    if (displayMatch) {
+      day = Number(displayMatch[1]);
+      month = MONTHS.indexOf(displayMatch[2].toLowerCase()) + 1;
+      year = Number(displayMatch[3]);
+    } else {
+      [year, month, day] = text.split(/[ T]/)[0].split('-').map(Number);
+    }
     if (!year || !month || !day) return false;
-    return new globalThis.Date(year, month - 1, day);
+    const parsed = new globalThis.Date(year, month - 1, day);
+    if (parsed.getMonth() !== month - 1 || parsed.getDate() !== day) return false;
+    return parsed;
   }
 
   _shouldValidateOnMount() {
