@@ -180,4 +180,21 @@ describe('execute control events', () => {
 
     executeStub.mockRestore();
   });
+
+  it('should pass the patient to events of controls nested inside a section', () => {
+    const recordWithChildren = new ControlRecord({
+      children: List.of(recordTreeWithEvent),
+    });
+    const patientsSeen = [];
+    const executeStub = jest.spyOn(ScriptRunner.prototype, 'execute').mockImplementation(function () {
+      patientsSeen.push(this.formContext.patient);
+      return recordWithChildren;
+    });
+
+    executeEventsFromCurrentRecord(recordWithChildren, undefined, patient);
+
+    expect(patientsSeen.length).toBeGreaterThan(0);
+    patientsSeen.forEach(seen => expect(seen).toBe(patient));
+    executeStub.mockRestore();
+  });
 });

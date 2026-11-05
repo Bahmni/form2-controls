@@ -6,7 +6,7 @@ export function executeEventsFromCurrentRecord(currentRecord, rootRecord, patien
     return recordTree;
   }
   currentRecord.children.forEach(record => {
-    recordTree = executeEventsFromCurrentRecord(record, recordTree);
+    recordTree = executeEventsFromCurrentRecord(record, recordTree, patient);
     if (record.control && record.control.events) {
       const eventKeys = Object.keys(record.control.events);
       eventKeys.forEach(eventKey => {
