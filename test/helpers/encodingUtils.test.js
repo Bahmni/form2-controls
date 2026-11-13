@@ -3,6 +3,7 @@ import {
     deepUnescapeStrings,
     utf8ToBase64,
     base64ToUtf8,
+    isBase64,
 } from 'src/helpers/encodingUtils';
 
 describe('encodingUtils', () => {
@@ -136,8 +137,28 @@ describe('encodingUtils', () => {
             expect(base64ToUtf8(encoded)).toBe(original);
         });
 
-        it('should throw for plain-text input that is not valid base64', () => {
-            expect(() => base64ToUtf8('function(form) {\n  form.get("x");\n}')).toThrow();
+    });
+
+    describe('isBase64', () => {
+        it('should return true for a base64 encoded string', () => {
+            expect(isBase64(utf8ToBase64('function(ctx) { return ctx; }'))).toBe(true);
+        });
+
+        it('should return true for base64 with whitespace or line breaks', () => {
+            expect(isBase64('ZnVu\nY3Rpb24=')).toBe(true);
+        });
+
+        it('should return false for plain JavaScript source', () => {
+            expect(isBase64('function(form) {\n  form.get("x");\n}')).toBe(false);
+        });
+
+        it('should return false when the length is not a multiple of 4', () => {
+            expect(isBase64('abcde')).toBe(false);
+        });
+
+        it('should return false for non-string values', () => {
+            expect(isBase64(undefined)).toBe(false);
+            expect(isBase64(null)).toBe(false);
         });
     });
 });

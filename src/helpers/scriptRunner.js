@@ -1,6 +1,6 @@
 import FormContext from './FormContext';
 import { httpInterceptor } from '../helpers/httpInterceptor';
-import { base64ToUtf8 } from './encodingUtils';
+import { base64ToUtf8, isBase64 } from './encodingUtils';
 
 export default class ScriptRunner {
 
@@ -10,12 +10,7 @@ export default class ScriptRunner {
   }
 
   convertToUTF8(str) {
-    try {
-      return base64ToUtf8(str);
-    } catch (error) {
-      console.log('Error in decoding script from base64, executing as is.', error);
-      return str;
-    }
+    return isBase64(str) ? base64ToUtf8(str) : str;
   }
 
   execute(eventJs) {
