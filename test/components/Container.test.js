@@ -312,6 +312,21 @@ describe('Container', () => {
       });
     });
 
+    it('should handle form initialization events stored as plain text', async () => {
+      const metadata = createNumericControlMetadata({
+        events: {
+          onFormInit: "function(form){form.get('Pulse').setEnabled(false);}",
+        },
+      });
+
+      renderContainer({ metadata });
+
+      await waitFor(() => {
+        const input = screen.getByRole('spinbutton');
+        expect(input).toBeDisabled();
+      });
+    });
+
     it('should execute conditional field logic with proper state changes', async () => {
       const metadata = createConditionalFormMetadata();
       renderContainer({ metadata });

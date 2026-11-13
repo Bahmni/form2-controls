@@ -135,5 +135,9 @@ describe('encodingUtils', () => {
             const encoded = utf8ToBase64(original);
             expect(base64ToUtf8(encoded)).toBe(original);
         });
+
+        it('should throw for plain-text input that is not valid base64', () => {
+            expect(() => base64ToUtf8('function(form) {\n  form.get("x");\n}')).toThrow();
+        });
     });
 });
