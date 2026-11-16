@@ -16,6 +16,7 @@ module.exports = {
     defaultName: 'Overview',
   },
   webpackFinal: async (config) => {
+    // Add babel loader for JS/JSX
     config.module.rules.push({
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
@@ -29,6 +30,22 @@ module.exports = {
       ],
     });
 
+    // Find and modify the CSS rule to handle SCSS separately
+    const cssRule = config.module.rules.find((rule) => {
+      return rule.test && rule.test.test('.css');
+    });
+
+    if (cssRule) {
+      // Modify CSS rule to only match .css files, not .scss
+      cssRule.test = /\.css$/;
+      // Ensure sass-loader is not in the CSS-only rule
+      cssRule.use = cssRule.use.filter((loader) => {
+        const loaderName = typeof loader === 'string' ? loader : loader.loader;
+        return !loaderName.includes('sass-loader');
+      });
+    }
+
+    // Add explicit SCSS rule
     config.module.rules.push({
       test: /\.scss$/,
       use: ['style-loader', 'css-loader', 'sass-loader'],
