@@ -3,7 +3,7 @@ import {
     deepUnescapeStrings,
     utf8ToBase64,
     base64ToUtf8,
-    isBase64,
+    looksLikeBase64,
 } from 'src/helpers/encodingUtils';
 
 describe('encodingUtils', () => {
@@ -139,26 +139,31 @@ describe('encodingUtils', () => {
 
     });
 
-    describe('isBase64', () => {
+    describe('looksLikeBase64', () => {
         it('should return true for a base64 encoded string', () => {
-            expect(isBase64(utf8ToBase64('function(ctx) { return ctx; }'))).toBe(true);
+            expect(looksLikeBase64(utf8ToBase64('function(ctx) { return ctx; }'))).toBe(true);
         });
 
         it('should return true for base64 with whitespace or line breaks', () => {
-            expect(isBase64('ZnVu\nY3Rpb24=')).toBe(true);
+            expect(looksLikeBase64('ZnVu\nY3Rpb24=')).toBe(true);
         });
 
         it('should return false for plain JavaScript source', () => {
-            expect(isBase64('function(form) {\n  form.get("x");\n}')).toBe(false);
+            expect(looksLikeBase64('function(form) {\n  form.get("x");\n}')).toBe(false);
         });
 
         it('should return false when the length is not a multiple of 4', () => {
-            expect(isBase64('abcde')).toBe(false);
+            expect(looksLikeBase64('abcde')).toBe(false);
+        });
+
+        it('should return false for an empty or whitespace-only string', () => {
+            expect(looksLikeBase64('')).toBe(false);
+            expect(looksLikeBase64('   ')).toBe(false);
         });
 
         it('should return false for non-string values', () => {
-            expect(isBase64(undefined)).toBe(false);
-            expect(isBase64(null)).toBe(false);
+            expect(looksLikeBase64(undefined)).toBe(false);
+            expect(looksLikeBase64(null)).toBe(false);
         });
     });
 });

@@ -33,12 +33,14 @@ export function utf8ToBase64(str) {
   return btoa(binaryString);
 }
 
-// Decides from the string's shape whether it is base64. Plain JS source contains
-// characters outside the base64 alphabet (spaces, parentheses, braces, ...).
-export function isBase64(str) {
+// Best-effort check on the shape of a string, not a strict base64 validator:
+// short alphanumeric words also pass. It is meant for telling base64-encoded
+// event scripts apart from plain JS source, which contains characters outside
+// the base64 alphabet (spaces, parentheses, braces, ...).
+export function looksLikeBase64(str) {
   if (typeof str !== "string") return false;
   const compact = str.replace(/\s/g, "");
-  return compact.length % 4 === 0 && /^[A-Za-z0-9+/]*={0,2}$/.test(compact);
+  return compact.length > 0 && compact.length % 4 === 0 && /^[A-Za-z0-9+/]*={0,2}$/.test(compact);
 }
 
 export function base64ToUtf8(b64) {
