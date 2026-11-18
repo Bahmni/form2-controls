@@ -11,7 +11,7 @@ import { ObsGroupControlWithIntl as ObsGroupControl } from 'components/ObsGroupC
 import { CodedControl } from 'components/CodedControl.jsx';
 import ComponentStore from 'src/helpers/componentStore';
 import ControlRecordTreeMgr from 'src/helpers/ControlRecordTreeMgr';
-import { utf8ToBase64 } from '../../src/helpers/encodingUtils';
+import { utf8ToBase64, base64ToUtf8 } from '../../src/helpers/encodingUtils';
 import { FormValidationError } from 'src/helpers/FormValidationError';
 
 const PULSE_UUID = 'c36bc411-3f10-11e4-adec-0800271c1b75';
@@ -312,6 +312,21 @@ describe('Container', () => {
       });
     });
 
+    it('should handle form initialization events stored as plain text', async () => {
+      const metadata = createNumericControlMetadata({
+        events: {
+          onFormInit: "function(form){form.get('Pulse').setEnabled(false);}",
+        },
+      });
+
+      renderContainer({ metadata });
+
+      await waitFor(() => {
+        const input = screen.getByRole('spinbutton');
+        expect(input).toBeDisabled();
+      });
+    });
+
     it('should execute conditional field logic with proper state changes', async () => {
       const metadata = createConditionalFormMetadata();
       renderContainer({ metadata });
@@ -332,6 +347,33 @@ describe('Container', () => {
 
       await waitFor(() => {
         expect(complaintInput).toBeEnabled();
+      });
+    });
+
+    it('should execute plain-text onValueChange scripts on field change', async () => {
+      const metadata = createConditionalFormMetadata();
+      const plainMetadata = {
+        ...metadata,
+        controls: metadata.controls.map((control) => (control.concept.uuid === ADMISSION_UUID
+          ? {
+            ...control,
+            events: {
+              ...control.events,
+              onValueChange: base64ToUtf8(control.events.onValueChange),
+            },
+          }
+          : control)),
+      };
+      renderContainer({ metadata: plainMetadata });
+
+      const admissionInput = screen.getByLabelText(/need of admission/i);
+      const complaintInput = screen.getByLabelText(/chief complaint notes/i);
+      expect(complaintInput).toBeEnabled();
+
+      fireEvent.change(admissionInput, { target: { value: 'yes' } });
+
+      await waitFor(() => {
+        expect(complaintInput).toBeDisabled();
       });
     });
   });
@@ -1073,6 +1115,25 @@ describe('Container', () => {
           onFormSave: utf8ToBase64(`function(form){
             form.get('Pulse').setValue(100);
           }`),
+        },
+      };
+      const containerRef = React.createRef();
+      render(
+        <Container ref={containerRef} {...defaultProps} metadata={metadata} fhirObservations={[]} />,
+      );
+
+      const bundle = containerRef.current.getObservationBundleForSave(fhirOptions);
+      expect(bundle.entry).toHaveLength(1);
+      expect(bundle.entry[0].resource.valueQuantity).toEqual({ value: 100 });
+    });
+
+    it('getObservationBundleForSave should run a plain-text onFormSave script before building the bundle', () => {
+      const metadata = {
+        ...createNumericControlMetadata(),
+        events: {
+          onFormSave: `function(form){
+            form.get('Pulse').setValue(100);
+          }`,
         },
       };
       const containerRef = React.createRef();
