@@ -354,7 +354,7 @@ describe('Container', () => {
       const metadata = createConditionalFormMetadata();
       const plainMetadata = {
         ...metadata,
-        controls: metadata.controls.map((control) => (control.events
+        controls: metadata.controls.map((control) => (control.concept.uuid === ADMISSION_UUID
           ? {
             ...control,
             events: {

@@ -1,8 +1,10 @@
 import { runEventScript } from 'src/helpers/runEventScript';
 import { utf8ToBase64 } from 'src/helpers/encodingUtils';
 
-// No mocks: these tests run the real ScriptRunner, the same path the clinical
-// app uses for onFormSave (executeOnFormSaveEvent -> runEventScript).
+// Kept separate from runEventScript.test.js because that file mocks ScriptRunner
+// at module level, which would stop these tests from running the real ScriptRunner.
+// No mocks here: these tests run the same path the clinical app uses for
+// onFormSave (executeOnFormSaveEvent -> runEventScript).
 describe('runEventScript with plain-text event scripts', () => {
   const patient = { uuid: 'patient-uuid-123', age: 30, gender: 'F' };
 
