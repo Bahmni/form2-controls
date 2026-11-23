@@ -71,6 +71,15 @@ describe('ScriptRunner', () => {
       expect(global.eval).toHaveBeenCalledWith(expectedExecutiveJs);
     });
 
+    it('should execute plain-text eventJs as-is when it is not base64 encoded', () => {
+      const plainEventJs = 'function(form) {\n  form.get("Cause").setHidden(true);\n}';
+      const expectedExecutiveJs = `(${plainEventJs})(formContext,interceptor)`;
+
+      scriptRunner.execute(plainEventJs);
+
+      expect(global.eval).toHaveBeenCalledWith(expectedExecutiveJs);
+    });
+
     it('should not execute eval when eventJs is null', () => {
       scriptRunner.execute(null);
 
